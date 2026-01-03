@@ -11,23 +11,17 @@ import { useProblemCollection } from './hooks/useProblemColleciton';
 
 export default function LibraryScreen(){    
     const repository = createProblemRepository()
-    //const { collection, addProblem } = useProblemCollection(repository)
+    const { collection, addProblem, removeAll } = useProblemCollection(repository)
 
-    const [collection, setCollection] = useState<Collection>({})
-
-    useEffect(() => {
-        repository.load().
-            then(setCollection).
-            catch(() => setCollection({}))
-    }, []);
-    const addProblem = (newProblem: Problem) => {
-        setCollection(prev => ({...prev, [newProblem.id]: newProblem}))
-        repository.save(collection)
-    }        
+    //const [collection, setCollection] = useState<Collection>({})
 
     const handleAddProblem = () => {
         const newProblem = { id: v4(), title: "asdf"}
         addProblem(newProblem)
+        console.log("handle add problem", collection)
+    }
+    const handleDeleteAll = () => {
+        removeAll()
     }
 
     return (
@@ -37,6 +31,9 @@ export default function LibraryScreen(){
                 <>
                     <Button onClick={handleAddProblem}>
                         追加
+                    </Button>
+                    <Button onClick={handleDeleteAll}>
+                        全削除
                     </Button>
                 </>
             }

@@ -11,14 +11,19 @@ export function useProblemCollection (repository: ProblemRepository){
             then(setCollection).
             catch(() => setCollection({}))
     }, []);
-    
+
     const addProblem = (newProblem: Problem) => {
         setCollection(prev => ({...prev, [newProblem.id]: newProblem}))
         repository.save(collection)
     }        
+    const removeAll = () => {
+        setCollection({})
+        repository.save({})
+    }
 
     return {
         collection,
         addProblem, 
+        removeAll,
     }
 }
