@@ -9,14 +9,17 @@ import { createProblemRepository } from '../../domain/problem/problemRepository'
 import { useProblemCollectionContext } from '@/app/providers/ProblemCollectionProvider';
 import type { DeckPlaySession, QueueItem } from './DeckPlaySession';
 import { useDeckPlaySession } from './useDeckplaySession';
+import { useDeckPlaySessionContext } from '@/app/providers/DeckPlaySessionProvider';
 
 export default function DeckScreen(){
-    const deckPlaySession = useDeckPlaySession()
+    const deckPlaySession = useDeckPlaySessionContext()
+    const { collection } = useProblemCollectionContext()
 
     const handleStart = () => {
         // build queue
-        const queue: QueueItem[] = []
-        deckPlaySession.startSession("0001", queue)
+        const queue: QueueItem[] = Object.values(collection).map((p) => ({problemId: p.id}))
+        
+        deckPlaySession.startSession(queue)
     }
     return (
         <AppLayout>

@@ -8,7 +8,7 @@ export function useDeckPlaySession() {
     const [session, setSession] = useState<DeckPlaySession | null>(null)
 
 
-    const startSession = (deckId: string, queue: QueueItem[]) => {
+    const startSession = (queue: QueueItem[]) => {
         //console.log("start session", queue)
 
         //if (queue.length === 0) return
@@ -21,6 +21,7 @@ export function useDeckPlaySession() {
             //startedAt: Date.now(),,
             //results: {}
         })
+        console.log("start session", queue)
     }
     const advance = useCallback(() => {
         setSession(prev => {
