@@ -4,23 +4,32 @@ import { List, ListItem, Button,  } from '@mui/material';
 import { v4 } from 'uuid'
 
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
-import type { Collection } from '../../domain/problem/types/Problem';
-import { createProblemRepository } from '../../application/problem/problemRepository';
+import type { Problem, Collection } from '../../domain/problem/types/Problem';
+import { createProblemRepository } from '../../domain/problem/problemRepository';
+import { useProblemCollection } from './hooks/useProblemColleciton';
 
 
-export default function LibraryScreen(){
-    const [collection, setCollection] = useState<Collection>({})
+export default function LibraryScreen(){    
     const repository = createProblemRepository()
+    //const { collection, addProblem } = useProblemCollection(repository)
+
+    const [collection, setCollection] = useState<Collection>({})
 
     useEffect(() => {
-        repository.load().then(setCollection).catch(() => setCollection({}))
+        repository.load().
+            then(setCollection).
+            catch(() => setCollection({}))
     }, []);
+    const addProblem = (newProblem: Problem) => {
+        setCollection(prev => ({...prev, [newProblem.id]: newProblem}))
+        repository.save(collection)
+    }        
 
     const handleAddProblem = () => {
         const newProblem = { id: v4(), title: "asdf"}
-        setCollection(prev => ({...prev, [newProblem.id]: newProblem}))
-        repository.save(collection)
+        addProblem(newProblem)
     }
+
     return (
         <AppLayout
             header={"library"}
@@ -35,7 +44,7 @@ export default function LibraryScreen(){
             <List>
                 {
                     Object.values(collection).map(p => (
-                        <ListItem>{p.id}</ListItem>
+                        <ListItem>{p.id}: {p.title}</ListItem>
                     ))
                 }
 

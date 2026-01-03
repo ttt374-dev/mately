@@ -1,10 +1,15 @@
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
-import type { Problem, Collection } from "../../domain/problem/types/Problem";
+import type { Problem, Collection } from "./types/Problem";
 
 const LIB_FILE = "problem.json";
 
-export const createProblemRepository = () => {
+export interface ProblemRepository {
+    load(): Promise<Collection>
+    save(collection: Collection): Promise<void>
+}
+
+export const createProblemRepository = (): ProblemRepository => {
     async function load(): Promise<Collection> {
         const result = await Filesystem.readFile({
             path: LIB_FILE,
