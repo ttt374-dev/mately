@@ -2,7 +2,7 @@ import './App.css'
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProblemCollectionProvider } from './providers/ProblemCollectionProvider';
-import LibraryScreen from '../ui/library/LibraryScreen';
+import LibraryScreen from '@/ui/library/LibraryScreen';
 
 export default function App() {
   return (
@@ -13,8 +13,7 @@ export default function App() {
           <Route path="/library" element={<LibraryScreen />} />
         </Routes>
       </BrowserRouter>
-    </ProblemCollectionProvider>
-    
+    </ProblemCollectionProvider>   
     
   );
 }

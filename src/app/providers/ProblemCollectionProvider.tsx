@@ -31,7 +31,7 @@ export const ProblemCollectionProvider = ({children}: { children: ReactNode}) =>
 // Hook で安全に取得
 export function useProblemCollectionContext(): ProblemCollectionContextValue {
   const ctx = useContext(ProblemCollectionContext)
-  if (!ctx) throw new Error("useKif must be used within a KifProvider");
+  if (!ctx) throw new Error("context provider error");
   return ctx;
 }
 
