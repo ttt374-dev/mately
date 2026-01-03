@@ -31,7 +31,7 @@ export function useDeckPlaySession() {
             if (nextIndex >= prev.queue.length) {
                 return {
                     ...prev,
-                    currentIndex: prev.queue.length, // finished 状態
+                    currentIndex: prev.queue.length-1, // finished 状態
                 }
             }
             return {

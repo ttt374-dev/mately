@@ -10,16 +10,19 @@ import { useProblemCollectionContext } from '@/app/providers/ProblemCollectionPr
 import type { DeckPlaySession, QueueItem } from './DeckPlaySession';
 import { useDeckPlaySession } from './useDeckplaySession';
 import { useDeckPlaySessionContext } from '@/app/providers/DeckPlaySessionProvider';
+import { useNavigate } from 'react-router-dom';
 
 export default function DeckScreen(){
     const deckPlaySession = useDeckPlaySessionContext()
     const { collection } = useProblemCollectionContext()
+    const navigate = useNavigate()
 
     const handleStart = () => {
         // build queue
         const queue: QueueItem[] = Object.values(collection).map((p) => ({problemId: p.id}))
         
         deckPlaySession.startSession(queue)
+        navigate("/player")
     }
     return (
         <AppLayout>

@@ -13,15 +13,16 @@ export const DeckPlaySessionContext = createContext<DeckPlaySessionContextValue 
 type DeckPlaySessionContextValue = {
     session: DeckPlaySession | null
     startSession: (queue: QueueItem[]) => void
+    advance: () => void
 }
 
 export const DeckPlaySessionProvider = ({children}: { children: ReactNode}) => {
     
-    const { session, startSession } = useDeckPlaySession()
+    const { session, startSession, advance } = useDeckPlaySession()
 
     return (
         <DeckPlaySessionContext.Provider value={{
-            session, startSession
+            session, startSession, advance
         }}>
             {children}
         </DeckPlaySessionContext.Provider>        
