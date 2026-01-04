@@ -8,7 +8,13 @@ function isUnansweredRecord(
     if (!record) return true;
     return record.solvedCount + record.failedCount === 0;
 }
-
+function matchesText(problem: Problem, text?: string): boolean {
+    if (!text) return true;
+    const t = text.toLowerCase();
+    return (
+        problem.title?.toLowerCase().includes(t)        
+    );
+}
 export const filterProblems = (
     problems: Problem[],
     filter: Filter,
@@ -18,7 +24,6 @@ export const filterProblems = (
     console.log("filter problems", filter, learningRecords)
     return problems.filter(problem => {
         const record = learningRecords[problem.id]
-
         //console.log("learning record", learningRecords, record, learningRecords)
 
         // 未回答のみ
@@ -36,12 +41,9 @@ export const filterProblems = (
             return false;
         }
         // text
-        //if (!matchesText(problem, filter.text)) {
-        //    return false;
-        //}
+        if (!matchesText(problem, filter.text)) {
+            return false;
+        }
         return true;
     });
-
-
-    //return problems
 }
