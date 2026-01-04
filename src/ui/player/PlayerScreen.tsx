@@ -37,9 +37,9 @@ export default function PlayerScreen(){
         return (
             <div>
                 セッションがありません
-                <button onClick={() => navigate("/deck")}>
+                <Button onClick={() => navigate("/deck")}>
                     デッキに戻る
-                </button>
+                </Button>
 
             </div>)
     }
@@ -88,18 +88,18 @@ export default function PlayerScreen(){
                                 </Button> 
                             </>) : 
                             (<>
-                                <button onClick={() => handleAnswer("solved")}>
+                                <Button onClick={() => handleAnswer("solved")}>
                                     正解
-                                </button>
-                                <button onClick={() => handleAnswer("failed")}>
+                                </Button>
+                                <Button onClick={() => handleAnswer("failed")}>
                                     不正解
-                                </button>
+                                </Button>
                             </>)
                         }
                         
-                        <button onClick={() => navigate("/deck")}>
+                        <Button onClick={() => navigate("/deck")}>
                             デッキに戻る
-                        </button>
+                        </Button>
                     </>
                     }
                     {mode === "review" && <>

@@ -127,7 +127,7 @@ export default function LibraryScreen() {
                                 </ListItemIcon>
 
                                 <ListItemText>
-                                    {p.id}: {p.title}
+                                    {p.title}
                                 </ListItemText>
                             </ListItemButton>
 
