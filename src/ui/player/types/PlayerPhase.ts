@@ -1,0 +1,1 @@
+export type PlayerPhase = "problem" | "solution"
