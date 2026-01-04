@@ -4,7 +4,7 @@ import { List, ListItem, Button,  } from '@mui/material';
 import { v4 } from 'uuid'
 
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
-import type { Problem, ProgramRecord } from '../../domain/problem/types/Problem';
+import type { Problem, ProblemRecord } from '../../domain/problem/types/Problem';
 import { createProblemRepository } from '../../domain/problem/problemRepository';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';

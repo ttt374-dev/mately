@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 
-import type { Problem, ProgramRecord } from'@/domain/problem/types/Problem'
 import type { LearningRepository } from '@/domain/learning/LearningRepository';
 import type { LearningEntry, LearningRecord } from '@/domain/learning/types/LearningEntry';
 import type { AnswerResult } from '@/domain/learning/types';

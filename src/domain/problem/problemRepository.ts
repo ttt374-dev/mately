@@ -1,16 +1,16 @@
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
-import type { Problem, ProgramRecord } from "./types/Problem";
+import type { Problem, ProblemRecord } from "./types/Problem";
 
 const LIB_FILE = "problem.json";
 
 export interface ProblemRepository {
-    load(): Promise<ProgramRecord>
-    save(collection: ProgramRecord): Promise<void>
+    load(): Promise<ProblemRecord>
+    save(collection: ProblemRecord): Promise<void>
 }
 
 export const createProblemRepository = (): ProblemRepository => {
-    async function load(): Promise<ProgramRecord> {
+    async function load(): Promise<ProblemRecord> {
         const result = await Filesystem.readFile({
             path: LIB_FILE,
             directory: Directory.Data,
@@ -25,7 +25,7 @@ export const createProblemRepository = (): ProblemRepository => {
         const parsed = JSON.parse(dataStr);
         // 配列で保存されている場合は record に変換
         if (Array.isArray(parsed)) {
-            const record: ProgramRecord = {};
+            const record: ProblemRecord = {};
             parsed.forEach((p: Problem) => {
                 record[p.id] = p;
             });
@@ -35,7 +35,7 @@ export const createProblemRepository = (): ProblemRepository => {
         return typeof parsed === "object" && parsed !== null ? parsed : {};
     };
 
-    async function save(collection: ProgramRecord) {
+    async function save(collection: ProblemRecord) {
         await Filesystem.writeFile({
             path: LIB_FILE,
             data: JSON.stringify(collection),

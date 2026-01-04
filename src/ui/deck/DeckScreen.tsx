@@ -6,15 +6,29 @@ import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvi
 import type { PlaySession, QueueItem } from '@/domain/session/types/';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { useNavigate } from 'react-router-dom';
+import { buildQueue } from '@/application/queue/queueBuilder';
+import type { SortState, SortKey, SortOrder } from '@/domain/problemRecord/types/Sort';
+import type { Filter } from '@/domain/problemRecord/types/Filter';
+import { createDefaultFilter, createDefaultSort } from '@/domain/problemRecord/factory';
 
 export default function DeckScreen(){
     const deckPlaySession = usePlaySessionContext()
     const { records } = useProblemRecordsContext()
     const navigate = useNavigate()
 
+    // キュー
+    //const queue: QueueItem[] = Object.values(records).map((p) => ({problemId: p.id}))
+    const sort = createDefaultSort()
+    const filter = createDefaultFilter()
+    //const sort: SortState = {key: "title", order: "asc"}
+    //const filter: Filter = {unansweredOnly: false, dueOnly: false}
+
+    const queue: QueueItem[] = buildQueue(records, sort, filter)
+    
+
     const handleStart = () => {
         // build queue
-        const queue: QueueItem[] = Object.values(records).map((p) => ({problemId: p.id}))
+        //const queue: QueueItem[] = Object.values(records).map((p) => ({problemId: p.id}))
         
         deckPlaySession.startSession(queue)
         navigate("/player")
@@ -33,7 +47,9 @@ export default function DeckScreen(){
             }
         >
             <>
-            
+                問題数：{ queue.length}
+
+
             </>
         </AppLayout>
     )

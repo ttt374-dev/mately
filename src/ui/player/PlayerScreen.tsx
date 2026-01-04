@@ -1,12 +1,8 @@
-
-import { useState, useEffect } from 'react';
-import { List, ListItem, Button,  } from '@mui/material';
-import { v4 } from 'uuid'
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Box } from '@mui/material';
 
-import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
-import type { Problem, ProgramRecord } from '../../domain/problem/types/Problem';
-import { createProblemRepository } from '../../domain/problem/problemRepository';
+import { AppLayout } from "@/shared/components/AppLayout/AppLayout"
+import type { Problem, ProblemRecord } from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { createLearningRepository } from '@/domain/learning/LearningRepository';
@@ -15,9 +11,15 @@ import type { AnswerResult } from '@/domain/learning/types';
 import type { PlaySession } from '@/domain/session/types';
 import type { PlayerMode } from './types/PlayerMode';
 
-function getCurrentProblem(session: PlaySession | null, records: ProgramRecord): Problem | null {
+function getCurrentProblem(session: PlaySession | null, records: ProblemRecord): Problem | null {
     const currentProblemId = session && session.queue[session.currentIndex]?.problemId
     return currentProblemId ? records[currentProblemId] ?? null : null;        
+}
+
+function getPlayerMode(): PlayerMode {
+    const location = useLocation();
+    const state = location.state as { mode?: PlayerMode } | undefined;
+    return state?.mode ?? "problem"
 }
 
 export default function PlayerScreen(){    
@@ -28,18 +30,29 @@ export default function PlayerScreen(){
     console.log("player session", session)
     const learningRepository = createLearningRepository()
     const { learningRecord, markAnswer } = useLearningRecords(learningRepository)
-
+    
     console.log("session info", session)   
     const currentProblem = getCurrentProblem(session, records)
 
-    // モード
-    const location = useLocation();
-    const state = location.state as { mode?: PlayerMode } | undefined;
-    const mode: PlayerMode = state?.mode ?? "problem"
+    // セッションがなければここで返す
+    if (session === null || currentProblem == null){
+        return (
+            <div>
+                セッションがありません
+                <button onClick={() => navigate("/deck")}>
+                    デッキに戻る
+                </button>
+
+            </div>)
+    }
+    
+    // 学習情報
+    const learningEntry = learningRecord[currentProblem.id] || {}
+    // モード    
+    const mode = getPlayerMode()
 
     const handleAnswer = (answer: AnswerResult) => { 
         if (currentProblem){                                   
-            //markSolved(id)
             markAnswer(currentProblem.id, answer)
             console.log("handle solved", learningRecord)
         }   
@@ -53,9 +66,8 @@ export default function PlayerScreen(){
 
     return (
         <AppLayout
-            footer={session !== null &&
+            footer={
                 <>
-
                     {mode === "problem" && <>
                         <button onClick={() => handleAnswer("solved")}>
                             正解
@@ -78,19 +90,15 @@ export default function PlayerScreen(){
                 </>}>
 
             <>
-                {currentProblem === null ? (
-                    <div>
-                        セッションがありません
-                        <button onClick={()=>navigate("/deck")}>
-                            デッキに戻る
-                        </button>
 
-                    </div>
-                ) : (
-                    <div>Player: [{session?.currentIndex}] {currentProblem.id}</div>
-                )}
+                <div>Player: [{session?.currentIndex}] {currentProblem.id}</div>
+                <Box>
+                    mode: {mode}
+                </Box>
+                <Box>
+                    成績：{ learningEntry.solvedCount } / { learningEntry.solvedCount + learningEntry.failedCount}
+                </Box>
 
-                
 
             </>
         </AppLayout>

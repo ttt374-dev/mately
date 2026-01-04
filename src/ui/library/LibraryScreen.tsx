@@ -4,13 +4,15 @@ import { List, ListItem, Button,  } from '@mui/material';
 import { v4 } from 'uuid'
 
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
-import type { Problem, ProgramRecord } from '../../domain/problem/types/Problem';
+import type { Problem, ProblemRecord } from '../../domain/problem/types/Problem';
 import { createProblemRepository } from '../../domain/problem/problemRepository';
 import { useProblemRecords } from '../hooks/useProblemRecords';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import { useNavigate } from 'react-router-dom';
 import type { QueueItem } from '@/domain/session/types';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
+import { createDefaultFilter, createDefaultSort } from '@/domain/problemRecord/factory';
+import { buildLibraryList } from '@/application/library/libraryListBuilder';
 
 
 export default function LibraryScreen(){    
@@ -21,6 +23,10 @@ export default function LibraryScreen(){
     const { session, startSession } = usePlaySessionContext()
 
     //const [collection, setCollection] = useState<Collection>({})
+    const sort = createDefaultSort()
+    const filter = createDefaultFilter()
+    const libraryList = buildLibraryList(records, sort, filter)
+    //const libraryList = Object.values(records)
 
     const handleAddProblem = () => {
         const newProblem = { id: v4(), title: "asdf"}
@@ -49,12 +55,15 @@ export default function LibraryScreen(){
                     <Button onClick={handleDeleteAll}>
                         全削除
                     </Button>
+                    <Button onClick={() => navigate("/deck")}>
+                        デッキに戻る
+                    </Button>
                 </>
             }
         >
             <List>
                 {
-                    Object.values(records).map((p, i) => (
+                    libraryList.map((p, i) => (
                         <ListItem 
                             key={i}
                             onClick={() => handleSelectProblem(p)}>
