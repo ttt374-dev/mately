@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import { AppLayout } from "@/shared/components/AppLayout/AppLayout"
 import type { PlaySession } from '@/domain/session/types';
-import { Box, List, ListItem } from '@mui/material';
+import { Box, List, ListItem, Button } from '@mui/material';
 import type { AnswerResult } from '@/domain/learning/types';
 
 const summaryResult = (results: Record<string, AnswerResult>) => {    
@@ -31,6 +31,11 @@ export default function SummaryScreen(){
     return (
         <AppLayout
             header={"Summary"}
+            footer={                
+                <Button fullWidth variant="outlined" onClick={()=> navigate("/deck")}>
+                    デッキに戻る
+                </Button>
+            }
         >
             <>
                 おつかれさまでした。
@@ -49,9 +54,6 @@ export default function SummaryScreen(){
                     </List>
                 </Box>
 
-                <button onClick={()=> navigate("/deck")}>
-                    デッキに戻る
-                </button>
             </>
         </AppLayout>
     )

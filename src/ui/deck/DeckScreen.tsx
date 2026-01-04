@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, List, ListItem, Button,  } from '@mui/material';
+import { Box, List, ListItem, Button, Stack  } from '@mui/material';
 
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
@@ -37,17 +37,17 @@ export default function DeckScreen(){
     return (
         <AppLayout 
             header={"Deck"}
-            footer={<>
-                <Button onClick={handleStart}>
-                    開始
-                </Button>
-                <Button onClick={()=>navigate("/library")}>
-                    ライブラリ
-                </Button>
-                <Button onClick={handleClearLearning}>
-                    学習データクリア
-                </Button>
-                </>
+            footer={
+                <Stack direction="row" spacing={1}>
+                    <Button fullWidth variant="contained" onClick={handleStart}
+                    sx={{ flex: 3}}>
+                        開始
+                    </Button>
+                    <Button variant="outlined" onClick={() => navigate("/library")}
+                        sx={{flex: 1}}>
+                        ライブラリ
+                    </Button>
+                </Stack>
             }
         >
             <>

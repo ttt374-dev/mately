@@ -22,6 +22,8 @@ export default function App() {
               <Route path="/library" element={<LibraryScreen />} />
               <Route path="/summary" element={<SummaryScreen />} />
               <Route path="/deck" element={<DeckScreen />} />
+              <Route path="/" element={<Navigate to="/deck" />} />
+              
               <Route path="/player" element={<PlayerScreen />} />
             </Routes>
 

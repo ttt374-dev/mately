@@ -26,13 +26,13 @@ describe("parseEventLineText", () => {
             ok: true,
             value: {
                 type: "move",
-                moveNumber: 3,
+                plyNumber: 3,
                 moveText: "２五歩",
                 piece: {
                     key: "歩",
                     owner: 'black',
                 },
-                position: { file: 2, rank: 5 },
+                to: { file: 2, rank: 5 },
                 from: { file: 2, rank: 6 },
                 drop: false,
                 player: 'black',
@@ -47,13 +47,13 @@ describe("parseEventLineText", () => {
             ok: true,
             value: {
                 type: "move",
-                moveNumber: 2,
+                plyNumber: 2,
                 moveText: "同　玉",
                 piece: {
                     key: "玉",
                     owner: 'white',
                 },
-                position: { file: 3, rank: 2 },
+                to: { file: 3, rank: 2 },
                 from: { file: 1, rank: 3 },
                 drop: false,
                 player: 'white',
@@ -67,13 +67,13 @@ describe("parseEventLineText", () => {
             ok: true,
             value: {
                 type: "move",
-                moveNumber: 5,
+                plyNumber: 5,
                 moveText: "２四銀不成",
                 piece: {
                     key: "銀",
                     owner: 'black',
                 },
-                position: { file: 2, rank: 4 },
+                to: { file: 2, rank: 4 },
                 from: { file: 2, rank: 5 },
                 drop: false,
                 player: 'black',
@@ -86,14 +86,14 @@ describe("parseEventLineText", () => {
             ok: true,
             value: {
                 type: "move",
-                moveNumber: 5,
+                plyNumber: 5,
                 moveText: "２四金打",
                 piece: {
                     key: "金",
                     owner: 'black',
                 },
-                position: { file: 2, rank: 4 },
-                from: null,
+                to: { file: 2, rank: 4 },
+                from: undefined,
                 drop: true,
                 player: 'black',
             }
@@ -105,12 +105,12 @@ describe("parseEventLineText", () => {
             ok: true,
             value: {
                 type: "move",
-                moveNumber: 5,
+                plyNumber: 5,
                 moveText: "２四金右",
                 piece: {
                     key: "金", owner: 'black',
                 },
-                position: { file: 2, rank: 4 },
+                to: { file: 2, rank: 4 },
                 from: { file: 2, rank: 3 },
                 drop: false,
                 player: 'black',

@@ -69,8 +69,9 @@ export default function LibraryScreen() {
                         onFileSelected={handleSelectFiles}
                         label="インポート"
                         useIconButton={false}
+                        buttonProps={{fullWidth: true, variant: "outlined"}}
                     />
-                    <Button onClick={() => navigate("/deck")}>
+                    <Button fullWidth variant='outlined' onClick={() => navigate("/deck")}>
                         デッキに戻る
                     </Button>
                 </Stack>

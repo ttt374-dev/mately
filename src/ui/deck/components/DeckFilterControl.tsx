@@ -29,8 +29,6 @@ export default function DeckFilterControl({ filter, setFilter }: Props) {
                     }
 
                 >
-
-
                 </TextField>
 
                 <FormControlLabel control={
