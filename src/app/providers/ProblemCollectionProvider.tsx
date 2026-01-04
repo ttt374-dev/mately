@@ -1,36 +1,28 @@
 import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 
-import type { Problem, ProgramRecord } from "@/domain/problem/types/Problem"
 import { createProblemRepository } from "@/domain/problem/problemRepository"
 import { useProblemRecords } from "@/ui/hooks/useProblemRecords"
 
 // context を作る
-export const ProblemCollectionContext = createContext<ProblemCollectionContextValue | null > (null)
-type ProblemCollectionContextValue = {
-    collection: ProgramRecord,
-    removeAll: () => void,
-    addProblem: (problem: Problem) => void
-}
+type ProblemRecordsContextValue = ReturnType<typeof useProblemRecords>
+export const ProblemRecordsContext = createContext<ProblemRecordsContextValue | null > (null)
 
 export const ProblemRecordProvider = ({children}: { children: ReactNode}) => {
-    const repository = createProblemRepository()
-    const { collection, removeAll, addProblem } = useProblemRecords(repository)
-
+    const repository = createProblemRepository()    
     return (
-        <ProblemCollectionContext.Provider value={{
-            collection, removeAll, addProblem
-        }}>
+        <ProblemRecordsContext.Provider value={
+            useProblemRecords(repository)
+        }>
             {children}
-        </ProblemCollectionContext.Provider>
-        
+        </ProblemRecordsContext.Provider>        
     )
 
 }
 
 // Hook で安全に取得
-export function useProblemCollectionContext(): ProblemCollectionContextValue {
-  const ctx = useContext(ProblemCollectionContext)
+export function useProblemRecordsContext(): ProblemRecordsContextValue {
+  const ctx = useContext(ProblemRecordsContext)
   if (!ctx) throw new Error("context provider error");
   return ctx;
 }

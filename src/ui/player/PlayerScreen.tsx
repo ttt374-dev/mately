@@ -2,45 +2,61 @@
 import { useState, useEffect } from 'react';
 import { List, ListItem, Button,  } from '@mui/material';
 import { v4 } from 'uuid'
+import { useNavigate } from 'react-router-dom';
 
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
 import type { Problem, ProgramRecord } from '../../domain/problem/types/Problem';
 import { createProblemRepository } from '../../domain/problem/problemRepository';
-import { useProblemCollectionContext } from '@/app/providers/ProblemCollectionProvider';
-import { useDeckPlaySessionContext } from '@/app/providers/DeckPlaySessionProvider';
+import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
+import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { createLearningRepository } from '@/domain/learning/LearningRepository';
 import { useLearningRecords } from '../hooks/useLearningRecords';
+import type { AnswerResult } from '@/domain/learning/types';
+
 
 export default function PlayerScreen(){
+    const navigate = useNavigate()
     //const { collection } = useProblemCollectionContext()
-    const { session, advance } = useDeckPlaySessionContext()
+    const { session, advance, isLastIndex } = usePlaySessionContext()
     console.log("player session", session)
     const learningRepository = createLearningRepository()
-    const { learningRecord, markSolved } = useLearningRecords(learningRepository)
+    const { learningRecord, markAnswer } = useLearningRecords(learningRepository)
 
     const curId = session ? session.queue[session.currentIndex].problemId : "-"  
 
-    const handleSolved = () => { 
+    const handleAnswer = (answer: AnswerResult) => { 
         if (session){
             const id = session.queue[session.currentIndex].problemId
-            markSolved(id)
+            //markSolved(id)
+            markAnswer(id, answer)
             console.log("handle solved", learningRecord)
         }   
-        advance()
+
+        if (isLastIndex){
+            navigate("/summary")
+        } else {
+            advance()
+        }                  
     }
 
     return (
-        <AppLayout>
-            <>
-                PLAYER: { session && session.currentIndex}: 
-                { curId }
-                <button onClick={advance}>
-                    進む
-                    
-                </button>
-                <button onClick={handleSolved}>
+        <AppLayout
+            footer={
+                <>
+                <button onClick={() => handleAnswer("solved")}>
                     正解
                 </button>
+                <button onClick={() => handleAnswer("failed")}>
+                    不正解
+                </button>
+                </>
+            }
+        >
+            <>
+                PLAYER: { session && session.currentIndex}: 
+                { curId }                
+
+
             </>
         </AppLayout>
     )

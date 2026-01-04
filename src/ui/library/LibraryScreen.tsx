@@ -7,13 +7,13 @@ import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
 import type { Problem, ProgramRecord } from '../../domain/problem/types/Problem';
 import { createProblemRepository } from '../../domain/problem/problemRepository';
 import { useProblemRecords } from '../hooks/useProblemRecords';
-import { useProblemCollectionContext } from '@/app/providers/ProblemCollectionProvider';
+import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 
 
 export default function LibraryScreen(){    
     //const repository = createProblemRepository()
     //const { collection, addProblem, removeAll } = useProblemCollection(repository)
-    const { collection, addProblem, removeAll } = useProblemCollectionContext()
+    const { collection, addProblem, removeAll } = useProblemRecordsContext()
 
     //const [collection, setCollection] = useState<Collection>({})
 

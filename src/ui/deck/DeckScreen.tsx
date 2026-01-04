@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { List, ListItem, Button,  } from '@mui/material';
 
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
-import { useProblemCollectionContext } from '@/app/providers/ProblemCollectionProvider';
-import type { PlayerSession, QueueItem } from '@/domain/session/types/';
-import { useDeckPlaySessionContext } from '@/app/providers/DeckPlaySessionProvider';
+import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
+import type { PlaySession, QueueItem } from '@/domain/session/types/';
+import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { useNavigate } from 'react-router-dom';
 
 export default function DeckScreen(){
-    const deckPlaySession = useDeckPlaySessionContext()
-    const { collection } = useProblemCollectionContext()
+    const deckPlaySession = usePlaySessionContext()
+    const { collection } = useProblemRecordsContext()
     const navigate = useNavigate()
 
     const handleStart = () => {
@@ -20,11 +20,16 @@ export default function DeckScreen(){
         navigate("/player")
     }
     return (
-        <AppLayout>
+        <AppLayout 
+            header={"Deck"}
+            footer={
+                <Button onClick={handleStart}>
+                    開始
+                </Button>
+            }
+        >
             <>
-            <Button onClick={handleStart}>
-                開始
-            </Button>
+            
             </>
         </AppLayout>
     )

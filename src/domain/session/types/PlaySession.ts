@@ -3,7 +3,7 @@
 import type { QueueItem } from "./QUeueItem"
 
 //export type AnswerResult = "correct" | "wrong" | "skipped";
-export type PlayerSession = {
+export type PlaySession = {
     //deckId: string
     sessionId: string
     queue: QueueItem[]

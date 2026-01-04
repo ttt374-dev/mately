@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import type { Problem, ProgramRecord } from'@/domain/problem/types/Problem'
 import type { LearningRepository } from '@/domain/learning/LearningRepository';
 import type { LearningEntry, LearningRecord } from '@/domain/learning/types/LearningEntry';
+import type { AnswerResult } from '@/domain/learning/types';
+
 
 export function useLearningRecords (repository: LearningRepository){
     const [learningRecord, setLearningRecord] = useState<LearningRecord>({})
@@ -32,16 +34,21 @@ export function useLearningRecords (repository: LearningRepository){
         //persist()
         repository.save(learningRecord)
     };
-    const markSolved = (problemId: string) =>{
+    const markAnswer = (problemId: string, answer: AnswerResult) =>{
+        const addSolved = answer === "solved" ? 1 : 0
+        const addFailed = answer === "failed" ? 1 : 0
+
         update(problemId, r => ({
             ...r,
-            solvedCount: r.solvedCount+1,
+            solvedCount: r.solvedCount+addSolved,
+            failedCount: r.failedCount+addFailed,
             lastAnsweredAt: Date.now()
         }))
     } 
+    
 
     return {
         learningRecord,
-        markSolved
+        markAnswer
     }
 }
