@@ -14,19 +14,14 @@ export default function App() {
 
     <ProblemRecordProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/library" element={<LibraryScreen />} />
-          <Route path="/summary" element={<SummaryScreen />} />
-
-          <Route path="/deck" element={
-            <PlaySessionProvider>
-              <DeckScreen />
-            </PlaySessionProvider>} />
-          <Route path="/player" element={
-            <PlaySessionProvider>
-              <PlayerScreen />
-            </PlaySessionProvider>} />
-        </Routes>
+        <PlaySessionProvider>
+          <Routes>
+            <Route path="/library" element={<LibraryScreen />} />
+            <Route path="/summary" element={<SummaryScreen />} />
+            <Route path="/deck" element={<DeckScreen />} />
+            <Route path="/player" element={<PlayerScreen />} />
+          </Routes>
+        </PlaySessionProvider>
       </BrowserRouter>
     </ProblemRecordProvider>
 

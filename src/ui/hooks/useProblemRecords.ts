@@ -4,16 +4,16 @@ import type { Problem, ProgramRecord } from'@/domain/problem/types/Problem'
 import type { ProblemRepository } from '@/domain/problem/problemRepository';
 
 export function useProblemRecords (repository: ProblemRepository){
-    const [collection, setCollection] = useState<ProgramRecord>({})
+    const [records, setRecords] = useState<ProgramRecord>({})
 
     useEffect(() => {
         repository.load().
-            then(setCollection).
-            catch(() => setCollection({}))
+            then(setRecords).
+            catch(() => setRecords({}))
     }, []);
 
 const addProblem = (newProblem: Problem) => {
-    setCollection(prev => {
+    setRecords(prev => {
         const updated = { ...prev, [newProblem.id]: newProblem };
         repository.save(updated);  // ← prev ではなく updated を保存
         return updated;
@@ -21,12 +21,12 @@ const addProblem = (newProblem: Problem) => {
 }
       
     const removeAll = () => {
-        setCollection({})
+        setRecords({})
         repository.save({})
     }
 
     return {
-        collection,
+        records,
         addProblem, 
         removeAll,
     }

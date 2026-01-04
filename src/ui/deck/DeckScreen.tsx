@@ -9,12 +9,12 @@ import { useNavigate } from 'react-router-dom';
 
 export default function DeckScreen(){
     const deckPlaySession = usePlaySessionContext()
-    const { collection } = useProblemRecordsContext()
+    const { records } = useProblemRecordsContext()
     const navigate = useNavigate()
 
     const handleStart = () => {
         // build queue
-        const queue: QueueItem[] = Object.values(collection).map((p) => ({problemId: p.id}))
+        const queue: QueueItem[] = Object.values(records).map((p) => ({problemId: p.id}))
         
         deckPlaySession.startSession(queue)
         navigate("/player")
@@ -22,10 +22,14 @@ export default function DeckScreen(){
     return (
         <AppLayout 
             header={"Deck"}
-            footer={
+            footer={<>
                 <Button onClick={handleStart}>
                     開始
                 </Button>
+                <Button onClick={()=>navigate("/library")}>
+                    ライブラリー
+                </Button>
+                </>
             }
         >
             <>
