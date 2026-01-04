@@ -1,14 +1,14 @@
 import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 
-import type { Problem, Collection } from "@/domain/problem/types/Problem"
+import type { Problem, ProgramRecord } from "@/domain/problem/types/Problem"
 import { createProblemRepository } from "@/domain/problem/problemRepository"
-import { useProblemCollection } from "@/ui/library/hooks/useProblemColleciton"
+import { useProblemCollection } from "@/ui/hooks/useProblemColleciton"
 
 // context を作る
 export const ProblemCollectionContext = createContext<ProblemCollectionContextValue | null > (null)
 type ProblemCollectionContextValue = {
-    collection: Collection,
+    collection: ProgramRecord,
     removeAll: () => void,
     addProblem: (problem: Problem) => void
 }

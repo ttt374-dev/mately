@@ -4,4 +4,4 @@ export type Problem = {
   title: string;
 };
 
-export type Collection = Record<string, Problem>;
+export type ProgramRecord = Record<string, Problem>;

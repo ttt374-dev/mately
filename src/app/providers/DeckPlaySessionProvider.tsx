@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 
-import type { Problem, Collection } from "@/domain/problem/types/Problem"
+import type { Problem, ProgramRecord } from "@/domain/problem/types/Problem"
 import { createProblemRepository } from "@/domain/problem/problemRepository"
 import type { DeckPlaySession } from "@/ui/deck/DeckPlaySession"
 import { useDeckPlaySession } from "@/ui/deck/useDeckplaySession"

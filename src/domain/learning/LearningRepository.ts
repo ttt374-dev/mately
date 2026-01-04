@@ -1,16 +1,16 @@
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
-import type { Problem, ProgramRecord } from "./types/Problem";
+import type { LearningProgress, LearningRecord } from "./types/LearningProgress";
 
-const LIB_FILE = "problem.json";
+const LIB_FILE = "learning.json";
 
-export interface ProblemRepository {
-    load(): Promise<ProgramRecord>
-    save(collection: ProgramRecord): Promise<void>
+export interface LearningRepository {
+    load(): Promise<LearningRecord>
+    save(learningrecord: LearningRecord): Promise<void>
 }
 
-export const createProblemRepository = (): ProblemRepository => {
-    async function load(): Promise<ProgramRecord> {
+export const createLearningRepository = (): LearningRepository => {
+    async function load(): Promise<LearningRecord> {
         const result = await Filesystem.readFile({
             path: LIB_FILE,
             directory: Directory.Data,
@@ -23,22 +23,15 @@ export const createProblemRepository = (): ProblemRepository => {
                 : await result.data.text();
 
         const parsed = JSON.parse(dataStr);
-        // 配列で保存されている場合は record に変換
-        if (Array.isArray(parsed)) {
-            const record: ProgramRecord = {};
-            parsed.forEach((p: Problem) => {
-                record[p.id] = p;
-            });
-            return record;
-        }
+
         // すでに record の場合
         return typeof parsed === "object" && parsed !== null ? parsed : {};
     };
 
-    async function save(collection: ProgramRecord) {
+    async function save(learningrecord: LearningRecord) {
         await Filesystem.writeFile({
             path: LIB_FILE,
-            data: JSON.stringify(collection),
+            data: JSON.stringify(learningrecord),
             directory: Directory.Data,
             encoding: Encoding.UTF8,
         });

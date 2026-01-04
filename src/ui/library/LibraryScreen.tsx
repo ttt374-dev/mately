@@ -4,9 +4,9 @@ import { List, ListItem, Button,  } from '@mui/material';
 import { v4 } from 'uuid'
 
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
-import type { Problem, Collection } from '../../domain/problem/types/Problem';
+import type { Problem, ProgramRecord } from '../../domain/problem/types/Problem';
 import { createProblemRepository } from '../../domain/problem/problemRepository';
-import { useProblemCollection } from './hooks/useProblemColleciton';
+import { useProblemCollection } from '../hooks/useProblemColleciton';
 import { useProblemCollectionContext } from '@/app/providers/ProblemCollectionProvider';
 
 
