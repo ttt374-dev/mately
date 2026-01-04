@@ -1,11 +1,11 @@
 import { useState, useCallback } from "react"
 import { v4 } from "uuid"
 
-import type { DeckPlaySession, QueueItem } from "./DeckPlaySession"
+import type { PlayerSession, QueueItem } from "@/domain/session/types/"
 // types/player.ts
 
 export function useDeckPlaySession() {
-    const [session, setSession] = useState<DeckPlaySession | null>(null)
+    const [session, setSession] = useState<PlayerSession | null>(null)
 
 
     const startSession = (queue: QueueItem[]) => {

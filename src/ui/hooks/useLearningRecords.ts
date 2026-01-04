@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 
 import type { Problem, ProgramRecord } from'@/domain/problem/types/Problem'
 import type { LearningRepository } from '@/domain/learning/LearningRepository';
-import type { LearningProgress, LearningRecord } from '@/domain/learning/types/LearningProgress';
+import type { LearningEntry, LearningRecord } from '@/domain/learning/types/LearningEntry';
 
-export function useLearningProgress (repository: LearningRepository){
+export function useLearningRecords (repository: LearningRepository){
     const [learningRecord, setLearningRecord] = useState<LearningRecord>({})
 
     useEffect(() => {
@@ -13,7 +13,7 @@ export function useLearningProgress (repository: LearningRepository){
             catch(() => setLearningRecord({}))
     }, []);
 
-    const update = (problemId: string, updater: (r: LearningProgress) => LearningProgress) => {        
+    const update = (problemId: string, updater: (r: LearningEntry) => LearningEntry) => {        
         //console.log("update", entryId, updater)
         setLearningRecord(prev => {
             const current = prev[problemId] ?? {

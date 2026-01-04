@@ -9,14 +9,14 @@ import { createProblemRepository } from '../../domain/problem/problemRepository'
 import { useProblemCollectionContext } from '@/app/providers/ProblemCollectionProvider';
 import { useDeckPlaySessionContext } from '@/app/providers/DeckPlaySessionProvider';
 import { createLearningRepository } from '@/domain/learning/LearningRepository';
-import { useLearningProgress } from '../hooks/useLearningProgress';
+import { useLearningRecords } from '../hooks/useLearningRecords';
 
 export default function PlayerScreen(){
     //const { collection } = useProblemCollectionContext()
     const { session, advance } = useDeckPlaySessionContext()
     console.log("player session", session)
     const learningRepository = createLearningRepository()
-    const { learningRecord, markSolved } = useLearningProgress(learningRepository)
+    const { learningRecord, markSolved } = useLearningRecords(learningRepository)
 
     const curId = session ? session.queue[session.currentIndex].problemId : "-"  
 

@@ -1,6 +1,6 @@
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
-import type { LearningProgress, LearningRecord } from "./types/LearningProgress";
+import type { LearningEntry, LearningRecord } from "./types/LearningEntry";
 
 const LIB_FILE = "learning.json";
 

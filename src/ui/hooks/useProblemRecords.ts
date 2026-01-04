@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import type { Problem, ProgramRecord } from'@/domain/problem/types/Problem'
 import type { ProblemRepository } from '@/domain/problem/problemRepository';
 
-export function useProblemCollection (repository: ProblemRepository){
+export function useProblemRecords (repository: ProblemRepository){
     const [collection, setCollection] = useState<ProgramRecord>({})
 
     useEffect(() => {

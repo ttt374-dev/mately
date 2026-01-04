@@ -1,14 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { List, ListItem, Button,  } from '@mui/material';
-import { v4 } from 'uuid'
 
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
-import type { Problem, ProgramRecord } from '../../domain/problem/types/Problem';
-import { createProblemRepository } from '../../domain/problem/problemRepository';
 import { useProblemCollectionContext } from '@/app/providers/ProblemCollectionProvider';
-import type { DeckPlaySession, QueueItem } from './DeckPlaySession';
-import { useDeckPlaySession } from './useDeckplaySession';
+import type { PlayerSession, QueueItem } from '@/domain/session/types/';
 import { useDeckPlaySessionContext } from '@/app/providers/DeckPlaySessionProvider';
 import { useNavigate } from 'react-router-dom';
 

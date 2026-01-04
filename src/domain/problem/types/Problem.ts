@@ -4,4 +4,6 @@ export type Problem = {
   title: string;
 };
 
+export type ProblemEntry = Problem
+
 export type ProgramRecord = Record<string, Problem>;

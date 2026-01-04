@@ -6,7 +6,7 @@ import { v4 } from 'uuid'
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
 import type { Problem, ProgramRecord } from '../../domain/problem/types/Problem';
 import { createProblemRepository } from '../../domain/problem/problemRepository';
-import { useProblemCollection } from '../hooks/useProblemColleciton';
+import { useProblemRecords } from '../hooks/useProblemRecords';
 import { useProblemCollectionContext } from '@/app/providers/ProblemCollectionProvider';
 
 

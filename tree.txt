@@ -1,0 +1,54 @@
+src
+├── app
+│   ├── App.css
+│   ├── App.tsx
+│   └── providers
+│       ├── DeckPlaySessionProvider.tsx
+│       └── ProblemCollectionProvider.tsx
+├── application
+├── domain
+│   ├── learning
+│   │   ├── LearningRepository.ts
+│   │   └── types
+│   │       └── LearningEntry.ts
+│   └── problem
+│       ├── problemRepository.ts
+│       └── types
+│           └── Problem.ts
+├── index.css
+├── main.tsx
+├── shared
+│   ├── components
+│   │   ├── AppLayout
+│   │   │   ├── AppLayout.module.css
+│   │   │   └── AppLayout.tsx
+│   │   ├── FileButton.tsx
+│   │   ├── FixedScrollScreen.tsx
+│   │   ├── FrameLayout.tsx
+│   │   ├── MultipleFilesButton.tsx
+│   │   └── MyAppBar.tsx
+│   ├── hooks
+│   │   └── useAndroidBackHandler.ts
+│   └── utils
+│       ├── formatDate.ts
+│       ├── formatPercent.ts
+│       └── index.ts
+├── tests
+│   └── __mocks__
+│       └── @capacitor
+└── ui
+    ├── deck
+    │   ├── DeckScreen.tsx
+    │   ├── hooks
+    │   │   └── useDeckplaySession.ts
+    │   └── types
+    │       └── DeckPlaySession.ts
+    ├── hooks
+    │   ├── useLearningRecords.ts
+    │   └── useProblemRecords.ts
+    ├── library
+    │   └── LibraryScreen.tsx
+    └── player
+        └── PlayerScreen.tsx
+
+24 directories, 28 files

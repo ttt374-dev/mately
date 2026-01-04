@@ -1,7 +1,7 @@
 import './App.css'
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ProblemCollectionProvider } from './providers/ProblemCollectionProvider';
+import { ProblemRecordProvider } from './providers/ProblemCollectionProvider';
 import LibraryScreen from '@/ui/library/LibraryScreen';
 import DeckScreen from '@/ui/deck/DeckScreen';
 import PlayerScreen from '@/ui/player/PlayerScreen';
@@ -11,7 +11,7 @@ export default function App() {
   return (
 
 
-    <ProblemCollectionProvider>
+    <ProblemRecordProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/library" element={<LibraryScreen />} />
@@ -25,7 +25,7 @@ export default function App() {
             </DeckPlaySessionProvider>} />
         </Routes>
       </BrowserRouter>
-    </ProblemCollectionProvider>
+    </ProblemRecordProvider>
 
   );
 }

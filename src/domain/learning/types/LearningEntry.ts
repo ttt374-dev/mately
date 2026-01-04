@@ -1,5 +1,5 @@
 
-export type LearningProgress = {
+export type LearningEntry = {
   problemId: string;
   solvedCount: number;
   failedCount: number;
@@ -10,4 +10,4 @@ export type LearningProgress = {
   easeFactor: number          // 習熟度（Anki系）
 }
 
-export type LearningRecord = Record<string, LearningProgress>
+export type LearningRecord = Record<string, LearningEntry>

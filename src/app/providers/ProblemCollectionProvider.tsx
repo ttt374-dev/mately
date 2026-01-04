@@ -3,7 +3,7 @@ import { createContext, useContext } from "react"
 
 import type { Problem, ProgramRecord } from "@/domain/problem/types/Problem"
 import { createProblemRepository } from "@/domain/problem/problemRepository"
-import { useProblemCollection } from "@/ui/hooks/useProblemColleciton"
+import { useProblemRecords } from "@/ui/hooks/useProblemRecords"
 
 // context を作る
 export const ProblemCollectionContext = createContext<ProblemCollectionContextValue | null > (null)
@@ -13,9 +13,9 @@ type ProblemCollectionContextValue = {
     addProblem: (problem: Problem) => void
 }
 
-export const ProblemCollectionProvider = ({children}: { children: ReactNode}) => {
+export const ProblemRecordProvider = ({children}: { children: ReactNode}) => {
     const repository = createProblemRepository()
-    const { collection, removeAll, addProblem } = useProblemCollection(repository)
+    const { collection, removeAll, addProblem } = useProblemRecords(repository)
 
     return (
         <ProblemCollectionContext.Provider value={{

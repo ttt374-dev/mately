@@ -1,17 +1,14 @@
 import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 
-import type { Problem, ProgramRecord } from "@/domain/problem/types/Problem"
-import { createProblemRepository } from "@/domain/problem/problemRepository"
-import type { DeckPlaySession } from "@/ui/deck/DeckPlaySession"
-import { useDeckPlaySession } from "@/ui/deck/useDeckplaySession"
-import type { QueueItem } from "@/ui/deck/DeckPlaySession"
+import { useDeckPlaySession } from "@/ui/deck/hooks/useDeckplaySession"
+import type { PlayerSession, QueueItem } from "@/domain/session/types/"
 
 // context を作る
 export const DeckPlaySessionContext = createContext<DeckPlaySessionContextValue | null > (null)
 
 type DeckPlaySessionContextValue = {
-    session: DeckPlaySession | null
+    session: PlayerSession | null
     startSession: (queue: QueueItem[]) => void
     advance: () => void
 }
