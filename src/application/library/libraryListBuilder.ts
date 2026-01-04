@@ -1,8 +1,8 @@
 import type { ProblemRecord } from "../../domain/problem/types/Problem"
-import type { SortState } from "../../domain/problemRecord/types/Sort"
-import type { Filter } from "../../domain/problemRecord/types/Filter"
-import { sortProblems } from "@/domain/problemRecord/sortProblems"
-import { filterProblems } from "@/domain/problemRecord/filterProblems"
+import type { SortState } from "../../domain/problemCatalog/types/Sort"
+import type { Filter } from "../../domain/problemCatalog/types/Filter"
+import { sortProblems } from "@/domain/problemCatalog/sortProblems"
+import { filterProblems } from "@/domain/problemCatalog/filterProblems"
 
 
 export const buildLibraryList = (records: ProblemRecord, sort: SortState, filter: Filter) => {

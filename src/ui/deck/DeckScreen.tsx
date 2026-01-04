@@ -7,9 +7,9 @@ import type { PlaySession, QueueItem } from '@/domain/session/types/';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { useNavigate } from 'react-router-dom';
 import { buildQueue } from '@/application/queue/queueBuilder';
-import type { SortState, SortKey, SortOrder } from '@/domain/problemRecord/types/Sort';
-import type { Filter } from '@/domain/problemRecord/types/Filter';
-import { createDefaultFilter, createDefaultSort } from '@/domain/problemRecord/factory';
+import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/types/Sort';
+import type { Filter } from '@/domain/problemCatalog/types/Filter';
+import { createDefaultFilter, createDefaultSort } from '@/domain/problemCatalog/factory';
 
 export default function DeckScreen(){
     const deckPlaySession = usePlaySessionContext()

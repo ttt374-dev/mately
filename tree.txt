@@ -3,18 +3,36 @@ src
 │   ├── App.css
 │   ├── App.tsx
 │   └── providers
-│       ├── DeckPlaySessionProvider.tsx
+│       ├── PlaySessionProvider.tsx
 │       └── ProblemCollectionProvider.tsx
 ├── application
+│   ├── library
+│   │   └── libraryListBuilder.ts
+│   └── queue
+│       └── queueBuilder.ts
 ├── domain
 │   ├── learning
 │   │   ├── LearningRepository.ts
 │   │   └── types
-│   │       └── LearningEntry.ts
-│   └── problem
-│       ├── problemRepository.ts
+│   │       ├── AnswerResult.ts
+│   │       ├── LearningEntry.ts
+│   │       └── index.ts
+│   ├── problem
+│   │   ├── problemRepository.ts
+│   │   └── types
+│   │       └── Problem.ts
+│   ├── problemRecord
+│   │   ├── factory.ts
+│   │   ├── filterProblems.ts
+│   │   ├── sortProblems.ts
+│   │   └── types
+│   │       ├── Filter.ts
+│   │       └── Sort.ts
+│   └── session
 │       └── types
-│           └── Problem.ts
+│           ├── PlaySession.ts
+│           ├── QUeueItem.ts
+│           └── index.ts
 ├── index.css
 ├── main.tsx
 ├── shared
@@ -39,16 +57,18 @@ src
 └── ui
     ├── deck
     │   ├── DeckScreen.tsx
-    │   ├── hooks
-    │   │   └── useDeckplaySession.ts
-    │   └── types
-    │       └── DeckPlaySession.ts
+    │   └── hooks
+    │       └── usePlaySession.ts
     ├── hooks
     │   ├── useLearningRecords.ts
     │   └── useProblemRecords.ts
     ├── library
     │   └── LibraryScreen.tsx
-    └── player
-        └── PlayerScreen.tsx
+    ├── player
+    │   ├── PlayerScreen.tsx
+    │   └── types
+    │       └── PlayerMode.ts
+    └── summary
+        └── SummaryScreen.tsx
 
-24 directories, 28 files
+31 directories, 41 files

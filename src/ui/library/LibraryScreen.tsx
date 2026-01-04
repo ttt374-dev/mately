@@ -11,7 +11,7 @@ import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvi
 import { useNavigate } from 'react-router-dom';
 import type { QueueItem } from '@/domain/session/types';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
-import { createDefaultFilter, createDefaultSort } from '@/domain/problemRecord/factory';
+import { createDefaultFilter, createDefaultSort } from '@/domain/problemCatalog/factory';
 import { buildLibraryList } from '@/application/library/libraryListBuilder';
 
 
