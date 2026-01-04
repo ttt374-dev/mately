@@ -2,26 +2,40 @@ import { useState, useCallback } from "react"
 import { v4 } from "uuid"
 
 import type { PlaySession, QueueItem } from "@/domain/session/types/"
+import type { AnswerResult } from "@/domain/learning/types"
 // types/player.ts
 
 export function usePlaySession() {
     const [session, setSession] = useState<PlaySession | null>(null)
 
-
     const startSession = (queue: QueueItem[], startIndex: number = 0) => {
-        //console.log("start session", queue)
-
-        //if (queue.length === 0) return
-        
         setSession({
             //deckId: deckId,
             sessionId: v4(),
             queue: queue,
             currentIndex: startIndex,
             //startedAt: Date.now(),,
-            //results: {}
+            results: {}
         })
         console.log("start session", queue, startIndex)
+    }
+    const answerCurrent = (result: AnswerResult) => {
+        setSession(prev => {
+            if (!prev) return prev;
+
+            const current = prev.queue[prev.currentIndex];
+            if (!current) return prev;
+
+            const problemId = current.problemId;
+
+            return {
+                ...prev,
+                results: {
+                    ...prev.results,
+                    [problemId]: result,
+                },
+            };
+        });
     }
     const advance = useCallback(() => {
         setSession(prev => {
@@ -68,6 +82,7 @@ export function usePlaySession() {
         !!session && session.currentIndex == session.queue.length - 1
     return {
         session, setSession, startSession, advance, retreat,
+        answerCurrent,
         currentProblemId, isFinished, isLastIndex,
     }
 }

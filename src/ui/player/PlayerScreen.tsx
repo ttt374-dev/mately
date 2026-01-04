@@ -26,7 +26,7 @@ export default function PlayerScreen(){
     const navigate = useNavigate()
     //const { collection } = useProblemCollectionContext()
     const { records } = useProblemRecordsContext()
-    const { session, advance, isLastIndex } = usePlaySessionContext()
+    const { session, advance, isLastIndex, answerCurrent } = usePlaySessionContext()
     console.log("player session", session)
     const learningRepository = createLearningRepository()
     const { learningRecord, markAnswer } = useLearningRecords(learningRepository)
@@ -54,11 +54,12 @@ export default function PlayerScreen(){
     const handleAnswer = (answer: AnswerResult) => { 
         if (currentProblem){                                   
             markAnswer(currentProblem.id, answer)
+            answerCurrent(answer)
             console.log("handle solved", learningRecord)
         }   
 
         if (isLastIndex){
-            navigate("/summary")
+            navigate("/summary", { state: { session}})
         } else {
             advance()
         }                  

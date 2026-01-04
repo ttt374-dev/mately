@@ -1,2 +1,2 @@
 export * from './PlaySession'
-export * from './QUeueItem'
+export * from './QueueItem'

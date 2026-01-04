@@ -1,18 +1,32 @@
 
 import { useState, useEffect } from 'react';
-import { List, ListItem, Button,  } from '@mui/material';
-import { v4 } from 'uuid'
+import { useNavigate, useLocation } from 'react-router-dom';
 
-import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
-import type { Problem, ProblemRecord } from '../../domain/problem/types/Problem';
-import { createProblemRepository } from '../../domain/problem/problemRepository';
-import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
-import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
-import { createLearningRepository } from '@/domain/learning/LearningRepository';
-import { useLearningRecords } from '../hooks/useLearningRecords';
-import { useNavigate } from 'react-router-dom';
+import { AppLayout } from "@/shared/components/AppLayout/AppLayout"
+import type { PlaySession } from '@/domain/session/types';
+import { Box, List, ListItem } from '@mui/material';
+import type { AnswerResult } from '@/domain/learning/types';
+
+const summaryResult = (results: Record<string, AnswerResult>) => {    
+    const values = Object.values(results);
+    const solved = values.filter(v => v === "solved").length;
+    const failed = values.filter(v => v === "failed").length;
+
+    return {
+      totalAnswered: values.length,
+      solved,
+      failed,
+      
+      accuracy: values.length ? solved / values.length
+        //? Math.round((solved / values.length) * 100 / 100)
+        : 0,
+    };
+}
 
 export default function SummaryScreen(){
+    const location = useLocation();
+    const { session } = location.state as { session: PlaySession };
+    const summary = summaryResult(session.results)
     const navigate = useNavigate()
     return (
         <AppLayout
@@ -20,6 +34,20 @@ export default function SummaryScreen(){
         >
             <>
                 おつかれさまでした。
+
+                <Box>
+                    <List>
+                        <ListItem>
+                            正解： { summary.solved}
+                        </ListItem>
+                        <ListItem>
+                            不正解： { summary.failed}
+                        </ListItem>
+                        <ListItem>
+                            正解率： { summary.accuracy * 100} %
+                        </ListItem>
+                    </List>
+                </Box>
 
                 <button onClick={()=> navigate("/deck")}>
                     デッキに戻る
