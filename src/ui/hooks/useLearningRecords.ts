@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import type { LearningRepository } from '@/domain/learning/LearningRepository';
 import type { LearningEntry, LearningRecord } from '@/domain/learning/types/LearningEntry';
 import type { AnswerResult } from '@/domain/learning/types';
+import { judgeAnswerQuality, scheduleNext } from '@/domain/learning/scheduleNext';
 
 
 export function useLearningRecords (repository: LearningRepository){
@@ -37,8 +38,11 @@ export function useLearningRecords (repository: LearningRepository){
         const addSolved = answer === "solved" ? 1 : 0
         const addFailed = answer === "failed" ? 1 : 0
 
+        const answerQuality = judgeAnswerQuality(answer, 20) // TODO: sec
+
         update(problemId, r => ({
-            ...r,
+            //...r,
+            ...scheduleNext(r, answerQuality, Date.now()),
             solvedCount: r.solvedCount+addSolved,
             failedCount: r.failedCount+addFailed,
             lastAnsweredAt: Date.now()

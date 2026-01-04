@@ -1,5 +1,5 @@
 import type { KifContent } from "../types";
-import { createEmptyBoard } from "./BoardFactroy";
+import { createEmptyBoard } from "./BoardFactory";
 import { createEmptyHands } from "./HandsFactory";
 
 

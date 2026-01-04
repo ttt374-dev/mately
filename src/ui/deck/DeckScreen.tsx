@@ -42,7 +42,7 @@ export default function DeckScreen(){
                     開始
                 </Button>
                 <Button onClick={()=>navigate("/library")}>
-                    ライブラリー
+                    ライブラリ
                 </Button>
                 <Button onClick={handleClearLearning}>
                     学習データクリア

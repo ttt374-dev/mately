@@ -3,6 +3,7 @@ src
 │   ├── App.css
 │   ├── App.tsx
 │   └── providers
+│       ├── LearningRecordsProvider.tsx
 │       ├── PlaySessionProvider.tsx
 │       └── ProblemCollectionProvider.tsx
 ├── application
@@ -11,27 +12,65 @@ src
 │   └── queue
 │       └── queueBuilder.ts
 ├── domain
+│   ├── kif
+│   │   ├── builder
+│   │   │   ├── applyMove.ts
+│   │   │   └── buildBoardUntil.ts
+│   │   ├── factory
+│   │   │   ├── BoardFactroy.ts
+│   │   │   ├── HandsFactory.ts
+│   │   │   ├── KifContentFactory.ts
+│   │   │   └── index.ts
+│   │   ├── formatter
+│   │   │   └── formatHand.ts
+│   │   ├── parser
+│   │   │   ├── index.ts
+│   │   │   ├── kanToNumber.ts
+│   │   │   ├── kifParseBoard.ts
+│   │   │   ├── kifParseEvent.test.ts
+│   │   │   ├── kifParseEvent.ts
+│   │   │   ├── kifParseHand.test.ts
+│   │   │   ├── kifParseHand.ts
+│   │   │   ├── kifParseHeader.ts
+│   │   │   ├── kifParsePosition.test.ts
+│   │   │   ├── kifParsePosition.ts
+│   │   │   ├── kifParser.test.ts
+│   │   │   ├── kifParser.ts
+│   │   │   └── parseResult.ts
+│   │   └── types
+│   │       ├── Board.ts
+│   │       ├── KifContent.ts
+│   │       ├── Move.ts
+│   │       ├── Piece.ts
+│   │       ├── PieceType.ts
+│   │       ├── PlayerType.ts
+│   │       └── index.ts
 │   ├── learning
 │   │   ├── LearningRepository.ts
+│   │   ├── scheduleNext.ts
 │   │   └── types
 │   │       ├── AnswerResult.ts
 │   │       ├── LearningEntry.ts
 │   │       └── index.ts
 │   ├── problem
+│   │   ├── factory
+│   │   │   └── createProblem.ts
 │   │   ├── problemRepository.ts
 │   │   └── types
 │   │       └── Problem.ts
-│   ├── problemRecord
+│   ├── problemCatalog
 │   │   ├── factory.ts
 │   │   ├── filterProblems.ts
 │   │   ├── sortProblems.ts
 │   │   └── types
 │   │       ├── Filter.ts
-│   │       └── Sort.ts
+│   │       ├── ProblemRecord.ts
+│   │       ├── Sort.ts
+│   │       └── index.ts
 │   └── session
 │       └── types
 │           ├── PlaySession.ts
-│           ├── QUeueItem.ts
+│           ├── QueueItem.ts
 │           └── index.ts
 ├── index.css
 ├── main.tsx
@@ -57,18 +96,36 @@ src
 └── ui
     ├── deck
     │   ├── DeckScreen.tsx
+    │   ├── components
+    │   │   └── DeckFilterControl.tsx
     │   └── hooks
     │       └── usePlaySession.ts
     ├── hooks
     │   ├── useLearningRecords.ts
     │   └── useProblemRecords.ts
     ├── library
-    │   └── LibraryScreen.tsx
+    │   ├── LibraryScreen.tsx
+    │   ├── components
+    │   │   ├── LibraryDeleteControl.tsx
+    │   │   ├── LibraryList.tsx
+    │   │   ├── LibrarySelectionControl.tsx
+    │   │   └── LibrarySortControl.tsx
+    │   └── hooks
+    │       ├── useLibraryChecked.ts
+    │       └── useLibrarySort.ts
     ├── player
     │   ├── PlayerScreen.tsx
+    │   ├── components
+    │   │   ├── BoardView.module.css
+    │   │   ├── BoardView.tsx
+    │   │   └── MoveView.tsx
+    │   ├── hooks
+    │   │   ├── usePlayerPhase.ts
+    │   │   └── useReplayBoard.ts
     │   └── types
-    │       └── PlayerMode.ts
+    │       ├── PlayerMode.ts
+    │       └── PlayerPhase.ts
     └── summary
         └── SummaryScreen.tsx
 
-31 directories, 41 files
+43 directories, 86 files
