@@ -1,4 +1,4 @@
-import type { ProblemRecord } from "../../domain/problem/types/Problem"
+import type { ProblemRecord } from '@/domain/problemCatalog/types/ProblemRecord'
 import type { SortState } from "../../domain/problemCatalog/types/Sort"
 import type { Filter } from "../../domain/problemCatalog/types/Filter"
 import { sortProblems } from "@/domain/problemCatalog/sortProblems"

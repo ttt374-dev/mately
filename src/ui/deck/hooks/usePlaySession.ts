@@ -27,7 +27,7 @@ export function usePlaySession() {
             if (!current) return prev;
 
             const problemId = current.problemId;
-
+            
             return {
                 ...prev,
                 results: {
@@ -36,18 +36,21 @@ export function usePlaySession() {
                 },
             };
         });
+        console.log("answer current:", result, session?.results)
     }
     const advance = useCallback(() => {
         setSession(prev => {
             if (!prev) return prev
 
             const nextIndex = prev.currentIndex + 1
+            /*
             if (nextIndex >= prev.queue.length) {
                 return {
                     ...prev,
                     currentIndex: prev.queue.length-1, // finished 状態
                 }
             }
+                */
             return {
                 ...prev,
                 currentIndex: nextIndex,
@@ -78,11 +81,9 @@ export function usePlaySession() {
     const isFinished =
         !!session && session.currentIndex >= session.queue.length
     
-    const isLastIndex = 
-        !!session && session.currentIndex == session.queue.length - 1
     return {
         session, setSession, startSession, advance, retreat,
         answerCurrent,
-        currentProblemId, isFinished, isLastIndex,
+        currentProblemId, isFinished, 
     }
 }

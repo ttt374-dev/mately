@@ -1,5 +1,5 @@
 // domain/problemRecord/sortProblemRecords.ts
-import type { ProblemRecord, Problem } from "../problem/types/Problem"
+import type { Problem } from "../problem/types/Problem"
 import type { SortState, SortKey, SortOrder } from "./types/Sort"
 
 export function sortProblems(

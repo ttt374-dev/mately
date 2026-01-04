@@ -21,7 +21,7 @@ export const filterProblems = (
     learningRecords: LearningRecord,
 ): Problem[] => {
     const now = Date.now();
-    console.log("filter problems", filter, learningRecords)
+    //console.log("filter problems", filter, learningRecords)
     return problems.filter(problem => {
         const record = learningRecords[problem.id]
         //console.log("learning record", learningRecords, record, learningRecords)

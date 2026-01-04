@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 
-import type { Problem, ProblemRecord } from'@/domain/problem/types/Problem'
+import type { Problem} from'@/domain/problem/types/Problem'
+import type { ProblemRecord } from '@/domain/problemCatalog/types/ProblemRecord'
 import type { ProblemRepository } from '@/domain/problem/problemRepository';
 
 export function useProblemRecords (repository: ProblemRepository){
