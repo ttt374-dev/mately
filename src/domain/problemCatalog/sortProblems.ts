@@ -8,7 +8,7 @@ export function sortProblems(
 ): Problem[] {    
     const sorted = [...problems]
     //const sorted = Object.values(records)
-    //console.log("sorted entries", sort)
+    //console.log("sort problems", sort)
     sorted.sort((a, b) => {
       let vA: any
       let vB: any
@@ -20,8 +20,8 @@ export function sortProblems(
           break
 
         case "createdAt":
-          //vA = a.createdAt
-          //vB = b.createdAt
+          vA = a.createdAt
+          vB = b.createdAt
           break
 
         case "accuracy":

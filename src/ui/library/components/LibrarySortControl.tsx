@@ -1,0 +1,39 @@
+import { Box, IconButton, Tooltip, Button } from "@mui/material";
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
+import type { SortState, SortKey, SortOrder } from "@/domain/problemCatalog/types/Sort";
+
+export default function LibrarySortControl({ sort, setSortKey, setSortOrder }: {
+    sort: SortState,
+    setSortKey: (order: SortKey) => void
+    setSortOrder: (order: SortOrder) => void,
+}) {
+    const handleChangeKey = (e: any) => {
+        //console.log("set sort key", e.target.value)
+        setSortKey(e.target.value)
+    }
+    return (
+        <Box>
+            <select value={sort.key} onChange={handleChangeKey}>
+                <option key="createdAt" value="createdAt">追加順</option>
+                <option key="title" value="title">名前順</option>
+                <option key="accuracy" value="accuracy">正答率</option>
+                <option key="easeFactor" value="easeFactor">習熟度</option>
+            </select>
+
+            <IconButton onClick={() => {
+                
+                setSortOrder(sort.order == "asc" ? "desc" : "asc")
+                console.log("toggle sort order", sort.order)                
+            }
+            }>
+                {sort.order === 'asc'
+                    ? <ArrowUpwardIcon />
+                    : <ArrowDownwardIcon />
+                }
+            </IconButton>
+        </Box>
+    )
+}
+

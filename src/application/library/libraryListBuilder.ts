@@ -7,7 +7,8 @@ import { filterProblems } from "@/domain/problemCatalog/filterProblems"
 
 export const buildLibraryList = (records: ProblemRecord, sort: SortState, filter: Filter) => {
     const problems = Object.values(records)
-    const filtered = sortProblems(filterProblems(problems, filter), sort)
+    //const filtered = sortProblems(filterProblems(problems, filter), sort)
+    const sorted = sortProblems(problems, sort)
 
-    return Object.values(filtered)
+    return Object.values(sorted)
 }

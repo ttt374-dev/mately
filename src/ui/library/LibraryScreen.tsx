@@ -13,37 +13,31 @@ import type { QueueItem } from '@/domain/session/types';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { createDefaultFilter, createDefaultSort } from '@/domain/problemCatalog/factory';
 import { buildLibraryList } from '@/application/library/libraryListBuilder';
+import LibraryList from './components/LibraryList';
+import LibrarySortControl from './components/LibrarySortControl';
+import { useKifLibrarySort } from './hooks/useLibrarySort';
 
 
 export default function LibraryScreen(){    
     const navigate = useNavigate()
-    //const repository = createProblemRepository()
-    //const { collection, addProblem, removeAll } = useProblemCollection(repository)
     const { records, addProblem, removeAll } = useProblemRecordsContext()
-    const { session, startSession } = usePlaySessionContext()
-
-    //const [collection, setCollection] = useState<Collection>({})
-    const sort = createDefaultSort()
+    const { startSession } = usePlaySessionContext()
+    const { sortState, setSortKey, setSortOrder } = useKifLibrarySort()
+    //const sort = createDefaultSort()
     const filter = createDefaultFilter()
-    const libraryList = buildLibraryList(records, sort, filter)
-    //const libraryList = Object.values(records)
+    const libraryList = buildLibraryList(records, sortState, filter)
 
     const handleAddProblem = () => {
-        const newProblem = { id: v4(), title: "asdf"}
+        const random = Math.floor(Math.random() * 100) + 1;
+        const newProblem = { id: v4(), title: random.toString(), createdAt: Date.now()  }
         addProblem(newProblem)
         console.log("handle add problem", records)
     }
     const handleDeleteAll = () => {
         removeAll()
     }
+    
 
-    const handleSelectProblem = (problem: Problem) => {
-        //const queue: QueueItem[] = Object.keys(records).map((i)=>({problemId: i}))
-
-        const queue: QueueItem[] = [{problemId: problem.id}]
-        startSession(queue)
-        navigate("/player", {state: { mode: "review"}})
-    }
     return (
         <AppLayout
             header={"library"}
@@ -61,17 +55,8 @@ export default function LibraryScreen(){
                 </>
             }
         >
-            <List>
-                {
-                    libraryList.map((p, i) => (
-                        <ListItem 
-                            key={i}
-                            onClick={() => handleSelectProblem(p)}>
-                            {p.id}: {p.title}
-                        </ListItem>
-                    ))
-                }
-            </List>
+            <LibrarySortControl sort={sortState} setSortKey={setSortKey} setSortOrder={setSortOrder}/>
+            <LibraryList libraryList={libraryList} startSession={startSession}/>
         </AppLayout>
     )
 }

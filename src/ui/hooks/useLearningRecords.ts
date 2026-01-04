@@ -6,17 +6,17 @@ import type { AnswerResult } from '@/domain/learning/types';
 
 
 export function useLearningRecords (repository: LearningRepository){
-    const [learningRecord, setLearningRecord] = useState<LearningRecord>({})
+    const [learningRecords, setLearningRecords] = useState<LearningRecord>({})
 
     useEffect(() => {
         repository.load().
-            then(setLearningRecord).
-            catch(() => setLearningRecord({}))
+            then(setLearningRecords).
+            catch(() => setLearningRecords({}))
     }, []);
 
     const update = (problemId: string, updater: (r: LearningEntry) => LearningEntry) => {        
         //console.log("update", entryId, updater)
-        setLearningRecord(prev => {
+        setLearningRecords(prev => {
             const current = prev[problemId] ?? {
                 problemId: problemId,
                 solvedCount: 0,
@@ -31,7 +31,7 @@ export function useLearningRecords (repository: LearningRepository){
             };
         });
         //persist()
-        repository.save(learningRecord)
+        repository.save(learningRecords)
     };
     const markAnswer = (problemId: string, answer: AnswerResult) =>{
         const addSolved = answer === "solved" ? 1 : 0
@@ -44,10 +44,13 @@ export function useLearningRecords (repository: LearningRepository){
             lastAnsweredAt: Date.now()
         }))
     } 
-    
+    const clearAll = () => {
+        repository.save({})
+        setLearningRecords({})
+    }
 
     return {
-        learningRecord,
-        markAnswer
+        learningRecords,
+        markAnswer, clearAll,
     }
 }

@@ -7,22 +7,27 @@ import DeckScreen from '@/ui/deck/DeckScreen';
 import PlayerScreen from '@/ui/player/PlayerScreen';
 import { PlaySessionProvider } from './providers/PlaySessionProvider';
 import SummaryScreen from '@/ui/summary/SummaryScreen';
+import { LearningRecordsProvider } from './providers/LearningRecordsProvider';
 
 export default function App() {
   return (
 
 
     <ProblemRecordProvider>
-      <BrowserRouter>
-        <PlaySessionProvider>
-          <Routes>
-            <Route path="/library" element={<LibraryScreen />} />
-            <Route path="/summary" element={<SummaryScreen />} />
-            <Route path="/deck" element={<DeckScreen />} />
-            <Route path="/player" element={<PlayerScreen />} />
-          </Routes>
-        </PlaySessionProvider>
-      </BrowserRouter>
+      <PlaySessionProvider>
+        <LearningRecordsProvider>
+          <BrowserRouter>
+
+            <Routes>
+              <Route path="/library" element={<LibraryScreen />} />
+              <Route path="/summary" element={<SummaryScreen />} />
+              <Route path="/deck" element={<DeckScreen />} />
+              <Route path="/player" element={<PlayerScreen />} />
+            </Routes>
+
+          </BrowserRouter>
+        </LearningRecordsProvider>
+      </PlaySessionProvider>
     </ProblemRecordProvider>
 
   );

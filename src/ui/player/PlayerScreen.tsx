@@ -10,6 +10,7 @@ import { useLearningRecords } from '../hooks/useLearningRecords';
 import type { AnswerResult } from '@/domain/learning/types';
 import type { PlaySession } from '@/domain/session/types';
 import type { PlayerMode } from './types/PlayerMode';
+import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 
 function getCurrentProblem(session: PlaySession | null, records: ProblemRecord): Problem | null {
     const currentProblemId = session && session.queue[session.currentIndex]?.problemId
@@ -28,8 +29,8 @@ export default function PlayerScreen(){
     const { records } = useProblemRecordsContext()
     const { session, advance, isLastIndex, answerCurrent } = usePlaySessionContext()
     console.log("player session", session)
-    const learningRepository = createLearningRepository()
-    const { learningRecord, markAnswer } = useLearningRecords(learningRepository)
+    //const learningRepository = createLearningRepository()
+    const { learningRecords, markAnswer } = useLearningRecordsContext()
     
     console.log("session info", session)   
     const currentProblem = getCurrentProblem(session, records)
@@ -47,7 +48,7 @@ export default function PlayerScreen(){
     }
     
     // 学習情報
-    const learningEntry = learningRecord[currentProblem.id] || {}
+    const learningEntry = learningRecords[currentProblem.id] || {}
     // モード    
     const mode = getPlayerMode()
 
@@ -55,7 +56,7 @@ export default function PlayerScreen(){
         if (currentProblem){                                   
             markAnswer(currentProblem.id, answer)
             answerCurrent(answer)
-            console.log("handle solved", learningRecord)
+            console.log("handle solved", learningRecords)
         }   
 
         if (isLastIndex){

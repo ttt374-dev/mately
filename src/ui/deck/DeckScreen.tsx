@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { List, ListItem, Button,  } from '@mui/material';
+import { Box, List, ListItem, Button,  } from '@mui/material';
 
 import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
@@ -10,21 +10,19 @@ import { buildQueue } from '@/application/queue/queueBuilder';
 import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/types/Sort';
 import type { Filter } from '@/domain/problemCatalog/types/Filter';
 import { createDefaultFilter, createDefaultSort } from '@/domain/problemCatalog/factory';
+import DeckFilterControl from './components/DeckFilterControl';
+import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 
 export default function DeckScreen(){
     const deckPlaySession = usePlaySessionContext()
     const { records } = useProblemRecordsContext()
+    const { learningRecords, clearAll } = useLearningRecordsContext()
+    //const learningRecords = {}
     const navigate = useNavigate()
+    const [filter, setFilter] = useState<Filter>(createDefaultFilter())
 
-    // キュー
-    //const queue: QueueItem[] = Object.values(records).map((p) => ({problemId: p.id}))
     const sort = createDefaultSort()
-    const filter = createDefaultFilter()
-    //const sort: SortState = {key: "title", order: "asc"}
-    //const filter: Filter = {unansweredOnly: false, dueOnly: false}
-
-    const queue: QueueItem[] = buildQueue(records, sort, filter)
-    
+    const queue: QueueItem[] = buildQueue(records, sort, filter, learningRecords)
 
     const handleStart = () => {
         // build queue
@@ -32,6 +30,9 @@ export default function DeckScreen(){
         
         deckPlaySession.startSession(queue)
         navigate("/player")
+    }
+    const handleClearLearning = () => {
+        clearAll()
     }
     return (
         <AppLayout 
@@ -43,12 +44,17 @@ export default function DeckScreen(){
                 <Button onClick={()=>navigate("/library")}>
                     ライブラリー
                 </Button>
+                <Button onClick={handleClearLearning}>
+                    学習データクリア
+                </Button>
                 </>
             }
         >
             <>
-                問題数：{ queue.length}
-
+                <DeckFilterControl filter={filter} setFilter={setFilter}/>
+                <Box>
+                    問題数：{ queue.length}
+                </Box>
 
             </>
         </AppLayout>
