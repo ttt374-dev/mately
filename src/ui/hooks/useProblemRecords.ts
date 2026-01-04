@@ -1,3 +1,5 @@
+// UI hook
+
 import { useState, useEffect } from 'react';
 
 import type { Problem, ProblemRecord } from'@/domain/problem/types/Problem'
@@ -12,14 +14,31 @@ export function useProblemRecords (repository: ProblemRepository){
             catch(() => setRecords({}))
     }, []);
 
-const addProblem = (newProblem: Problem) => {
-    setRecords(prev => {
-        const updated = { ...prev, [newProblem.id]: newProblem };
-        repository.save(updated);  // ← prev ではなく updated を保存
-        return updated;
-    });
-}
-      
+    const addProblem = (newProblem: Problem) => {
+        setRecords(prev => {
+            const updated = { ...prev, [newProblem.id]: newProblem };
+            repository.save(updated);  // ← prev ではなく updated を保存
+            return updated;
+        });
+    }
+
+    const removeMany = (problems: Problem[]) => {
+        const removeIds = new Set(problems.map(p => p.id));
+
+        setRecords(prev => {
+            const next = Object.entries(prev).reduce<Record<string, Problem>>(
+                (acc, [id, problem]) => {
+                    if (!removeIds.has(id)) acc[id] = problem;
+                    return acc;
+                },
+                {}
+            );
+
+            repository.save(next);
+            return next;
+        });
+    };
+
     const removeAll = () => {
         setRecords({})
         repository.save({})
@@ -29,5 +48,6 @@ const addProblem = (newProblem: Problem) => {
         records,
         addProblem, 
         removeAll,
+        removeMany,
     }
 }
