@@ -12,7 +12,6 @@ type PlayerAction = {
     fullWidth?: boolean;
 };
 
-
 // フッター
 export default function PlayerFooterActions({
     phase,

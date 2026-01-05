@@ -9,9 +9,9 @@ import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import type { AnswerResult } from '@/domain/learning/types';
 import type { PlaySession } from '@/domain/session/types';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
-import { usePlayerPhase } from './hooks/usePlayerPhase';
+import { usePlayerPhaseFSM } from './hooks/usePlayerPhaseFSM';
 import { useEffect } from 'react';
-import { useReplayBoard } from './hooks/useReplayBoard';
+import { useReplayView } from './hooks/useReplayView';
 import { BoardPanel } from './components/BoardPanel';
 import PlayerFooterActions from './components/PlayerFooterActions';
 import MovesPanel from './components/MovesPanel';
@@ -30,21 +30,26 @@ function getCurrentProblem(session: PlaySession | null, records: Record<string, 
 }
 
 export default function PlayerScreen(){    
+    // session
     const { session, isFinished, answerCurrent,
         advance: advanceQueue, retreat: retreatQueue,
     } = usePlaySessionContext()
     const { records } = useProblemRecordsContext()
     const currentProblem = getCurrentProblem(session, records)     
-    const { currentPhase, advancePhase, retreatPhase, resetPhase } = usePlayerPhase()
+    
+    // replay
     const kifContent = currentProblem?.kifContent ?? createKifContent()
-    const moves = kifContent.events.filter(event => event.type ==="move")
-    const { board, hands, advancePly, retreatPly, resetPly,
-        currentPlyIndex, setCurrentPlyIndex } = useReplayBoard(
-        kifContent.board, kifContent.hands, moves        
-    )
-    const navigate = useNavigate()
-    const { learningRecords, markAnswer, toggleStar } = useLearningRecordsContext()
+    const { board, hands, moves,
+        dispatch: dispatchPly, moveToPly,
+        currentPlyIndex,  } = useReplayView(kifContent)
 
+    // FSM
+    const { currentPhase, dispatch: dispatchPhase} = usePlayerPhaseFSM()
+    
+
+    const { learningRecords, markAnswer, toggleStar } = useLearningRecordsContext()
+    const navigate = useNavigate()
+    
     // 最後のインデックスだったらサマリーに遷移
     useEffect(() => {
         if (!session || !isFinished) return;       
@@ -55,11 +60,16 @@ export default function PlayerScreen(){
     useEffect(() => {
         if (!session) return
 
-        resetPhase()
-        resetPly()        
+        //resetPhase()
+        dispatchPhase("RESET")
+        dispatchPly("RESET")
+        //resetPly()        
     }, [session?.currentIndex])
 
-    if (!session || !currentProblem) return (<>NO SESSION / NO PROBLEM</>)
+    if (!session || !currentProblem) return (<>
+        NO SESSION / NO PROBLEM
+        <button onClick={()=>navigate("/deck")}>戻る</button>
+    </>)
 
     // 学習情報
     const learningEntry = learningRecords[currentProblem.id] ?? {}
@@ -68,6 +78,7 @@ export default function PlayerScreen(){
     const handleAnswer = (answer: AnswerResult) => {                                     
         markAnswer(currentProblem.id, answer)
         answerCurrent(answer)
+        dispatchPhase("RESET")
     }    
     const handleStar = () => {
         toggleStar(currentProblem.id)        
@@ -78,10 +89,11 @@ export default function PlayerScreen(){
             header={ `${(session?.currentIndex ?? 0) + 1}: ${currentProblem.title}`}
             footer={<PlayerFooterActions 
                 phase={currentPhase}
-                onShowSolution={advancePhase}
+                //onShowSolution={advancePhase}
+                onShowSolution={()=>dispatchPhase("SHOW_SOLUTION")}
                 //onAnswer={handleAnswer}
                 onSolve={() => handleAnswer("solved")}
-                onFail={() => handleAnswer("solved")}
+                onFail={() => handleAnswer("failed")}
                 onBack={()=>navigate(-1)}
             />}
             >
@@ -91,10 +103,12 @@ export default function PlayerScreen(){
                     board={board}
                     hands={hands}
                     currentPhase={currentPhase}
-                    advanceMove={advancePly}
-                    retreatMove={retreatPly}
-                    advancePhase={advancePhase}
-                    retreatPhase={retreatPhase}
+                    advanceMove={() => dispatchPly("NEXT")}
+                    retreatMove={() => dispatchPly("PREV")}
+                    //advancePhase={advancePhase}
+                    advancePhase={() => dispatchPhase("ADVANCE")}
+                    //retreatPhase={retreatPhase}
+                    retreatPhase={() => dispatchPhase("RETREAT")}
                     advanceQueue={advanceQueue}
                     retreatQueue={retreatQueue}
                 />                
@@ -105,14 +119,14 @@ export default function PlayerScreen(){
                         moves={moves}
                         currentPhase={currentPhase}
                         currentPlyIndex={currentPlyIndex}
-                        setCurrentPlyIndex={setCurrentPlyIndex} />
+                        moveToPly={moveToPly} />
                     { /* コントロール */}
                     <ControlsPanel
                         learningEntry={learningEntry}
                         session={session}
                         currentPhase={currentPhase}
-                        advancePly={advancePly}
-                        retreatPly={retreatPly}
+                        advancePly={() => dispatchPly("NEXT")}
+                        retreatPly={() => {dispatchPly("PREV")}}
                         onToggleStar={handleStar}                          
                     />                                        
                 </Stack>

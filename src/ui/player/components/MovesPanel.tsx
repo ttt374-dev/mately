@@ -6,12 +6,12 @@ export default function MovesPanel({
     moves,
     currentPhase,
     currentPlyIndex,
-    setCurrentPlyIndex,
+    moveToPly,
 }: {
     moves: any[];
     currentPhase: PlayerPhase;
     currentPlyIndex: number;
-    setCurrentPlyIndex: (i: number) => void;
+    moveToPly: (i: number) => void;
 }) {
     return (
         <Box
@@ -27,7 +27,7 @@ export default function MovesPanel({
         >
             {currentPhase === "problem" && <Box p={2}>{moves.length}手詰め</Box>}
             {currentPhase === "solution" && (
-                <MovesView moves={moves} currentPlyIndex={currentPlyIndex} onMoveClick={setCurrentPlyIndex} />
+                <MovesView moves={moves} currentPlyIndex={currentPlyIndex} onMoveClick={moveToPly} />
             )}
         </Box>
     );

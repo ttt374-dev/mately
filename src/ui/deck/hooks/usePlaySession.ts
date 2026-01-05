@@ -3,6 +3,9 @@ import { v4 } from "uuid"
 
 import type { PlaySession, QueueItem } from "@/domain/session/types/"
 import type { AnswerResult } from "@/domain/learning/types"
+
+type SessionPhase = "playing" | "finished"
+
 // types/player.ts
 export function usePlaySession() {
     const [session, setSession] = useState<PlaySession | null>(null)
@@ -32,20 +35,8 @@ export function usePlaySession() {
                         answerResult: result,
                     }
                 ]
-            }
-            /*
-            const problemId = current.problemId;
-            
-            return {
-                ...prev,
-                results: {
-                    ...prev.results,
-                    [problemId]: result,
-                },
-            };
-            */
+            }            
         });
-        //console.log("answer current:", result, session?.results)
     }
     const advance = useCallback(() => {
         setSession(prev => {
@@ -72,11 +63,12 @@ export function usePlaySession() {
             }
         })
     }, [])    
-
+/*
     const currentProblemId =
         session && session.currentIndex < session.queue.length
             ? session.queue[session.currentIndex]
             : null
+            */
 
     const isFinished =
         !!session && session.currentIndex >= session.queue.length
@@ -86,6 +78,7 @@ export function usePlaySession() {
         session, setSession, startSession, 
         advance, retreat,
         answerCurrent,
-        currentProblemId, isFinished, 
+        //currentProblemId, 
+        isFinished, 
     }
 }
