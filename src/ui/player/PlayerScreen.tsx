@@ -1,15 +1,13 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Stack, Box, Button, IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Stack, Button, Box } from '@mui/material';
 
 import { AppLayout } from "@/shared/components/AppLayout/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
-//import type { ProblemRecord } from '@/domain/problemCatalog/types/ProblemRecord'
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
-import type { AnswerResult } from '@/domain/learning/types';
 import type { PlaySession } from '@/domain/session/types';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
-import { usePlayerPhaseFSM } from './hooks/usePlayerPhaseFSM';
+import { usePlayerPhase } from './hooks/usePlayerPhase';
 import { useEffect } from 'react';
 import { useReplayView } from './hooks/useReplayView';
 import { BoardPanel } from './components/BoardPanel';
@@ -18,21 +16,16 @@ import MovesPanel from './components/MovesPanel';
 import ControlsPanel from './components/ControlPanel';
 import { createKifContent } from '@/domain/kif/factory';
 
-function getCurrentProblem(session: PlaySession | null, records: Record<string, Problem>): Problem | null {
-    if (!session) return null
-
-    const item = session.queue[session.currentIndex]
-    if (!item) return null
-
-    return records[item.problemId] ?? null
-    //const currentProblemId = session && session.queue[session.currentIndex]?.problemId
-    //return currentProblemId ? records[currentProblemId] ?? null : null;        
-}
+const getCurrentProblem = (session: PlaySession | null, records: Record<string, Problem>): Problem | null =>
+    session?.queue[session.currentIndex]?.problemId
+        ? records[session.queue[session.currentIndex].problemId] ?? null
+        : null;
 
 export default function PlayerScreen(){    
     // session
-    const { session, isFinished, answerCurrent, dispatch: dispatchSession,
-        //advance: advanceQueue, retreat: retreatQueue,
+    const { session, isFinished, 
+        markSolved: sessionMarkSolved, markFailed: sessionMarkFailed,
+        nextProblem, prevProblem,
     } = usePlaySessionContext()
     const { records } = useProblemRecordsContext()
     const currentProblem = getCurrentProblem(session, records)     
@@ -40,13 +33,17 @@ export default function PlayerScreen(){
     // replay
     const kifContent = currentProblem?.kifContent ?? createKifContent()
     const { board, hands, moves,
-        dispatch: dispatchPly, moveToPly,
+        advancePly, retreatPly, moveToPly, resetPly,
         currentPlyIndex,  } = useReplayView(kifContent)
 
-    // FSM
-    const { currentPhase, dispatch: dispatchPhase} = usePlayerPhaseFSM()    
+    // phase
+    const { phase: currentPhase, advancePhase, retreatPhase,
+        resetPhase, showSolution,
+    } = usePlayerPhase()    
 
-    const { learningRecords, markAnswer, toggleStar } = useLearningRecordsContext()
+    const { learningRecords, toggleStar,
+        markSolved: learningMarkSolved, markFailed: learningMarkFailed,
+     } = useLearningRecordsContext()
     const navigate = useNavigate()
     
     // 最後のインデックスだったらサマリーに遷移
@@ -59,26 +56,38 @@ export default function PlayerScreen(){
     useEffect(() => {
         if (!session) return
 
-        //resetPhase()
-        dispatchPhase("RESET")
-        dispatchPly("RESET")
-        //resetPly()        
-    }, [session?.currentIndex])
+        resetPhase()
+        resetPly()
+    }, [session && session.currentIndex])
 
-    if (!session || !currentProblem) return (<>
-        NO SESSION / NO PROBLEM
-        <button onClick={()=>navigate("/deck")}>戻る</button>
-    </>)
+    if (!session || !currentProblem){
+        return (
+            <AppLayout>
+                <Box>NO SESSION / NO PROBLEM</Box>
+                <Button onClick={() => navigate("/deck")}>戻る</Button>
+            </AppLayout>)
+    }
 
     // 学習情報
     const learningEntry = learningRecords[currentProblem.id] ?? {}
     /////////////////////////////////////
     // ハンドラー
-    const handleAnswer = (answer: AnswerResult) => {                                     
-        markAnswer(currentProblem.id, answer)
-        answerCurrent(answer)
-        dispatchPhase("RESET")
+    const handleSolve = () => {                                     
+        learningMarkSolved(currentProblem.id)
+        sessionMarkSolved()
+        nextProblem()
+        //resetPhase()
     }    
+    const handleFail = () => {                                     
+        learningMarkFailed(currentProblem.id)
+        sessionMarkFailed()
+        nextProblem()
+        //resetPhase()
+    }    
+    const handleBack = () => {
+        navigate(-1)
+    }
+    
     const handleStar = () => {
         toggleStar(currentProblem.id)        
     }
@@ -88,12 +97,10 @@ export default function PlayerScreen(){
             header={ `${(session?.currentIndex ?? 0) + 1}: ${currentProblem.title}`}
             footer={<PlayerFooterActions 
                 phase={currentPhase}
-                //onShowSolution={advancePhase}
-                onShowSolution={()=>dispatchPhase("SHOW_SOLUTION")}
-                //onAnswer={handleAnswer}
-                onSolve={() => handleAnswer("solved")}
-                onFail={() => handleAnswer("failed")}
-                onBack={()=>navigate(-1)}
+                onShowSolution={showSolution}
+                onSolve={handleSolve}
+                onFail={handleFail}
+                onBack={handleBack}
             />}
             >
 
@@ -102,14 +109,12 @@ export default function PlayerScreen(){
                     board={board}
                     hands={hands}
                     currentPhase={currentPhase}
-                    advanceMove={() => dispatchPly("NEXT")}
-                    retreatMove={() => dispatchPly("PREV")}
-                    //advancePhase={advancePhase}
-                    advancePhase={() => dispatchPhase("ADVANCE")}
-                    //retreatPhase={retreatPhase}
-                    retreatPhase={() => dispatchPhase("RETREAT")}
-                    advanceQueue={() => dispatchSession({type: "NEXT"})}
-                    retreatQueue={() => dispatchSession({type: "PREV"})}
+                    advanceMove={advancePly}
+                    retreatMove={retreatPly}
+                    advancePhase={advancePhase}
+                    retreatPhase={retreatPhase}
+                    advanceQueue={nextProblem}
+                    retreatQueue={prevProblem}
                 />                
 
                 <Stack direction="row" sx={{ minHeight: 0}}>
@@ -124,8 +129,8 @@ export default function PlayerScreen(){
                         learningEntry={learningEntry}
                         session={session}
                         currentPhase={currentPhase}
-                        advancePly={() => dispatchPly("NEXT")}
-                        retreatPly={() => {dispatchPly("PREV")}}
+                        advancePly={advancePly}
+                        retreatPly={retreatPly}
                         onToggleStar={handleStar}                          
                     />                                        
                 </Stack>

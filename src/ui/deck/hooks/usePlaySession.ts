@@ -40,14 +40,13 @@ function sessionReducer(state: SessionState, action: SessionAction): SessionStat
       if (!state.session) return state
       const currentItem = state.session.queue[state.session.currentIndex]
       if (!currentItem) return state
-
-      const nextIndex = state.session.currentIndex + 1
-      const isFinished = nextIndex >= state.session.queue.length
+      
+      const isFinished = state.session.currentIndex >= state.session.queue.length
 
       return {
         session: {
           ...state.session,
-          currentIndex: nextIndex,
+          //currentIndex: nextIndex,
           results: [
             ...state.session.results,
             {
@@ -93,7 +92,7 @@ function sessionReducer(state: SessionState, action: SessionAction): SessionStat
       return state
   }
 }
-
+//////////////////////////////////////////////////////
 export function usePlaySession() {
   const [state, dispatch] = useReducer(sessionReducer, initialState)
 
@@ -101,17 +100,10 @@ export function usePlaySession() {
     dispatch({ type: "START", payload: { queue, startIndex } })
   }
 
-  const answerCurrent = (result: AnswerResult) => {
+  const markAnswer = (result: AnswerResult) => {
     if (result === "solved") dispatch({ type: "SOLVE" })
     else dispatch({ type: "FAIL" })
   }
-
-  const resetSession = () => {
-    dispatch({ type: "RESET" })
-  }
-
-  const goNext = () => dispatch({ type: "NEXT" })
-  const goPrev = () => dispatch({ type: "PREV" })
 
   const currentProblem =
     state.session && state.session.currentIndex < state.session.queue.length
@@ -126,10 +118,13 @@ export function usePlaySession() {
     currentProblem,
     isFinished,
     startSession,
-    answerCurrent,
-    resetSession,
-    goNext,
-    goPrev,
+    markAnswer,
+    markSolved: () => markAnswer("solved"),
+    markFailed: () => markAnswer("failed"),
+    resetSession: () => dispatch({ type: "RESET"}),
+    nextProblem: () => dispatch({ type: "NEXT" }),
+    prevProblem: () => dispatch({ type: "PREV" }),
+
     dispatch,
   }
 }

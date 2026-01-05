@@ -27,8 +27,8 @@ function reducer(
     return phaseTransition[state][action] ?? state    
 }
 
-export function usePlayerPhaseFSM(){
-    const [currentPhase, dispatch] = useReducer(reducer, initialPhase);
+export function usePlayerPhase(){
+    const [phase, dispatch] = useReducer(reducer, initialPhase);
 
     /*
     const [_currentPhase, setCurrentPhase] = useState<PlayerPhase>(initialPhase)
@@ -44,7 +44,11 @@ export function usePlayerPhaseFSM(){
     }
 */
     return {
-        currentPhase, 
+        phase, 
+        showSolution: () => dispatch("SHOW_SOLUTION"),
+        advancePhase: () => dispatch("ADVANCE"),
+        retreatPhase: () => dispatch("RETREAT"),
+        resetPhase: () => dispatch("RESET"),
         //advancePhase, retreatPhase, resetPhase,
 
         dispatch

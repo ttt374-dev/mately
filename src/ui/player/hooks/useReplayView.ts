@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
-import { createDefaultBoard, createEmptyHand, createEmptyHands } from "@/domain/kif/factory";
-import type { Board, Hands, KifContent, Move } from "@/domain/kif/types";
+import type { KifContent } from "@/domain/kif/types";
 import { buildBoardUntil } from "@/domain/kif/builder/buildBoardUntil";
 
 type ReplayAction = "NEXT" | "PREV" | "RESET";
@@ -35,15 +34,9 @@ export function useReplayView(kifContent: KifContent){
         currentPlyIndex,
         moveToPly: setCurrentPlyIndex,
         dispatch,
-/*
-        advancePly: () => {
-            currentPlyIndex < moves.length && setCurrentPlyIndex(prev => prev + 1)
-        },
-        retreatPly: () => {
-            currentPlyIndex > 0 && setCurrentPlyIndex(prev => prev - 1)
-            
-        },
-        resetPly: () => { setCurrentPlyIndex(initialIndex)}
-        */
+        advancePly: () => dispatch("NEXT"),
+        retreatPly: () => dispatch("PREV"),
+        resetPly: () => dispatch("RESET"),
+
     }
 }

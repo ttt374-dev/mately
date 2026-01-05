@@ -5,7 +5,6 @@ import type { LearningEntry, LearningRecord } from '@/domain/learning/types/Lear
 import type { AnswerResult } from '@/domain/learning/types';
 import { judgeAnswerQuality, scheduleNext } from '@/domain/learning/scheduleNext';
 
-
 export function useLearningRecords (repository: LearningRepository){
     const [learningRecords, setLearningRecords] = useState<LearningRecord>({})
 
@@ -63,6 +62,8 @@ export function useLearningRecords (repository: LearningRepository){
     return {
         learningRecords,
         markAnswer, clearAll,
+        markSolved: (id: string) => markAnswer(id, "solved"),
+        markFailed: (id: string) => markAnswer(id, "failed"),
         toggleStar,
     }
 }
