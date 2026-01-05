@@ -91,7 +91,7 @@ export default function PlayerScreen(){
             />}
             >
 
-            <Stack spacing={1}>
+            <>
                 <Box sx={{ justifyContent: "center" }}>
                     <BoardPanel
                         board={board}
@@ -126,7 +126,7 @@ export default function PlayerScreen(){
                                         
                 </Box>
 
-            </Stack>
+            </>
         </AppLayout>
     )
 }

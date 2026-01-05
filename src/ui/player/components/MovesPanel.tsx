@@ -23,6 +23,7 @@ export default function MovesPanel({
                 overflowY: "auto",
                 gap: 2,
                 p: 1,
+                flex: 1,
             }}
         >
             {currentPhase === "problem" && <Box p={2}>{moves.length}手詰め</Box>}
