@@ -2,7 +2,7 @@ import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 
 import { usePlaySession } from "@/hooks/usePlaySession"
-import type { PlaySession, QueueItem } from "@/domain/session/types/"
+import type { PlaySession, QueueItem } from "@/domain/fsm/types"
 
 // context を作る
 type PlaySessionContextValue = ReturnType<typeof usePlaySession>

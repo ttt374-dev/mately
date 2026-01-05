@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
-import type { PlaySession } from '@/domain/session/types';
+import type { PlaySession } from '@/domain/fsm/types';
 import { Stack, Box, List, ListItem, Button } from '@mui/material';
 import type { AnswerResult } from '@/domain/learning/types';
-import type { AnswerEntry } from '@/domain/session/types/AnswerEntry';
+import type { AnswerEntry } from '@/domain/fsm/types/AnswerEntry';
 
 const summaryResult = (results: AnswerEntry[]) => {
     const values = results

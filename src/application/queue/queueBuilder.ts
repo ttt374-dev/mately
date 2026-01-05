@@ -1,5 +1,5 @@
 import type { ProblemRecord } from '@/domain/problemCatalog/types/ProblemRecord'
-import type { QueueItem } from "@/domain/session/types"
+import type { QueueItem } from "@/domain/fsm/types"
 import type { SortState } from "@/domain/problemCatalog/types/Sort"
 import type { Filter } from "@/domain/problemCatalog/types/Filter"
 import { sortProblems } from "@/domain/problemCatalog/sortProblems"

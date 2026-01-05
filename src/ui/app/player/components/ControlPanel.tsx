@@ -1,7 +1,7 @@
 
 ///////////////////////
 
-import type { PlaySession } from "@/domain/session/types";
+import type { PlaySession } from "@/domain/fsm/types";
 import type { PlayerPhase } from "../types/PlayerPhase";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";

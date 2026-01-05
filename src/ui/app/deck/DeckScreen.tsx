@@ -3,7 +3,7 @@ import { Box, List, ListItem, Button, Stack  } from '@mui/material';
 
 import { AppLayout } from "../../shared/AppLayout/AppLayout"
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
-import type { PlaySession, QueueItem } from '@/domain/session/types/';
+import type { PlaySession, QueueItem } from '@/domain/fsm/types';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { useNavigate } from 'react-router-dom';
 import { buildQueue } from '@/application/queue/queueBuilder';

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
 import type { Problem} from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
-import type { QueueItem } from '@/domain/session/types';
+import type { QueueItem } from '@/domain/fsm/types';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { buildLibraryList } from '@/application/library/libraryListBuilder';
 import LibrarySortControl from './components/LibrarySortControl';

@@ -1,6 +1,6 @@
 import { useReducer } from "react"
 import { v4 as uuidv4 } from "uuid"
-import type { PlaySession, QueueItem } from "@/domain/session/types"
+import type { PlaySession, QueueItem } from "@/domain/fsm/types"
 import type { AnswerResult } from "@/domain/learning/types"
 
 type SessionPhase = "playing" | "finished"

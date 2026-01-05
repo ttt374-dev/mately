@@ -5,7 +5,7 @@ import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
-import type { PlaySession } from '@/domain/session/types';
+import type { PlaySession } from '@/domain/fsm/types';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { usePlayerPhase } from './hooks/usePlayerPhase';
 import { useEffect } from 'react';
