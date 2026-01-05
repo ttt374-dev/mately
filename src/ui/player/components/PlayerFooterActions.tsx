@@ -11,19 +11,19 @@ import type { AnswerResult } from "@/domain/learning/types";
 export default function PlayerFooterActions({
     currentPhase,
     advancePhase,
-    session,
     onAnswer,
+    onBack,
 }: {
     currentPhase: PlayerPhase;
     advancePhase: () => void;
-    session: PlaySession | null;
     onAnswer: (answer: AnswerResult) => void;
+    onBack: () => void;
 }) {
     const navigate = useNavigate();
     return currentPhase === "problem" ? (
         <Stack direction="row" spacing={1}>
-            <Button variant="outlined" onClick={() => navigate("/summary", { state: { session } })} sx={{ flex: 1 }}>
-                セッション完了
+            <Button variant="outlined" onClick={onBack}>
+                戻る
             </Button>
             <Button variant="contained" color="primary" onClick={advancePhase} sx={{ flex: 3 }}>
                 手筋を見る
@@ -31,14 +31,14 @@ export default function PlayerFooterActions({
         </Stack>
     ) : (
         <Stack direction="row" spacing={1}>
-                <Button fullWidth variant="contained" color="error" 
+            <Button fullWidth variant="contained" color="error"
                 onClick={() => onAnswer("failed")}>
-                    不正解
-                </Button>
-                <Button fullWidth variant="contained" color="success" 
-                    onClick={() => onAnswer("solved")}>
-                    正解
-                </Button>                
-            </Stack>
+                不正解
+            </Button>
+            <Button fullWidth variant="contained" color="success"
+                onClick={() => onAnswer("solved")}>
+                正解
+            </Button>
+        </Stack>
     );
 }

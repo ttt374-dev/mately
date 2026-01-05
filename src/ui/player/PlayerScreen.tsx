@@ -84,8 +84,8 @@ export default function PlayerScreen(){
             footer={<PlayerFooterActions 
                 currentPhase={currentPhase}
                 advancePhase={advancePhase}
-                session={session}
                 onAnswer={handleAnswer}
+                onBack={()=>navigate(-1)}
             />}
             >
 
