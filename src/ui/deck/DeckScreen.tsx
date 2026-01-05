@@ -10,7 +10,7 @@ import { buildQueue } from '@/application/queue/queueBuilder';
 import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/types/Sort';
 import DeckFilterControl from './components/DeckFilterControl';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
-import { useSortFilterContext } from '@/app/providers/SortFilterProvider';
+import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
 
 export default function DeckScreen(){
     const deckPlaySession = usePlaySessionContext()
@@ -19,7 +19,7 @@ export default function DeckScreen(){
     //const learningRecords = {}
     const navigate = useNavigate()
     //const [filter, setFilter] = useState<Filter>(createDefaultFilter())
-    const { filter: { filter, setFilter }} = useSortFilterContext()
+    const { filter: { filter, setFilter }} = useSortFilterStateContext()
 
     console.log("dec screen filter", filter)
 

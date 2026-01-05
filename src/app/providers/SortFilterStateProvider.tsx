@@ -4,29 +4,29 @@ import type { ReactNode } from "react"
 import { createContext, useContext, useState } from "react"
 
 // context を作る
-type SortFilterContextValue = {
+type SortFilterStateContextValue = {
   sort: ReturnType<typeof useLibrarySort>,
   filter: ReturnType<typeof useLibraryFilter>
 }
-export const SortFilterContext = createContext<SortFilterContextValue | null > (null)
+export const SortFilterStateContext = createContext<SortFilterStateContextValue | null > (null)
 
-export const SortFilterProvider = ({children}: { children: ReactNode}) => {
+export const SortFilterStateProvider = ({children}: { children: ReactNode}) => {
   const sort = useLibrarySort()
   const filter = useLibraryFilter()
 
   return (
-    <SortFilterContext.Provider value={{
+    <SortFilterStateContext.Provider value={{
       sort, filter
     }}>
       {children}
-    </SortFilterContext.Provider>
+    </SortFilterStateContext.Provider>
     )
 
 }
 
 // Hook で安全に取得
-export function useSortFilterContext(): SortFilterContextValue {
-  const ctx = useContext(SortFilterContext)
+export function useSortFilterStateContext(): SortFilterStateContextValue {
+  const ctx = useContext(SortFilterStateContext)
   if (!ctx) throw new Error("context provider error");
   return ctx;
 }

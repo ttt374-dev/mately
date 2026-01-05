@@ -5,7 +5,8 @@ src
 │   └── providers
 │       ├── LearningRecordsProvider.tsx
 │       ├── PlaySessionProvider.tsx
-│       └── ProblemCollectionProvider.tsx
+│       ├── ProblemCollectionProvider.tsx
+│       └── SortFilterProvider.tsx
 ├── application
 │   ├── library
 │   │   └── libraryListBuilder.ts
@@ -17,7 +18,7 @@ src
 │   │   │   ├── applyMove.ts
 │   │   │   └── buildBoardUntil.ts
 │   │   ├── factory
-│   │   │   ├── BoardFactroy.ts
+│   │   │   ├── BoardFactory.ts
 │   │   │   ├── HandsFactory.ts
 │   │   │   ├── KifContentFactory.ts
 │   │   │   └── index.ts
@@ -54,12 +55,13 @@ src
 │   │       └── index.ts
 │   ├── problem
 │   │   ├── factory
-│   │   │   └── createProblem.ts
+│   │   │   ├── buildProblem.ts
+│   │   │   ├── createProblem.ts
+│   │   │   └── index.ts
 │   │   ├── problemRepository.ts
 │   │   └── types
 │   │       └── Problem.ts
 │   ├── problemCatalog
-│   │   ├── factory.ts
 │   │   ├── filterProblems.ts
 │   │   ├── sortProblems.ts
 │   │   └── types
@@ -69,6 +71,7 @@ src
 │   │       └── index.ts
 │   └── session
 │       └── types
+│           ├── AnswerEntry.ts
 │           ├── PlaySession.ts
 │           ├── QueueItem.ts
 │           └── index.ts
@@ -90,9 +93,6 @@ src
 │       ├── formatDate.ts
 │       ├── formatPercent.ts
 │       └── index.ts
-├── tests
-│   └── __mocks__
-│       └── @capacitor
 └── ui
     ├── deck
     │   ├── DeckScreen.tsx
@@ -107,25 +107,29 @@ src
     │   ├── LibraryScreen.tsx
     │   ├── components
     │   │   ├── LibraryDeleteControl.tsx
-    │   │   ├── LibraryList.tsx
+    │   │   ├── LibraryFooterActions.tsx
     │   │   ├── LibrarySelectionControl.tsx
     │   │   └── LibrarySortControl.tsx
     │   └── hooks
     │       ├── useLibraryChecked.ts
+    │       ├── useLibraryFilter.ts
     │       └── useLibrarySort.ts
     ├── player
     │   ├── PlayerScreen.tsx
     │   ├── components
+    │   │   ├── BoardPanel.tsx
     │   │   ├── BoardView.module.css
     │   │   ├── BoardView.tsx
-    │   │   └── MoveView.tsx
+    │   │   ├── ControlPanel.tsx
+    │   │   ├── MoveView.tsx
+    │   │   ├── MovesPanel.tsx
+    │   │   └── PlayerFooterActions.tsx
     │   ├── hooks
     │   │   ├── usePlayerPhase.ts
-    │   │   └── useReplayBoard.ts
+    │   │   └── useReplayView.ts
     │   └── types
-    │       ├── PlayerMode.ts
     │       └── PlayerPhase.ts
     └── summary
         └── SummaryScreen.tsx
 
-43 directories, 86 files
+40 directories, 93 files

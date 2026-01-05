@@ -13,16 +13,16 @@ import { useLibrarySort } from './hooks/useLibrarySort';
 import { useLibraryChecked } from './hooks/useLibraryChecked';
 import LibraryDeleteControl from './components/LibraryDeleteControl';
 import LibrarySelectionControl from './components/LibrarySelectionControl';
-import { createProblemFromText } from '@/domain/problem/factory/createProblem';
+import { buildProblem } from '@/domain/problem/factory/';
 import LibraryFooterActions from './components/LibraryFooterActions';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
-import { useSortFilterContext } from '@/app/providers/SortFilterProvider';
+import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
 
 export default function LibraryScreen() {
     const navigate = useNavigate()
     const { records, addProblem, removeAll, removeMany } = useProblemRecordsContext()
     const { startSession } = usePlaySessionContext()
-    const { sort: { sortState, setSortKey, setSortOrder }} = useSortFilterContext()
+    const { sort: { sortState, setSortKey, setSortOrder }} = useSortFilterStateContext()
     const { learningRecords } = useLearningRecordsContext()
     const libraryList = buildLibraryList(records, sortState, learningRecords)
 
@@ -32,7 +32,7 @@ export default function LibraryScreen() {
                 const buf = await file.arrayBuffer();
                 const text = new TextDecoder("shift_jis").decode(buf);
 
-                const newProblem = createProblemFromText(text, file.name)
+                const newProblem = buildProblem(text, file.name)
                 console.log("new problem", newProblem)
                 newProblem && addProblem(newProblem)
             } catch (e) {
