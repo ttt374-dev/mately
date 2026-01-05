@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import type { PlayerPhase } from "../types/PlayerPhase";
 import MovesView from "./MoveView";
 
-
 export default function MovesPanel({
     moves,
     currentPhase,
