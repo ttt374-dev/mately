@@ -53,11 +53,11 @@ export default function PlayerScreen(){
     // 最後のインデックスだったらサマリーに遷移
     useEffect(() => {
         //console.log("effect", session?.currentIndex, isFinished)
-        if (!session) return;
-        if (!isFinished) return;
+        if (!session || !isFinished) return;
+        
 
         navigate("/summary", { state: { session } });
-    }, [session?.results, isFinished]);
+    }, [session, isFinished, navigate]);
     
     useEffect(() => {
         if (!session) return
@@ -81,8 +81,6 @@ export default function PlayerScreen(){
     return (
         <AppLayout
             header={ `${(session?.currentIndex ?? 0) + 1}: ${currentProblem.title}`}
-            //ooter={ ModeActions[mode] }
-            //footer={phaseActions[currentPhase]}
             footer={<FooterAction 
                 currentPhase={currentPhase}
                 advancePhase={advancePhase}
@@ -91,23 +89,20 @@ export default function PlayerScreen(){
             />}
             >
 
-            <>
-                <Box sx={{ justifyContent: "center" }}>
-                    <BoardPanel
-                        board={board}
-                        hands={hands}
-                        currentPhase={currentPhase}
-                        advanceMove={advancePly}
-                        retreatMove={retreatPly}
-                        advancePhase={advancePhase}
-                        retreatPhase={retreatPhase}
-                        advanceQueue={advanceQueue}
-                        retreatQueue={retreatQueue}
-                    />
-                </Box>
-                
+            <Stack direction="column" sx={{ minHeight: 0 }}>
+                <BoardPanel
+                    board={board}
+                    hands={hands}
+                    currentPhase={currentPhase}
+                    advanceMove={advancePly}
+                    retreatMove={retreatPly}
+                    advancePhase={advancePhase}
+                    retreatPhase={retreatPhase}
+                    advanceQueue={advanceQueue}
+                    retreatQueue={retreatQueue}
+                />                
 
-                <Box sx={{ minHeight: 0, display: "flex", flexDirection: "row" }}>
+                <Stack direction="row" sx={{ minHeight: 0}}>
                     { /* 手順リスト */}
                     <MovesPanel
                         moves={moves}
@@ -124,9 +119,8 @@ export default function PlayerScreen(){
                         onToggleStar={handleStar}                          
                     />
                                         
-                </Box>
-
-            </>
+                </Stack>
+            </Stack>
         </AppLayout>
     )
 }
