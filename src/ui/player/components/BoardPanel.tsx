@@ -1,10 +1,9 @@
 import { useSwipeable } from 'react-swipeable'
 import { Stack, Box } from '@mui/material'
-import type { PlayerPhase } from '../types/PlayerPhase'
 
+import type { PlayerPhase } from '../types/PlayerPhase'
 import type { Board, Hands } from '@/domain/kif/types'
 import BoardView from './BoardView'
-
 
 export function BoardPanel({
     board, hands,
@@ -15,9 +14,9 @@ export function BoardPanel({
 
 }: {
     board: Board, hands: Hands,
+    currentPhase: PlayerPhase
     advanceQueue: () => void
     retreatQueue: () => void
-    currentPhase: PlayerPhase
     advanceMove: () => void
     retreatMove: () => void
     advancePhase: () => void

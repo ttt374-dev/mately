@@ -1,9 +1,5 @@
-import { useState, useMemo } from "react";
-import {
-    Stack, Box, Button, FormControlLabel, FormGroup, FormLabel,
-    InputAdornment
-} from "@mui/material";
-import { FormControl, TextField, Checkbox, Select, MenuItem, Divider } from "@mui/material";
+import { FormControlLabel, FormGroup, FormLabel } from "@mui/material";
+import { FormControl, TextField, Checkbox } from "@mui/material";
 
 import type { Filter } from "@/domain/problemCatalog/types/Filter";
 
@@ -25,9 +21,7 @@ export default function DeckFilterControl({ filter, setFilter }: Props) {
                             ...f,
                             text: e.target.value
                         }))
-
                     }
-
                 >
                 </TextField>
 
@@ -41,7 +35,6 @@ export default function DeckFilterControl({ filter, setFilter }: Props) {
                             }))
                         } />}
                     label="未回答のみ" />
-
 
                 <FormControlLabel
                     control={
@@ -73,6 +66,5 @@ export default function DeckFilterControl({ filter, setFilter }: Props) {
                 />
             </FormGroup>
         </FormControl>
-
     )
 }

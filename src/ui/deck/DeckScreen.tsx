@@ -8,10 +8,9 @@ import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { useNavigate } from 'react-router-dom';
 import { buildQueue } from '@/application/queue/queueBuilder';
 import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/types/Sort';
-import type { Filter } from '@/domain/problemCatalog/types/Filter';
-import { createDefaultFilter, createDefaultSort } from '@/domain/problemCatalog/factory';
 import DeckFilterControl from './components/DeckFilterControl';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
+import { useSortFilterContext } from '@/app/providers/SortFilterProvider';
 
 export default function DeckScreen(){
     const deckPlaySession = usePlaySessionContext()
@@ -19,9 +18,16 @@ export default function DeckScreen(){
     const { learningRecords, clearAll } = useLearningRecordsContext()
     //const learningRecords = {}
     const navigate = useNavigate()
-    const [filter, setFilter] = useState<Filter>(createDefaultFilter())
+    //const [filter, setFilter] = useState<Filter>(createDefaultFilter())
+    const { filter: { filter, setFilter }} = useSortFilterContext()
 
-    const sort = createDefaultSort()
+    console.log("dec screen filter", filter)
+
+
+    const sort: SortState = {
+        key: "nextReviewedAt",
+        order: "asc"
+    }
     const queue: QueueItem[] = buildQueue(records, sort, filter, learningRecords)
 
     const handleStart = () => {

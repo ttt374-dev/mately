@@ -2,10 +2,16 @@
 import { useState, useCallback } from "react"
 
 import type { SortState, SortKey, SortOrder } from "@/domain/problemCatalog/types/Sort";
-import { createDefaultSort } from "@/domain/problemCatalog/factory";
 
-export function useKifLibrarySort() {
-  const [sortState, setSortState] = useState<SortState>(createDefaultSort())
+const DefaultSort: SortState = {
+  key: "title",
+  order: "asc",
+
+}
+
+
+export function useLibrarySort() {
+  const [sortState, setSortState] = useState<SortState>(DefaultSort)
 
   const setSortKey = useCallback((key: SortKey) => {
     //alert("setsortkey")

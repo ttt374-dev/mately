@@ -94,7 +94,7 @@ export default function PlayerScreen(){
     
     return (
         <AppLayout
-            header={ `${(session?.currentIndex ?? 0) + 1}: ${currentProblem.title}`}
+            header={ `${currentProblem.title}`}
             footer={<PlayerFooterActions 
                 phase={currentPhase}
                 onShowSolution={showSolution}

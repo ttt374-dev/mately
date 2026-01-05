@@ -1,10 +1,15 @@
 // domain/problemRecord/sortProblemRecords.ts
+import type { LearningEntry, LearningRecord } from "../learning/types"
 import type { Problem } from "../problem/types/Problem"
 import type { SortState, SortKey, SortOrder } from "./types/Sort"
 
+const calcAccuracy = (learningEntry: LearningEntry): number => {
+  return learningEntry.solvedCount / (learningEntry.solvedCount + learningEntry.failedCount)
+}
 export function sortProblems(
-  problems: readonly Problem[],
-  sort: SortState
+  problems: Problem[],
+  sort: SortState,
+  learningRecords?: LearningRecord
 ): Problem[] {    
     const sorted = [...problems]
     //const sorted = Object.values(records)
@@ -25,18 +30,21 @@ export function sortProblems(
           break
 
         case "accuracy":
-          //const aAcc = calcAccuracy(learningRecords[a.id]) ?? 0
-          //const bAcc = calcAccuracy(learningRecords[b.id]) ?? 0
-          //return sort.order === "asc" ? aAcc - bAcc : bAcc - aAcc
+          if (!learningRecords) return 0
+          const aAcc = calcAccuracy(learningRecords[a.id]) ?? 0
+          const bAcc = calcAccuracy(learningRecords[b.id]) ?? 0
+          return sort.order === "asc" ? aAcc - bAcc : bAcc - aAcc
           break
         case "easeFactor":
-          //vA = learningRecords[a.id]?.easeFactor
-          //vB = learningRecords[b.id]?.easeFactor
+          if (!learningRecords) return 0
+          vA = learningRecords[a.id]?.easeFactor
+          vB = learningRecords[b.id]?.easeFactor
           break
 
         case "nextReviewedAt":
-          //vA = learningRecords[a.id]?.nextReviewedAt
-          //vB = learningRecords[b.id]?.nextReviewedAt
+          if (!learningRecords) return 0
+          vA = learningRecords[a.id]?.nextReviewedAt
+          vB = learningRecords[b.id]?.nextReviewedAt
           break;
 
         case "random":

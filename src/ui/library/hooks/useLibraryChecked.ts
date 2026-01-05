@@ -1,6 +1,4 @@
-import type { Problem } from '@/domain/problem/types/Problem'
 import { useState, useCallback } from 'react'
-
 
 export function useLibraryChecked(problemIds: string[]) {
   const [checkedIds, setCheckedIds] = useState<Set<string>>(

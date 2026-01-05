@@ -10,8 +10,7 @@ type PhaseTransition = {
 const phaseTransition: PhaseTransition = {
   problem: {
     ADVANCE: "solution",
-    SHOW_SOLUTION: "solution",
-    
+    SHOW_SOLUTION: "solution",    
   },
   solution: {
     RETREAT: "problem",
@@ -30,19 +29,6 @@ function reducer(
 export function usePlayerPhase(){
     const [phase, dispatch] = useReducer(reducer, initialPhase);
 
-    /*
-    const [_currentPhase, setCurrentPhase] = useState<PlayerPhase>(initialPhase)
-
-    const resetPhase = () => {
-        setCurrentPhase(initialPhase)
-    }
-    const advancePhase = () => {
-        currentPhase === "problem" && setCurrentPhase("solution")
-    }
-    const retreatPhase = () => {
-        currentPhase === "solution" && setCurrentPhase("problem")
-    }
-*/
     return {
         phase, 
         showSolution: () => dispatch("SHOW_SOLUTION"),
