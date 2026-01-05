@@ -31,8 +31,8 @@ function getCurrentProblem(session: PlaySession | null, records: Record<string, 
 
 export default function PlayerScreen(){    
     // session
-    const { session, isFinished, answerCurrent,
-        advance: advanceQueue, retreat: retreatQueue,
+    const { session, isFinished, answerCurrent, dispatch: dispatchSession,
+        //advance: advanceQueue, retreat: retreatQueue,
     } = usePlaySessionContext()
     const { records } = useProblemRecordsContext()
     const currentProblem = getCurrentProblem(session, records)     
@@ -44,8 +44,7 @@ export default function PlayerScreen(){
         currentPlyIndex,  } = useReplayView(kifContent)
 
     // FSM
-    const { currentPhase, dispatch: dispatchPhase} = usePlayerPhaseFSM()
-    
+    const { currentPhase, dispatch: dispatchPhase} = usePlayerPhaseFSM()    
 
     const { learningRecords, markAnswer, toggleStar } = useLearningRecordsContext()
     const navigate = useNavigate()
@@ -109,8 +108,8 @@ export default function PlayerScreen(){
                     advancePhase={() => dispatchPhase("ADVANCE")}
                     //retreatPhase={retreatPhase}
                     retreatPhase={() => dispatchPhase("RETREAT")}
-                    advanceQueue={advanceQueue}
-                    retreatQueue={retreatQueue}
+                    advanceQueue={() => dispatchSession({type: "NEXT"})}
+                    retreatQueue={() => dispatchSession({type: "PREV"})}
                 />                
 
                 <Stack direction="row" sx={{ minHeight: 0}}>

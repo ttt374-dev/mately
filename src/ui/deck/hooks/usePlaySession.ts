@@ -1,84 +1,135 @@
-import { useState, useCallback } from "react"
-import { v4 } from "uuid"
-
-import type { PlaySession, QueueItem } from "@/domain/session/types/"
+import { useReducer } from "react"
+import { v4 as uuidv4 } from "uuid"
+import type { PlaySession, QueueItem } from "@/domain/session/types"
 import type { AnswerResult } from "@/domain/learning/types"
 
 type SessionPhase = "playing" | "finished"
 
-// types/player.ts
+type SessionState = {
+  session: PlaySession | null
+  phase: SessionPhase
+}
+
+type SessionAction =
+  | { type: "START"; payload: { queue: QueueItem[]; startIndex?: number } }
+  | { type: "SOLVE" }
+  | { type: "FAIL" }
+  | { type: "NEXT" }
+  | { type: "PREV" }
+  | { type: "RESET" }
+
+const initialState: SessionState = { session: null, phase: "playing" }
+
+function sessionReducer(state: SessionState, action: SessionAction): SessionState {
+  switch (action.type) {
+    case "START": {
+      const startIndex = action.payload.startIndex ?? 0
+      return {
+        session: {
+          sessionId: uuidv4(),
+          queue: action.payload.queue,
+          currentIndex: startIndex,
+          results: [],
+        },
+        phase: "playing",
+      }
+    }
+
+    case "SOLVE":
+    case "FAIL": {
+      if (!state.session) return state
+      const currentItem = state.session.queue[state.session.currentIndex]
+      if (!currentItem) return state
+
+      const nextIndex = state.session.currentIndex + 1
+      const isFinished = nextIndex >= state.session.queue.length
+
+      return {
+        session: {
+          ...state.session,
+          currentIndex: nextIndex,
+          results: [
+            ...state.session.results,
+            {
+              problemId: currentItem.problemId,
+              answerResult: action.type === "SOLVE" ? "solved" : "failed",
+            },
+          ],
+        },
+        phase: isFinished ? "finished" : "playing",
+      }
+    }
+
+    case "NEXT": {
+      if (!state.session) return state
+      const nextIndex = state.session.currentIndex + 1
+      const isFinished = nextIndex >= state.session.queue.length
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          currentIndex: Math.min(nextIndex, state.session.queue.length),
+        },
+        phase: isFinished ? "finished" : "playing",
+      }
+    }
+
+    case "PREV": {
+      if (!state.session) return state
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          currentIndex: Math.max(state.session.currentIndex - 1, 0),
+        },
+        phase: "playing",
+      }
+    }
+
+    case "RESET":
+      return initialState
+
+    default:
+      return state
+  }
+}
+
 export function usePlaySession() {
-    const [session, setSession] = useState<PlaySession | null>(null)
+  const [state, dispatch] = useReducer(sessionReducer, initialState)
 
-    const startSession = (queue: QueueItem[], startIndex: number = 0) => {
-        setSession({
-            //deckId: deckId,
-            sessionId: v4(),
-            queue: queue,
-            currentIndex: startIndex,
-            //startedAt: Date.now(),,
-            results: []
-        })
-        console.log("start session", queue, startIndex)
-    }
-    const answerCurrent = (result: AnswerResult) => {
-        setSession(prev => {
-            if (!prev) return prev;
-            const current = prev.queue[prev.currentIndex];
-            if (!current) return prev;
-            return {
-                ...prev,
-                currentIndex: prev.currentIndex + 1,
-                results: [
-                    ...prev.results,
-                    { problemId: current.problemId,
-                        answerResult: result,
-                    }
-                ]
-            }            
-        });
-    }
-    const advance = useCallback(() => {
-        setSession(prev => {
-            if (!prev) return prev
-            if (prev.currentIndex >= prev.queue.length) return prev
+  const startSession = (queue: QueueItem[], startIndex?: number) => {
+    dispatch({ type: "START", payload: { queue, startIndex } })
+  }
 
-            return {
-                ...prev,
-                currentIndex: prev.currentIndex + 1,
-            }
-        })
-        
-    }, [])
-    const retreat = useCallback(() => {
-        setSession(prev => {
-            if (!prev) return prev
-            if (prev.currentIndex <= 0) {
-                return prev
-            }
+  const answerCurrent = (result: AnswerResult) => {
+    if (result === "solved") dispatch({ type: "SOLVE" })
+    else dispatch({ type: "FAIL" })
+  }
 
-            return {
-                ...prev,
-                currentIndex: prev.currentIndex - 1,
-            }
-        })
-    }, [])    
-/*
-    const currentProblemId =
-        session && session.currentIndex < session.queue.length
-            ? session.queue[session.currentIndex]
-            : null
-            */
+  const resetSession = () => {
+    dispatch({ type: "RESET" })
+  }
 
-    const isFinished =
-        !!session && session.currentIndex >= session.queue.length
-    //const isLastIndex = session && session.currentIndex === session.queue.length - 1
-    
-    return {
-        session, setSession, startSession, 
-        advance, retreat,
-        answerCurrent,
-        //currentProblemId, 
-        isFinished, 
-    }
+  const goNext = () => dispatch({ type: "NEXT" })
+  const goPrev = () => dispatch({ type: "PREV" })
+
+  const currentProblem =
+    state.session && state.session.currentIndex < state.session.queue.length
+      ? state.session.queue[state.session.currentIndex]
+      : null
+
+  const isFinished = state.phase === "finished"
+
+  return {
+    session: state.session,
+    phase: state.phase,
+    currentProblem,
+    isFinished,
+    startSession,
+    answerCurrent,
+    resetSession,
+    goNext,
+    goPrev,
+    dispatch,
+  }
 }
