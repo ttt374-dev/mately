@@ -3,9 +3,10 @@ import { createDefaultBoard, createEmptyHand, createEmptyHands } from "@/domain/
 import type { Board, Hands, Move } from "@/domain/kif/types";
 import { buildBoardUntil } from "@/domain/kif/builder/buildBoardUntil";
 
+const initialIndex = 0
 
 export function useReplayBoard(initialBoard: Board, initialHands: Hands, moves: Move[]){
-    const [currentPlyIndex, setCurrentPlyIndex] = useState(0)
+    const [currentPlyIndex, setCurrentPlyIndex] = useState(initialIndex)
     const { board, hands } = useMemo(() => {
         return buildBoardUntil(initialBoard, initialHands, moves, currentPlyIndex)
     }, [initialBoard, initialHands, moves, currentPlyIndex])
@@ -22,5 +23,6 @@ export function useReplayBoard(initialBoard: Board, initialHands: Hands, moves: 
             currentPlyIndex > 0 && setCurrentPlyIndex(prev => prev - 1)
             
         },
+        resetPly: () => { setCurrentPlyIndex(initialIndex)}
     }
 }

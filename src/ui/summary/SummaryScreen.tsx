@@ -6,11 +6,12 @@ import { AppLayout } from "@/shared/components/AppLayout/AppLayout"
 import type { PlaySession } from '@/domain/session/types';
 import { Box, List, ListItem, Button } from '@mui/material';
 import type { AnswerResult } from '@/domain/learning/types';
+import type { AnswerEntry } from '@/domain/session/types/AnswerEntry';
 
-const summaryResult = (results: Record<string, AnswerResult>) => {    
-    const values = Object.values(results);
-    const solved = values.filter(v => v === "solved").length;
-    const failed = values.filter(v => v === "failed").length;
+const summaryResult = (results: AnswerEntry[]) => {    
+    const values = results
+    const solved = values.filter(v => v.answerResult === "solved").length;
+    const failed = values.filter(v => v.answerResult === "failed").length;
 
     return {
       totalAnswered: values.length,

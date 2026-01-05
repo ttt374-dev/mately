@@ -7,6 +7,7 @@ export type Problem = {
   createdAt: number;
 
   kifContent: KifContent,
+
 };
 
 export type ProblemEntry = Problem

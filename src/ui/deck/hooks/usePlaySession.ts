@@ -4,7 +4,6 @@ import { v4 } from "uuid"
 import type { PlaySession, QueueItem } from "@/domain/session/types/"
 import type { AnswerResult } from "@/domain/learning/types"
 // types/player.ts
-
 export function usePlaySession() {
     const [session, setSession] = useState<PlaySession | null>(null)
 
@@ -15,17 +14,25 @@ export function usePlaySession() {
             queue: queue,
             currentIndex: startIndex,
             //startedAt: Date.now(),,
-            results: {}
+            results: []
         })
         console.log("start session", queue, startIndex)
     }
     const answerCurrent = (result: AnswerResult) => {
         setSession(prev => {
             if (!prev) return prev;
-
             const current = prev.queue[prev.currentIndex];
             if (!current) return prev;
-
+            return {
+                ...prev,
+                results: [
+                    ...prev.results,
+                    { problemId: current.problemId,
+                        answerResult: result,
+                    }
+                ]
+            }
+            /*
             const problemId = current.problemId;
             
             return {
@@ -35,25 +42,18 @@ export function usePlaySession() {
                     [problemId]: result,
                 },
             };
+            */
         });
-        console.log("answer current:", result, session?.results)
+        //console.log("answer current:", result, session?.results)
     }
     const advance = useCallback(() => {
         setSession(prev => {
             if (!prev) return prev
+            if (prev.currentIndex >= prev.queue.length) return prev
 
-            const nextIndex = prev.currentIndex + 1
-            /*
-            if (nextIndex >= prev.queue.length) {
-                return {
-                    ...prev,
-                    currentIndex: prev.queue.length-1, // finished 状態
-                }
-            }
-                */
             return {
                 ...prev,
-                currentIndex: nextIndex,
+                currentIndex: prev.currentIndex + 1,
             }
         })
         
@@ -61,7 +61,6 @@ export function usePlaySession() {
     const retreat = useCallback(() => {
         setSession(prev => {
             if (!prev) return prev
-
             if (prev.currentIndex <= 0) {
                 return prev
             }
@@ -78,12 +77,14 @@ export function usePlaySession() {
             ? session.queue[session.currentIndex]
             : null
 
-    const isFinished =
-        !!session && session.currentIndex >= session.queue.length
+    //const isFinished =
+    //    !!session && session.currentIndex >= session.queue.length
+    const isLastIndex = session && session.currentIndex === session.queue.length - 1
     
     return {
-        session, setSession, startSession, advance, retreat,
+        session, setSession, startSession, 
+        advance, retreat,
         answerCurrent,
-        currentProblemId, isFinished, 
+        currentProblemId, isLastIndex, 
     }
 }

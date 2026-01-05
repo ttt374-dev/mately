@@ -12,6 +12,7 @@ export function createDefaultFilter(): Filter {
   return {
     unansweredOnly: false,
     dueOnly: false,
+    starredOnly: false,
   };
 }
 

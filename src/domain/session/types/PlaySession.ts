@@ -1,5 +1,6 @@
 import type { AnswerResult } from "@/domain/learning/types"
 import type { QueueItem } from "./QueueItem"
+import type { AnswerEntry } from "./AnswerEntry"
 
 //export type AnswerResult = "correct" | "wrong" | "skipped";
 export type PlaySession = {
@@ -7,7 +8,8 @@ export type PlaySession = {
     sessionId: string
     queue: QueueItem[]
     currentIndex: number
-    results: Record<string, AnswerResult>
+    results: AnswerEntry[]
+        //results: Record<string, AnswerResult>
     //startedAt: number
 }
 

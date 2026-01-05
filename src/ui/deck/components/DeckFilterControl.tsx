@@ -57,6 +57,20 @@ export default function DeckFilterControl({ filter, setFilter }: Props) {
                     }
                     label="習熟度でレビュー対象のみ"
                 />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={filter.starredOnly}
+                            onChange={e =>
+                                setFilter(f => ({
+                                    ...f,
+                                    starredOnly: e.target.checked,
+                                }))
+                            }
+                        />
+                    }
+                    label="スター付きのみ"
+                />
             </FormGroup>
         </FormControl>
 

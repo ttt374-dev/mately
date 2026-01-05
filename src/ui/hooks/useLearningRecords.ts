@@ -48,6 +48,13 @@ export function useLearningRecords (repository: LearningRepository){
             lastAnsweredAt: Date.now()
         }))
     } 
+    const toggleStar = (problemId: string) =>{
+        //console.log("toggleStar in hook", )
+        update(problemId, r => ({
+            ...r,
+            starred: !(r?.starred ?? false),
+        }))
+    }
     const clearAll = () => {
         repository.save({})
         setLearningRecords({})
@@ -56,5 +63,6 @@ export function useLearningRecords (repository: LearningRepository){
     return {
         learningRecords,
         markAnswer, clearAll,
+        toggleStar,
     }
 }

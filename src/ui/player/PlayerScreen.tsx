@@ -1,6 +1,8 @@
 import type { JSX } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Stack, Box, Button } from '@mui/material';
+import { Stack, Box, Button, IconButton } from '@mui/material';
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 import { AppLayout } from "@/shared/components/AppLayout/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
@@ -33,44 +35,47 @@ function getPlayerMode(): PlayerMode {
 
 export default function PlayerScreen(){    
         //const { collection } = useProblemCollectionContext()
-    const { session, isFinished, answerCurrent,
+    const { session, isLastIndex, answerCurrent,
         advance: advanceQueue, retreat: retreatQueue,
      } = usePlaySessionContext()
     //console.log("session info", session)   
     const { records } = useProblemRecordsContext()
     const currentProblem = getCurrentProblem(session, records) ?? createProblem()
     const navigate = useNavigate()
-        ///////////
-        
-    // 最後のインデックスだったらサマリーに遷移
-    useEffect(() => {
-        console.log("effect", session?.currentIndex, isFinished)
-        if (!session) return;
-        if (!isFinished) return;
-
-        navigate("/summary", { state: { session } });
-    }, [session?.results]);
-    
-    useEffect(() => {
-        resetPhase()
-    }, [records, session])
-
     /////////////////////////////////////////    
     const { currentPhase, advancePhase, retreatPhase, resetPhase } = usePlayerPhase()
     const moves = currentProblem.kifContent.events.filter(event => event.type ==="move")
-    const { board, hands, advancePly, retreatPly, 
+    const { board, hands, advancePly, retreatPly, resetPly,
         currentPlyIndex, setCurrentPlyIndex } = useReplayBoard(
         currentProblem.kifContent.board, currentProblem.kifContent.hands, moves        
     )
 
     //console.log("player session", session)
     //const learningRepository = createLearningRepository()
-    const { learningRecords, markAnswer } = useLearningRecordsContext()
+    const { learningRecords, markAnswer, toggleStar } = useLearningRecordsContext()
+    ///////////    
     
     // 学習情報
     const learningEntry = learningRecords[currentProblem.id] || {}
     // モード    
-    const mode = getPlayerMode()
+    const mode = getPlayerMode()        
+
+    // 最後のインデックスだったらサマリーに遷移
+    useEffect(() => {
+        //console.log("effect", session?.currentIndex, isFinished)
+        if (!session) return;
+        //if (!isFinished) return;
+
+        navigate("/summary", { state: { session } });
+    }, [session?.results]);
+    
+    useEffect(() => {
+        if (!session) return
+        resetPhase()
+        resetPly()
+        
+    }, [session?.currentIndex])
+
 
     // ハンドラー
     const handleAnswer = (answer: AnswerResult) => { 
@@ -83,14 +88,27 @@ export default function PlayerScreen(){
             advanceQueue()
         //}                  
     }    
-
+    const handleStar = () => {
+        toggleStar(currentProblem.id)
+        //console.log("toggled ", learningEntry.starred)
+    }
     //// フェーズ毎のアクションボタン（フッター）
     const phaseActions: Record<PlayerPhase, JSX.Element> = {
         problem: (
-            <Button fullWidth variant="contained" color="primary" 
-                onClick={advancePhase}>
-                手筋を見る
-            </Button>
+            <Stack direction="row" spacing={1}>
+                <Button variant="outlined" onClick={() =>
+                    //navigate("/deck")
+                    navigate("/summary", { state: { session }, },)
+                } sx={{flex: 1}}>
+                    セッション完了
+                </Button>
+
+                <Button fullWidth variant="contained" color="primary"
+                    onClick={advancePhase} sx={{flex: 3}}> 
+                    手筋を見る
+                </Button>
+                
+            </Stack>
         ),
         solution:
             (<Stack direction="row" spacing={1}>
@@ -104,24 +122,21 @@ export default function PlayerScreen(){
                 </Button>                
             </Stack>)
     }
+    /// モードごとのアクション（フッター）
+    const ModeActions: Record<PlayerMode, JSX.Element> = {
+        problem:
+            ( phaseActions[currentPhase]),
+        review:
+            (<Button onClick={() => navigate("/library")}>
+                ライブラリに戻る
+            </Button>)
+    }
     return (
         <AppLayout
             header={ `${(session?.currentIndex ?? 0) + 1}: ${currentProblem.title}`}
-            footer={
-                <>
-                    {mode === "problem" && 
-                        phaseActions[currentPhase]                                                               
-                    }
-                    {mode === "review" && <>
-                        <button onClick={() => navigate("/library")}>
-                            ライブラリに戻る
-                        </button>
-                    </>
-                    }
-                </>}>
+            footer={ ModeActions[mode] }>
 
-            <>
-
+            <Stack spacing={1}>
                 <Box sx={{ justifyContent: "center" }}>
                     <BoardPanel
                         board={board}
@@ -163,6 +178,15 @@ export default function PlayerScreen(){
 
                     { /* コントロール */}
                     <Stack border={1} sx={{ width: 150 }} gap={2} p={2}>
+                        <IconButton onClick={handleStar} disableRipple
+                            sx={{
+                                '&:focus': {outline: "none"},
+                                '&:focus-visible': {outline: "none"},
+                        }}
+                        >
+                            { learningEntry.starred ? <StarIcon/> : <StarBorderIcon/> }
+                        </IconButton>
+                        
                         
                         {currentPhase === "solution" && 
                         <Stack spacing={1}>
@@ -181,16 +205,11 @@ export default function PlayerScreen(){
                         <Box>
                             session: {session && `${session.currentIndex + 1} / ${session.queue.length}`}
                         </Box>
-                        <Button onClick={() =>
-                            //navigate("/deck")
-                            navigate("/summary", { state: { session } })
-                        }>
-                            セッション完了
-                        </Button>
+       
                     </Stack>
                 </Box>
 
-            </>
+            </Stack>
         </AppLayout>
     )
 }

@@ -39,24 +39,29 @@ export default function DeckScreen(){
             header={"Deck"}
             footer={
                 <Stack direction="row" spacing={1}>
-                    <Button fullWidth variant="contained" onClick={handleStart}
-                    sx={{ flex: 3}}>
-                        開始
+                    <Button onClick={handleClearLearning} sx={{flex: 1}}>
+                        学習クリア
                     </Button>
                     <Button variant="outlined" onClick={() => navigate("/library")}
                         sx={{flex: 1}}>
                         ライブラリ
                     </Button>
+
+                    <Button fullWidth variant="contained" onClick={handleStart}
+                    sx={{ flex: 3}} disabled={queue.length===0}>
+                        セッション開始
+                    </Button>
+                    
                 </Stack>
             }
         >
-            <>
+            <Stack p={1} spacing={2}>
                 <DeckFilterControl filter={filter} setFilter={setFilter}/>
                 <Box>
                     問題数：{ queue.length}
                 </Box>
 
-            </>
+            </Stack>
         </AppLayout>
     )
 }

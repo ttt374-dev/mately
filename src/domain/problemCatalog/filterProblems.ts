@@ -24,6 +24,8 @@ export const filterProblems = (
     //console.log("filter problems", filter, learningRecords)
     return problems.filter(problem => {
         const record = learningRecords[problem.id]
+        //if (!record) return true
+
         //console.log("learning record", learningRecords, record, learningRecords)
 
         // 未回答のみ
@@ -33,13 +35,19 @@ export const filterProblems = (
         }
 
         // 次回レビュー対象のみ
-        if (
-            filter.dueOnly &&
+        if (filter.dueOnly &&
             record?.nextReviewedAt !== undefined &&
             record.nextReviewedAt > now
         ) {
             return false;
         }
+        // スターつきのみ
+        if (filter.starredOnly &&
+            !record?.starred){
+            return false
+        }
+
+        
         // text
         if (!matchesText(problem, filter.text)) {
             return false;
