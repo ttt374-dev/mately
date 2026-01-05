@@ -16,22 +16,23 @@ import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvid
 import { usePlayerPhase } from './hooks/usePlayerPhase';
 import { useEffect } from 'react';
 import { useReplayBoard } from './hooks/useReplayBoard';
-import BoardView from './components/BoardView';
 import MovesView from './components/MoveView';
 import { createProblem } from '@/domain/problem/factory/createProblem';
 import type { PlayerPhase } from './types/PlayerPhase';
 import { BoardPanel } from './components/BoardPanel';
+import FooterAction from './components/FooterAction';
 
 function getCurrentProblem(session: PlaySession | null, records: ProblemRecord): Problem | null {
     const currentProblemId = session && session.queue[session.currentIndex]?.problemId
     return currentProblemId ? records[currentProblemId] ?? null : null;        
 }
-
+/*
 function getPlayerMode(): PlayerMode {
     const location = useLocation();
     const state = location.state as { mode?: PlayerMode } | undefined;
     return state?.mode ?? "problem"
 }
+    */
 
 export default function PlayerScreen(){    
         //const { collection } = useProblemCollectionContext()
@@ -58,7 +59,7 @@ export default function PlayerScreen(){
     // 学習情報
     const learningEntry = learningRecords[currentProblem.id] || {}
     // モード    
-    const mode = getPlayerMode()        
+    //const mode = getPlayerMode()        
 
     // 最後のインデックスだったらサマリーに遷移
     useEffect(() => {
@@ -67,7 +68,7 @@ export default function PlayerScreen(){
         if (!isFinished) return;
 
         navigate("/summary", { state: { session } });
-    }, [session?.results]);
+    }, [session?.results, isFinished]);
     
     useEffect(() => {
         if (!session) return
@@ -78,63 +79,28 @@ export default function PlayerScreen(){
 
     /////////////////////////////////////
     // ハンドラー
-    const handleAnswer = (answer: AnswerResult) => { 
-        if (currentProblem){                                   
-            markAnswer(currentProblem.id, answer)
-            answerCurrent(answer)
-            console.log("handle solved", session?.results)
-        }   
-        //if (!isFinished){            
-            //advanceQueue()
-        //}                  
+    const handleAnswer = (answer: AnswerResult) => {                                     
+        markAnswer(currentProblem.id, answer)
+        answerCurrent(answer)
+        //console.log("handle solved", session?.results)            
     }    
     const handleStar = () => {
         toggleStar(currentProblem.id)
         //console.log("toggled ", learningEntry.starred)
     }
-    //// フェーズ毎のアクションボタン（フッター）
-    const phaseActions: Record<PlayerPhase, JSX.Element> = {
-        problem: (
-            <Stack direction="row" spacing={1}>
-                <Button variant="outlined" onClick={() =>
-                    //navigate("/deck")
-                    navigate("/summary", { state: { session }, },)
-                } sx={{flex: 1}}>
-                    セッション完了
-                </Button>
-
-                <Button fullWidth variant="contained" color="primary"
-                    onClick={advancePhase} sx={{flex: 3}}> 
-                    手筋を見る
-                </Button>
-                
-            </Stack>
-        ),
-        solution:
-            (<Stack direction="row" spacing={1}>
-                <Button fullWidth variant="contained" color="error" 
-                onClick={() => handleAnswer("failed")}>
-                    不正解
-                </Button>
-                <Button fullWidth variant="contained" color="success" 
-                    onClick={() => handleAnswer("solved")}>
-                    正解
-                </Button>                
-            </Stack>)
-    }
-    /// モードごとのアクション（フッター）
-    const ModeActions: Record<PlayerMode, JSX.Element> = {
-        problem:
-            ( phaseActions[currentPhase]),
-        review:
-            (<Button onClick={() => navigate("/library")}>
-                ライブラリに戻る
-            </Button>)
-    }
+    
     return (
         <AppLayout
             header={ `${(session?.currentIndex ?? 0) + 1}: ${currentProblem.title}`}
-            footer={ ModeActions[mode] }>
+            //ooter={ ModeActions[mode] }
+            //footer={phaseActions[currentPhase]}
+            footer={<FooterAction 
+                currentPhase={currentPhase}
+                advancePhase={advancePhase}
+                session={session}
+                onAnswer={handleAnswer}
+            />}
+            >
 
             <Stack spacing={1}>
                 <Box sx={{ justifyContent: "center" }}>
@@ -163,9 +129,9 @@ export default function PlayerScreen(){
                             gap: 2, flex: 7,
                         }}>
                         {currentPhase === "problem" &&
-                            <>
+                            <Box p={2}>
                                 {moves.length}手詰め
-                            </>
+                            </Box>
                         }
                         {currentPhase === "solution" &&
                             <MovesView

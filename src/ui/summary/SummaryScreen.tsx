@@ -26,9 +26,20 @@ const summaryResult = (results: AnswerEntry[]) => {
 
 export default function SummaryScreen(){
     const location = useLocation();
-    const { session } = location.state as { session: PlaySession };
-    const summary = summaryResult(session.results)
     const navigate = useNavigate()
+    const locationState = location.state as { session?: PlaySession } | null;
+    const session = locationState?.session;
+
+    useEffect(() => {
+        if (!session) {
+            navigate("/deck");
+        }
+    }, [session, navigate]);
+
+    if (!session) return null; // セーフティレンダリング
+    //const { session } = location.state as { session: PlaySession };
+    const summary = summaryResult(session.results)
+    
     return (
         <AppLayout
             header={"Summary"}
