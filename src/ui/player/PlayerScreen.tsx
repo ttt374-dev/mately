@@ -35,7 +35,7 @@ function getPlayerMode(): PlayerMode {
 
 export default function PlayerScreen(){    
         //const { collection } = useProblemCollectionContext()
-    const { session, isLastIndex, answerCurrent,
+    const { session, isFinished, answerCurrent,
         advance: advanceQueue, retreat: retreatQueue,
      } = usePlaySessionContext()
     //console.log("session info", session)   
@@ -64,7 +64,7 @@ export default function PlayerScreen(){
     useEffect(() => {
         //console.log("effect", session?.currentIndex, isFinished)
         if (!session) return;
-        //if (!isFinished) return;
+        if (!isFinished) return;
 
         navigate("/summary", { state: { session } });
     }, [session?.results]);
@@ -76,7 +76,7 @@ export default function PlayerScreen(){
         
     }, [session?.currentIndex])
 
-
+    /////////////////////////////////////
     // ハンドラー
     const handleAnswer = (answer: AnswerResult) => { 
         if (currentProblem){                                   
@@ -85,7 +85,7 @@ export default function PlayerScreen(){
             console.log("handle solved", session?.results)
         }   
         //if (!isFinished){            
-            advanceQueue()
+            //advanceQueue()
         //}                  
     }    
     const handleStar = () => {
@@ -149,7 +149,6 @@ export default function PlayerScreen(){
                         advanceQueue={advanceQueue}
                         retreatQueue={retreatQueue}
                     />
-
                 </Box>
                 
 

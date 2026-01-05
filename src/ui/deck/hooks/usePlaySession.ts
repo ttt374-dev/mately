@@ -25,6 +25,7 @@ export function usePlaySession() {
             if (!current) return prev;
             return {
                 ...prev,
+                currentIndex: prev.currentIndex + 1,
                 results: [
                     ...prev.results,
                     { problemId: current.problemId,
@@ -77,14 +78,14 @@ export function usePlaySession() {
             ? session.queue[session.currentIndex]
             : null
 
-    //const isFinished =
-    //    !!session && session.currentIndex >= session.queue.length
-    const isLastIndex = session && session.currentIndex === session.queue.length - 1
+    const isFinished =
+        !!session && session.currentIndex >= session.queue.length
+    //const isLastIndex = session && session.currentIndex === session.queue.length - 1
     
     return {
         session, setSession, startSession, 
         advance, retreat,
         answerCurrent,
-        currentProblemId, isLastIndex, 
+        currentProblemId, isFinished, 
     }
 }
