@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import { AppLayout } from "@/shared/components/AppLayout/AppLayout"
+import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
 import type { PlaySession } from '@/domain/session/types';
 import { Stack, Box, List, ListItem, Button } from '@mui/material';
 import type { AnswerResult } from '@/domain/learning/types';

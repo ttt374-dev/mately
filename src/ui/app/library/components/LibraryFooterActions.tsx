@@ -1,6 +1,6 @@
 import { Button, Stack } from "@mui/material";
 
-import MultipleFilesButton from "@/shared/components/MultipleFilesButton";
+import MultipleFilesButton from "@/ui/shared/MultipleFilesButton";
 
 export default function LibraryFooterActions({ onFileSelected, onBackToDeck }: {
     onFileSelected: (files: File[]) => Promise<void>

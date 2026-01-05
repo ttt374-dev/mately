@@ -1,4 +1,4 @@
-import { formatDate } from "@/shared/utils"
+import { formatDate } from "@/utils"
 import type { AnswerResult, LearningEntry } from "./types"
 
 export type AnswerQuality = 0 | 1 | 2 | 3

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, List, ListItem, Button, Stack  } from '@mui/material';
 
-import { AppLayout } from "../../shared/components/AppLayout/AppLayout"
+import { AppLayout } from "../../shared/AppLayout/AppLayout"
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { PlaySession, QueueItem } from '@/domain/session/types/';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';

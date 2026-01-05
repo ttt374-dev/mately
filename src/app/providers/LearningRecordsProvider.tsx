@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 
-import { useLearningRecords } from "@/ui/hooks/useLearningRecords"
+import { useLearningRecords } from "@/hooks/useLearningRecords"
 import { createLearningRepository } from "@/domain/learning/LearningRepository"
 
 // context を作る

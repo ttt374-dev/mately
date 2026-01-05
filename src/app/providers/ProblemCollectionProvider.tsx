@@ -2,7 +2,7 @@ import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 
 import { createProblemRepository } from "@/domain/problem/problemRepository"
-import { useProblemRecords } from "@/ui/hooks/useProblemRecords"
+import { useProblemRecords } from "@/hooks/useProblemRecords"
 
 // context を作る
 type ProblemRecordsContextValue = ReturnType<typeof useProblemRecords>

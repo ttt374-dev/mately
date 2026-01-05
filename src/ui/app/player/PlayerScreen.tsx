@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Stack, Button, Box } from '@mui/material';
 
-import { AppLayout } from "@/shared/components/AppLayout/AppLayout"
+import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';

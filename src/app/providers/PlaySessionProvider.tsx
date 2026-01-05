@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 
-import { usePlaySession } from "@/ui/deck/hooks/usePlaySession"
+import { usePlaySession } from "@/hooks/usePlaySession"
 import type { PlaySession, QueueItem } from "@/domain/session/types/"
 
 // context を作る
