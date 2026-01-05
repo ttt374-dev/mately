@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 import { useReplayBoard } from './hooks/useReplayBoard';
 import { createProblem } from '@/domain/problem/factory/createProblem';
 import { BoardPanel } from './components/BoardPanel';
-import FooterAction from './components/FooterAction';
+import PlayerFooterActions from './components/PlayerFooterActions';
 import MovesPanel from './components/MovesPanel';
 import ControlsPanel from './components/ControlPanel';
 
@@ -81,7 +81,7 @@ export default function PlayerScreen(){
     return (
         <AppLayout
             header={ `${(session?.currentIndex ?? 0) + 1}: ${currentProblem.title}`}
-            footer={<FooterAction 
+            footer={<PlayerFooterActions 
                 currentPhase={currentPhase}
                 advancePhase={advancePhase}
                 session={session}

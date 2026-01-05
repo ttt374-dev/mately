@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import type { AnswerResult } from "@/domain/learning/types";
 
 // フッター
-export default function FooterAction({
+export default function PlayerFooterActions({
     currentPhase,
     advancePhase,
     session,

@@ -46,11 +46,6 @@ export default function DeckScreen(){
                         sx={{flex: 1}}>
                         ライブラリ
                     </Button>
-
-                    <Button fullWidth variant="contained" onClick={handleStart}
-                    sx={{ flex: 3}} disabled={queue.length===0}>
-                        セッション開始
-                    </Button>
                     
                 </Stack>
             }
@@ -60,6 +55,19 @@ export default function DeckScreen(){
                 <Box>
                     問題数：{ queue.length}
                 </Box>
+
+                <Button variant="contained"
+                    size="large"
+                    sx={{
+                        //flex: 3,
+                        minHeight: 100,
+                        alignSelf: "center"
+                    }}
+                    onClick={handleStart}
+                    disabled={queue.length===0}
+                    >
+                    セッション開始
+                </Button>
 
             </Stack>
         </AppLayout>

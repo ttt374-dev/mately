@@ -5,7 +5,7 @@ import { sortProblems } from "@/domain/problemCatalog/sortProblems"
 import { filterProblems } from "@/domain/problemCatalog/filterProblems"
 
 
-export const buildLibraryList = (records: ProblemRecord, sort: SortState, filter: Filter) => {
+export const buildLibraryList = (records: ProblemRecord, sort: SortState) => {
     const problems = Object.values(records)
     //const filtered = sortProblems(filterProblems(problems, filter), sort)
     const sorted = sortProblems(problems, sort)

@@ -17,6 +17,7 @@ import { useLibraryChecked } from './hooks/useLibraryChecked';
 import LibraryDeleteControl from './components/LibraryDeleteControl';
 import LibrarySelectionControl from './components/LibrarySelectionControl';
 import { createProblem, createProblemFromText } from '@/domain/problem/factory/createProblem';
+import LibraryFooterActions from './components/LibraryFooterActions';
 
 
 export default function LibraryScreen() {
@@ -24,9 +25,7 @@ export default function LibraryScreen() {
     const { records, addProblem, removeAll, removeMany } = useProblemRecordsContext()
     const { startSession } = usePlaySessionContext()
     const { sortState, setSortKey, setSortOrder } = useKifLibrarySort()
-    //const sort = createDefaultSort()
-    const filter = createDefaultFilter()
-    const libraryList = buildLibraryList(records, sortState, filter)
+    const libraryList = buildLibraryList(records, sortState)
 
     const handleSelectFiles = async (files: File[]) => {
         for (const file of files) {
@@ -64,17 +63,10 @@ export default function LibraryScreen() {
         <AppLayout
             header={"library"}
             footer={
-                <Stack direction="row">
-                    <MultipleFilesButton
+                <LibraryFooterActions 
                         onFileSelected={handleSelectFiles}
-                        label="インポート"
-                        useIconButton={false}
-                        buttonProps={{fullWidth: true, variant: "outlined"}}
-                    />
-                    <Button fullWidth variant='outlined' onClick={() => navigate("/deck")}>
-                        デッキに戻る
-                    </Button>
-                </Stack>
+                        onBackToDeck={() => navigate("/deck")}
+                />
             }
         >
             <Stack direction="row">
@@ -89,13 +81,12 @@ export default function LibraryScreen() {
                 <Box sx={{ flexGrow: 1 }} />
                 <LibrarySortControl sort={sortState} setSortKey={setSortKey} setSortOrder={setSortOrder} />
             </Stack>
-            <Box sx={{ maxHeight: "100%", overflowY: "auto" }}>
+            
+            <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto"  }}>
                 <List>
-                    {libraryList.map((p, i) => (
-                        <ListItem disablePadding
-                            key={i}
-                            onClick={() => handleSelectProblem(p)}>
-                            <ListItemButton>
+                    {libraryList.map((p) => (
+                        <ListItem disablePadding key={p.id}>
+                            <ListItemButton onClick={() => handleSelectProblem(p)}>
                                 <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>
                                     <Checkbox
                                         size="small"
