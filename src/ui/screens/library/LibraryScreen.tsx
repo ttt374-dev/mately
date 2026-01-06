@@ -6,7 +6,7 @@ import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
 import type { Problem} from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { QueueItem } from '@/domain/fsm/types';
-import { buildLibraryList } from '@/application/library/libraryListBuilder';
+import { buildLibraryList } from '@/usecase/listBuilder/libraryListBuilder';
 import LibrarySortControl from './components/LibrarySortControl';
 import { useLibraryChecked } from './hooks/useLibraryChecked';
 import LibraryDeleteControl from './components/LibraryDeleteControl';

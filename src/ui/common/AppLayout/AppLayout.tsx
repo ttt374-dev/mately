@@ -3,6 +3,7 @@ import styles from "./AppLayout.module.css";
 import { AppBar, Box, Drawer, IconButton, List, ListItemButton, ListItemText, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
+import BackupRestoreDialog from "../backupRestore/BackupRestoreDialog";
 
 interface Props {
   header?: React.ReactNode;
@@ -58,6 +59,10 @@ export function AppLayout({ header, footer, children }: Props) {
       
       <div className={styles.main}>{children}</div>
       {footer && <div className={styles.footer}>{footer}</div>}
+
+
+      { <BackupRestoreDialog open={backupDialogOpen} 
+        onClose={()=>setBackupDialogOpen(false)}/>}
     </div>
   );
 }
