@@ -25,6 +25,7 @@ export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
       if (!current) return state
       return {
         ...state,
+        phase: "answered",
         results: [
           ...state.results,
           { problemId: current.problemId, answerResult: action.type === "SOLVE" ? "solved" : "failed" },
@@ -78,7 +79,7 @@ export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
       }  
         */
     case "RESET":
-      //return initialState  // TODO
+      return initialState  // TODO
 
     default:
       return state

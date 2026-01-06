@@ -1,6 +1,6 @@
 import type { AnswerResult } from "@/domain/learning/types"
 import type { QueueItem } from "@/domain/fsm/types/QueueItem"
-import type { PlayerPhase } from "@/ui/app/player/types/PlayerPhase"
+import type { PlayerPhase } from "@/domain/fsm/types/PlayerPhase"
 
 // FSM state
 export type FsmState = {

@@ -1,7 +1,7 @@
 import { useSwipeable } from 'react-swipeable'
 import { Stack, Box } from '@mui/material'
 
-import type { PlayerPhase } from '../types/PlayerPhase'
+import type { PlayerPhase } from '../../../../domain/fsm/types/PlayerPhase'
 import type { Board, Hands } from '@/domain/kif/types'
 import BoardView from './BoardView'
 

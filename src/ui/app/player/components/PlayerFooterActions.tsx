@@ -1,4 +1,4 @@
-import type { PlayerPhase } from "../types/PlayerPhase";
+import type { PlayerPhase } from "../../../../domain/fsm/types/PlayerPhase";
 import { Button, Stack, type ButtonProps } from "@mui/material";
 import type { AnswerResult } from "@/domain/learning/types";
 

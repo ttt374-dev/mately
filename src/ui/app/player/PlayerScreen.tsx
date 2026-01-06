@@ -7,9 +7,8 @@ import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvi
 import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import type { FsmState, PlaySession } from '@/domain/fsm/types';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
-import { usePlayerPhase } from './hooks/usePlayerPhase';
 import { useEffect } from 'react';
-import { useReplayView } from './hooks/useReplayView';
+import { useReplayView } from '@/ui/app/player/hooks/useReplayView';
 import { BoardPanel } from './components/BoardPanel';
 import PlayerFooterActions from './components/PlayerFooterActions';
 import MovesPanel from './components/MovesPanel';
@@ -29,53 +28,55 @@ const getCurrentProblem = (session: PlaySession | null, records: Record<string, 
 */
 export default function PlayerScreen(){    
     // fsm
-    const { state: fsmState, next, prev, solve, fail, reset,
+    const { state: fsmState, next, prev, solve, fail, 
         advancePhase, retreatPhase,
         //advancePly, retreatPly,
      } = useFsmContext()
     const currentPhase = fsmState.phase
     // session
-    const { //session, //isFinished, 
+    //const { //session, //isFinished, 
         //markSolved: sessionMarkSolved, markFailed: sessionMarkFailed,
         //nextProblem, prevProblem,
-    } = usePlaySessionContext()
+    //} = usePlaySessionContext()
     const { records } = useProblemRecordsContext()
     const currentProblem = getCurrentProblem(fsmState, records)     
     
     // replay
     const kifContent = currentProblem?.kifContent ?? createKifContent()
-    const { board, hands, moves,
+    const { board, hands, moves, currentPlyIndex, 
         advancePly, retreatPly, 
-        moveToPly, resetPly,
-        currentPlyIndex, 
+        moveToPly, resetPly,        
      } = useReplayView(kifContent)
 
     // phase
-    const { //phase: currentPhase, //advancePhase, retreatPhase,
+    //const { //phase: currentPhase, //advancePhase, retreatPhase,
         //resetPhase, showSolution,
-    } = usePlayerPhase()    
+    //} = usePlayerPhase()    
 
     const { learningRecords, toggleStar,
         markSolved: learningMarkSolved, markFailed: learningMarkFailed,
      } = useLearningRecordsContext()
     const navigate = useNavigate()
     
+    // answer から次へ自動遷移
+    useEffect(() => {
+        if (fsmState.phase === "answered")
+            next()
+    }, [fsmState.phase])
+
     // 最後のインデックスだったらサマリーに遷移
     useEffect(() => {
         if (!fsmState.isFinished) return;       
 
-        //navigate("/summary", { state: { session } });  // TODO
         navigate("/summary", { state: { fsmState }})
     }, [fsmState.isFinished, navigate]);
     
+    // 問題が変わったら手筋をリセット
     useEffect(() => {
         if (!fsmState) return
 
-        //resetPhase()
         resetPly()
-
-        reset()
-    }, [fsmState && fsmState.currentIndex])
+    }, [fsmState.currentIndex])
 
     if (!fsmState || !currentProblem){
         console.log("empty state", fsmState, currentProblem)
@@ -93,19 +94,11 @@ export default function PlayerScreen(){
     // ハンドラー
     const handleSolve = () => {                                     
         learningMarkSolved(currentProblem.id)
-        //sessionMarkSolved()
-        //nextProblem()
-        //resetPhase()
-
-        // fsm
         solve()
         next()
     }    
     const handleFail = () => {                                     
         learningMarkFailed(currentProblem.id)
-        //sessionMarkFailed()
-        //nextProblem()
-        //resetPhase()
         fail()
         next()
     }    

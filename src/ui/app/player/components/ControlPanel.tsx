@@ -2,7 +2,7 @@
 ///////////////////////
 
 import type { FsmState, PlaySession } from "@/domain/fsm/types";
-import type { PlayerPhase } from "../types/PlayerPhase";
+import type { PlayerPhase } from "../../../../domain/fsm/types/PlayerPhase";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { Stack, Box, Button, IconButton } from '@mui/material';

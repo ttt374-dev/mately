@@ -1,42 +1,53 @@
-import { useState, useMemo } from "react";
+// useReplayView.ts
+import { useReducer, useMemo } from "react";
 import type { KifContent } from "@/domain/kif/types";
 import { buildBoardUntil } from "@/domain/kif/builder/buildBoardUntil";
+import {
+  replayReducer,
+  initialReplayState,
+  type ReplayAction,
+} from "@/domain/fsm/replayReducer";
 
-type ReplayAction = "NEXT" | "PREV" | "RESET";
+export function useReplayView(kifContent: KifContent) {
+  const { board: initialBoard, hands: initialHands, events } = kifContent;
 
-const initialIndex = 0
+  const moves = useMemo(
+    () => events.filter(e => e.type === "move"),
+    [events]
+  );
 
-export function useReplayView(kifContent: KifContent){
-//export function useReplayView(initialBoard: Board, initialHands: Hands, moves: Move[]){
-    const { board: initialBoard, hands: initialHands, events }  = kifContent
-    const moves = events.filter(event => event.type ==="move")
+  const [state, dispatch] = useReducer(
+    (s: typeof initialReplayState, a: ReplayAction) =>
+      replayReducer(s, a, moves.length),
+    initialReplayState
+  );
 
-    const [currentPlyIndex, setCurrentPlyIndex] = useState(initialIndex)
-    const { board, hands } = useMemo(() => {
-        return buildBoardUntil(initialBoard, initialHands, moves, currentPlyIndex)
-    }, [initialBoard, initialHands, moves, currentPlyIndex])
+  const { board, hands } = useMemo(() => {
+    return buildBoardUntil(
+      initialBoard,
+      initialHands,
+      moves,
+      state.currentPlyIndex
+    );
+  }, [initialBoard, initialHands, moves, state.currentPlyIndex]);
 
-    const dispatch = (action: ReplayAction) => {
-        switch (action) {
-            case "NEXT":
-                setCurrentPlyIndex(i => Math.min(i + 1, moves.length));
-                break;
-            case "PREV":
-                setCurrentPlyIndex(i => Math.max(i - 1, 0));
-                break;
-            case "RESET":
-                setCurrentPlyIndex(initialIndex);
-                break;
-        }
-    }
-    return {
-        board, hands, moves,
-        currentPlyIndex,
-        moveToPly: setCurrentPlyIndex,
-        dispatch,
-        advancePly: () => dispatch("NEXT"),
-        retreatPly: () => dispatch("PREV"),
-        resetPly: () => dispatch("RESET"),
+  return {
+    // derived state
+    board,
+    hands,
+    moves,
 
-    }
+    // FSM state
+    currentPlyIndex: state.currentPlyIndex,
+
+    // raw dispatcher
+    dispatch,
+
+    // semantic helpers（UI向け）
+    advancePly: () => dispatch({ type: "NEXT" }),
+    retreatPly: () => dispatch({ type: "PREV" }),
+    resetPly: () => dispatch({ type: "RESET" }),
+    moveToPly: (index: number) =>
+      dispatch({ type: "MOVE_TO", index }),
+  };
 }
