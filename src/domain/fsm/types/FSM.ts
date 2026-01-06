@@ -8,6 +8,7 @@ export type FSMState = {
   currentIndex: number
   phase: PlayerPhase
   plyIndex: number
+  isFinished: boolean
   results: { problemId: string; answerResult: AnswerResult }[]
 }
 
@@ -20,4 +21,6 @@ export type FSMAction =
   | { type: "PREV" }
   | { type: "ADVANCE_PHASE" }
   | { type: "RETREAT_PHASE" }
+  | { type: "ADVANCE_PLY"}
+  | { type: "RETREAT_PLY"}
   | { type: "RESET" }

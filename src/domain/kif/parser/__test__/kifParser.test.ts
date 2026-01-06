@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { parseEventLine } from './kifParseEvent'
-import { parseKif } from './kifParser'
+import { parseEventLine } from '../kifParseEvent'
+import { parseKif } from '../kifParser'
 import { AdfScannerRounded } from '@mui/icons-material'
 import { aspectRatioClasses } from '@mui/joy'
 

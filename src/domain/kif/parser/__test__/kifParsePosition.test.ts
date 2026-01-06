@@ -1,6 +1,6 @@
 // utils/parser/handParser.test.ts
 import { describe, it, expect } from 'vitest'
-import { parsePosition } from './kifParsePosition';
+import { parsePosition } from '../kifParsePosition';
 
 
 describe("parsePosition", () => {

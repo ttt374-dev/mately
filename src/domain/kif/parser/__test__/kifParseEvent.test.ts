@@ -1,6 +1,6 @@
 // utils/parser/handParser.test.ts
 import { describe, it, expect } from 'vitest'
-import { parseEventLine } from './kifParseEvent'
+import { parseEventLine } from '../kifParseEvent'
 
 // GameEnd
 describe("parse event", () => {
