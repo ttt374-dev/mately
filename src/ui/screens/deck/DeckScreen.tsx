@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, List, ListItem, Button, Stack  } from '@mui/material';
 
-import { AppLayout } from "../../shared/AppLayout/AppLayout"
+import { AppLayout } from "../../common/AppLayout/AppLayout"
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { QueueItem } from '@/domain/fsm/types';
 import { useNavigate } from 'react-router-dom';

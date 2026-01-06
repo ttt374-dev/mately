@@ -2,7 +2,7 @@ import { List, ListItem, ListItemButton, ListItemIcon, ListItemText,
     Box, Stack, Button, Checkbox } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
+import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
 import type { Problem} from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { QueueItem } from '@/domain/fsm/types';

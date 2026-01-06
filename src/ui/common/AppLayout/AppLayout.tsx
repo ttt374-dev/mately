@@ -11,9 +11,11 @@ interface Props {
 }
 
 export function AppLayout({ header, footer, children }: Props) {
-  const [open, setOpen] = useState(false);
-    const toggleDrawer = (open: boolean) => () => {
-    setOpen(open);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [backupDialogOpen, setBackupDialogOpen] = useState(false);
+
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerOpen(open);
   };
   const navigate = useNavigate()
   return (
@@ -33,11 +35,18 @@ export function AppLayout({ header, footer, children }: Props) {
       </AppBar>
 
       {/* Drawer */}
-      <Drawer anchor="left" open={open} onClose={toggleDrawer(false)} >
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)} >
         <Box sx={{ width: 250 }} role="presentation"  className={styles.header}>
           <List>
             <ListItemButton onClick={() => navigate("/deck")}>
               <ListItemText primary="デッキに戻る" />
+            </ListItemButton>
+
+            <ListItemButton onClick={() => {
+              setDrawerOpen(false);          // ① Drawer を閉じる
+              setBackupDialogOpen(true);     // ② Dialog を開く
+            }}>
+              <ListItemText primary="バックアップ" />
             </ListItemButton>
 
             <ListItemButton onClick={() => console.log("settings")}>

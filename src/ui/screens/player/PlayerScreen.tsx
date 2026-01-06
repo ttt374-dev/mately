@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { Stack, Button, Box } from '@mui/material';
 
-import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
+import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { FsmState } from '@/domain/fsm/types';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useEffect, useMemo } from 'react';
-import { useReplayView } from '@/ui/app/player/hooks/useReplayView';
+import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';
 import { BoardPanel } from './components/BoardPanel';
 import PlayerFooterActions from './components/PlayerFooterActions';
 import MovesPanel from './components/MovesPanel';
