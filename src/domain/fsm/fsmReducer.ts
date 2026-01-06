@@ -1,20 +1,16 @@
-import { v4 } from "uuid"
 import type { FsmAction, FsmState } from "./types"
 
 export const initialState: FsmState = {
   queue: [],
   currentIndex: 0,
   phase: "problem",
-  //plyIndex: 0,
   isFinished: false,
   results: [],
 }
 
 export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
-  console.log("fsmreducer", action, state)
   switch (action.type) {    
     case "START":
-      console.log("start fms", action)
       return {
         ...initialState,
         queue: action.payload.queue,
@@ -40,7 +36,6 @@ export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
         ...state,
         currentIndex: Math.min(state.currentIndex + 1, state.queue.length),
         phase: "problem", // 次の問題に移ると phase はリセット
-        //plyIndex: 0,
         isFinished: state.currentIndex === state.queue.length - 1
       }
 
@@ -49,7 +44,6 @@ export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
         ...state,
         currentIndex: Math.max(state.currentIndex - 1, 0),
         phase: "problem",
-        //plyIndex: 0,
       }
 
     case "FINISH_RUN":
@@ -75,19 +69,7 @@ export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
         ...state,
         phase: state.phase === "solution" ? "problem" : state.phase,
       }
-/*
-    case "ADVANCE_PLY":
-      return {
-        ...state,
-        plyIndex: state.plyIndex + 1 // TODO
-      }
 
-    case "RETREAT_PLY":
-      return {
-        ...state,
-        plyIndex: state.plyIndex - 1  // TODO
-      }  
-        */
     case "RESET":
       return initialState  // TODO
 

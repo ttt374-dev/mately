@@ -6,7 +6,7 @@ import type { Problem } from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { FsmState } from '@/domain/fsm/types';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useReplayView } from '@/ui/app/player/hooks/useReplayView';
 import { BoardPanel } from './components/BoardPanel';
 import PlayerFooterActions from './components/PlayerFooterActions';
@@ -24,11 +24,13 @@ const getCurrentProblem = (fsmState: FsmState, records: Record<string, Problem>)
 export default function PlayerScreen() {
     // fsm
     const { state: fsmState, next, prev, solve, fail,
-        advancePhase, retreatPhase, finishRun,
+        advancePhase, retreatPhase, 
     } = useFsmContext()
     const currentPhase = fsmState.phase
     const { records } = useProblemRecordsContext()
-    const currentProblem = getCurrentProblem(fsmState, records)
+    const currentProblem = useMemo(()=>
+        getCurrentProblem(fsmState, records),
+    [fsmState, records])
 
     // replay
     const kifContent = currentProblem?.kifContent ?? createKifContent()
@@ -53,9 +55,9 @@ export default function PlayerScreen() {
 
     // 最後のインデックスだったらサマリーに遷移
     useEffect(() => {
-        if (!fsmState.isFinished) return;
-
-        navigate("/summary", { state: { fsmState } })
+        if (fsmState.isFinished) {
+            navigate("/summary", { state: { fsmState } })
+        }
     }, [fsmState.isFinished, navigate]);
 
     // 問題が変わったら手筋をリセット
@@ -64,12 +66,10 @@ export default function PlayerScreen() {
 
         timer.reset()
         timer.start()
-
         resetPly()
     }, [fsmState.currentIndex])
 
     if (!fsmState || !currentProblem) {
-        console.log("empty state", fsmState, currentProblem)
         return (
             <AppLayout>
                 <Box>NO SESSION / NO PROBLEM</Box>
@@ -85,12 +85,10 @@ export default function PlayerScreen() {
     const handleSolve = () => {
         learningMarkSolved(currentProblem.id, timer.seconds)
         solve()
-        next()
     }
     const handleFail = () => {
         learningMarkFailed(currentProblem.id, timer.seconds)
         fail()
-        next()
     }
     const handleBack = () => {
         navigate(-1)
@@ -98,9 +96,6 @@ export default function PlayerScreen() {
 
     const handleStar = () => {
         toggleStar(currentProblem.id)
-    }
-    const handleBackToDeck = () => {
-        navigate("/deck")
     }
 
     return (
@@ -120,17 +115,18 @@ export default function PlayerScreen() {
                     board={board}
                     hands={hands}
                     currentPhase={currentPhase}
-                    advanceMove={advancePly}
-                    retreatMove={retreatPly}
+                    advancePly={advancePly}
+                    retreatPly={retreatPly}
                     advancePhase={advancePhase}
                     retreatPhase={retreatPhase}
                     advanceQueue={next}
                     retreatQueue={prev}
                 />
+                { /* 
                 <NavigationControl 
                     onNext={next} onPrev={prev} 
                     onFinishRun={finishRun} onBackToDeck={handleBackToDeck}/>
-
+                        */ }
                 <Stack direction="row" pb={1}
                     sx={{ minHeight: 0, flexGrow: 1 }} spacing={1} >
 
@@ -154,21 +150,3 @@ export default function PlayerScreen() {
         </AppLayout>
     )
 }
-/*
-     
-                    <MovesPanel
-                        moves={moves}
-                        currentPhase={currentPhase}
-                        currentPlyIndex={currentPlyIndex}
-                        moveToPly={moveToPly} />
-     
-                    <ControlsPanel
-                        learningEntry={learningEntry}
-                        fsmState={fsmState}
-                        currentPhase={currentPhase}
-                        advancePly={advancePly}
-                        retreatPly={retreatPly}
-                        onToggleStar={handleStar} 
-                        elaspedSec={timer.seconds}             
-                        toggleTimer={() => timer.toggle()}          
-                        isTimerRunning={timer.isRunning}/>  */

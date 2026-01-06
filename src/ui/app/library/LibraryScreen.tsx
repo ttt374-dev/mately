@@ -17,15 +17,19 @@ import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvid
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 
-export default function LibraryScreen() {
-    const navigate = useNavigate()
-    const { records, addProblem, removeAll, removeMany } = useProblemRecordsContext()
-    //const { startSession } = usePlaySessionContext()
+export default function LibraryScreen() {    
+    const { records, addProblem, removeMany } = useProblemRecordsContext()
     const { sort: { sortState, setSortKey, setSortOrder }} = useSortFilterStateContext()
     const { learningRecords } = useLearningRecordsContext()
     const libraryList = buildLibraryList(records, sortState, learningRecords)
     const fsm = useFsmContext()
+    const { isChecked, checkedIds,
+        toggleChecked, clearChecked, selectAllChecked
+     } = useLibraryChecked(Object.keys(records))
+    const navigate = useNavigate()
+    const targetProblems = Object.values(records).filter(e => checkedIds.has(e.id))
 
+    // handlers
     const handleSelectFiles = async (files: File[]) => {
         for (const file of files) {
             try {
@@ -49,20 +53,15 @@ export default function LibraryScreen() {
         navigate("/player")
     }
 
-    // 選択
-    const { isChecked, checkedIds,
-        setCheckedIds, toggleChecked, clearChecked, selectAllChecked
-     } = useLibraryChecked(Object.keys(records))
-    const targetProblems = Object.values(records).filter(e => checkedIds.has(e.id))
-
     // 削除
     const handleDelete = async (problems: Problem[]) => {
         removeMany(problems)
     }
 
+    //////////////////////////////////////////////////
     return (
         <AppLayout
-            header={"library"}
+            header={"Library"}
             footer={
                 <LibraryFooterActions 
                         onFileSelected={handleSelectFiles}
@@ -105,7 +104,6 @@ export default function LibraryScreen() {
                                     {p.title}
                                 </ListItemText>
                             </ListItemButton>
-
                         </ListItem>
                     ))}
                 </List>

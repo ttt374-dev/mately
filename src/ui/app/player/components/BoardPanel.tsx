@@ -10,7 +10,7 @@ export function BoardPanel({
     board, hands,
     currentPhase,
     advanceQueue, retreatQueue,
-    advanceMove, retreatMove,
+    advancePly: advanceMove, retreatPly: retreatMove,
     advancePhase, retreatPhase
 
 }: {
@@ -18,8 +18,8 @@ export function BoardPanel({
     currentPhase: PlayerPhase
     advanceQueue: () => void
     retreatQueue: () => void
-    advanceMove: () => void
-    retreatMove: () => void
+    advancePly: () => void
+    retreatPly: () => void
     advancePhase: () => void
     retreatPhase: () => void
 }) {

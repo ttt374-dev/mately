@@ -24,8 +24,6 @@ export default function NavigationControl({ onNext, onPrev, onFinishRun, onBackT
     return (
         <Stack direction="row" gap={2} sx={{ justifyContent: "center" }}>
 
-            <Button sx={noFocusVisible} onClick={onBackToDeck}>&lt;&lt;</Button>
-            <Button sx={noFocusVisible} onClick={onPrev}>&lt;</Button>
             <Button sx={noFocusVisible} onClick={onNext}>&gt;</Button>
             <Button sx={noFocusVisible} onClick={onFinishRun}>&gt;&gt;</Button>
             
