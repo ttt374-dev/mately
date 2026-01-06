@@ -6,10 +6,8 @@ import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
 import type { Problem} from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { QueueItem } from '@/domain/fsm/types';
-import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
 import { buildLibraryList } from '@/application/library/libraryListBuilder';
 import LibrarySortControl from './components/LibrarySortControl';
-import { useLibrarySort } from './hooks/useLibrarySort';
 import { useLibraryChecked } from './hooks/useLibraryChecked';
 import LibraryDeleteControl from './components/LibraryDeleteControl';
 import LibrarySelectionControl from './components/LibrarySelectionControl';
@@ -17,14 +15,16 @@ import { buildProblem } from '@/domain/problem/factory/';
 import LibraryFooterActions from './components/LibraryFooterActions';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
+import { useFsmContext } from '@/app/providers/FsmProvider';
 
 export default function LibraryScreen() {
     const navigate = useNavigate()
     const { records, addProblem, removeAll, removeMany } = useProblemRecordsContext()
-    const { startSession } = usePlaySessionContext()
+    //const { startSession } = usePlaySessionContext()
     const { sort: { sortState, setSortKey, setSortOrder }} = useSortFilterStateContext()
     const { learningRecords } = useLearningRecordsContext()
     const libraryList = buildLibraryList(records, sortState, learningRecords)
+    const fsm = useFsmContext()
 
     const handleSelectFiles = async (files: File[]) => {
         for (const file of files) {
@@ -43,8 +43,10 @@ export default function LibraryScreen() {
 
     const handleSelectProblem = (problem: Problem) => {
         const queue: QueueItem[] = [{ problemId: problem.id }]
-        startSession(queue)
-        navigate("/player", { state: { mode: "review" } })
+        //startSession(queue)
+        console.log("library player start", queue)
+        fsm.start(queue)
+        navigate("/player")
     }
 
     // 選択

@@ -1,16 +1,16 @@
-import { useFSM } from "@/hooks/useFSM"
+import { useFsm } from "@/hooks/useFsm"
 import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 
 
 // context を作る
-type FsmContextValue = ReturnType<typeof useFSM>
+type FsmContextValue = ReturnType<typeof useFsm>
 export const FsmContext = createContext<FsmContextValue | null > (null)
 
 export const FsmProvider = ({children}: { children: ReactNode}) => {
     return (
         <FsmContext.Provider value={
-            useFSM()
+            useFsm()
         }>
             {children}
         </FsmContext.Provider>        

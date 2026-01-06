@@ -5,7 +5,6 @@ import { ProblemRecordProvider } from './providers/ProblemCollectionProvider';
 import LibraryScreen from '@/ui/app/library/LibraryScreen';
 import DeckScreen from '@/ui/app/deck/DeckScreen';
 import PlayerScreen from '@/ui/app/player/PlayerScreen';
-import { PlaySessionProvider } from './providers/PlaySessionProvider';
 import SummaryScreen from '@/ui/app/summary/SummaryScreen';
 import { LearningRecordsProvider } from './providers/LearningRecordsProvider';
 import { SortFilterStateProvider } from './providers/SortFilterStateProvider';
@@ -17,7 +16,6 @@ export default function App() {
 
     <ProblemRecordProvider>
       <LearningRecordsProvider>
-        <PlaySessionProvider>
           <FsmProvider>
           <SortFilterStateProvider>
             
@@ -33,7 +31,6 @@ export default function App() {
 
           </SortFilterStateProvider>
           </FsmProvider>
-        </PlaySessionProvider>
       </LearningRecordsProvider>
     </ProblemRecordProvider>
 

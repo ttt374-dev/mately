@@ -3,12 +3,12 @@ import { useReducer } from "react"
 import type {  QueueItem, } from "@/domain/fsm/types"
 import { fsmReducer, initialState } from "@/domain/fsm/fsmReducer"
 
-export function useFSM() {
+export function useFsm() {
   const [state, dispatch] = useReducer(fsmReducer, initialState)
 
   // ラッパー
   const start = (queue: QueueItem[], startIndex?: number) => {
-    console.log("start fsm", queue)
+    console.log("start fsm", queue, startIndex)
     dispatch({ type: "START", payload: { queue, startIndex } })
   }
   const solve = () => dispatch({ type: "SOLVE" })

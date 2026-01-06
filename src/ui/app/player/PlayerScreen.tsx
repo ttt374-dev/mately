@@ -4,8 +4,7 @@ import { Stack, Button, Box } from '@mui/material';
 import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
-import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
-import type { FsmState, PlaySession } from '@/domain/fsm/types';
+import type { FsmState } from '@/domain/fsm/types';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useEffect } from 'react';
 import { useReplayView } from '@/ui/app/player/hooks/useReplayView';
@@ -20,24 +19,12 @@ const getCurrentProblem = (fsmState: FsmState, records: Record<string, Problem>)
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
     return records[problemId] ?? null
 }
-/*
-const getCurrentProblem = (session: PlaySession | null, records: Record<string, Problem>): Problem | null =>
-    session?.queue[session.currentIndex]?.problemId
-        ? records[session.queue[session.currentIndex].problemId] ?? null
-        : null;
-*/
 export default function PlayerScreen(){    
     // fsm
     const { state: fsmState, next, prev, solve, fail, 
         advancePhase, retreatPhase,
-        //advancePly, retreatPly,
      } = useFsmContext()
     const currentPhase = fsmState.phase
-    // session
-    //const { //session, //isFinished, 
-        //markSolved: sessionMarkSolved, markFailed: sessionMarkFailed,
-        //nextProblem, prevProblem,
-    //} = usePlaySessionContext()
     const { records } = useProblemRecordsContext()
     const currentProblem = getCurrentProblem(fsmState, records)     
     
@@ -46,12 +33,7 @@ export default function PlayerScreen(){
     const { board, hands, moves, currentPlyIndex, 
         advancePly, retreatPly, 
         moveToPly, resetPly,        
-     } = useReplayView(kifContent)
-
-    // phase
-    //const { //phase: currentPhase, //advancePhase, retreatPhase,
-        //resetPhase, showSolution,
-    //} = usePlayerPhase()    
+     } = useReplayView(kifContent)    
 
     const { learningRecords, toggleStar,
         markSolved: learningMarkSolved, markFailed: learningMarkFailed,
@@ -145,7 +127,6 @@ export default function PlayerScreen(){
                     { /* コントロール */}
                     <ControlsPanel
                         learningEntry={learningEntry}
-                        //session={session}
                         fsmState={fsmState}
                         currentPhase={currentPhase}
                         advancePly={advancePly}

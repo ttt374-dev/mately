@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
-import type { FsmState, PlaySession } from '@/domain/fsm/types';
+import type { FsmState} from '@/domain/fsm/types';
 import { Stack, Box, List, ListItem, Button } from '@mui/material';
 import type { AnswerResult } from '@/domain/learning/types';
 import type { AnswerEntry } from '@/domain/fsm/types/AnswerEntry';

@@ -36,6 +36,7 @@ export default function PlayerFooterActions({
             { id: "fail", label: "不正解", variant: "contained", color: "error", onClick: onFail },
             { id: "solve", label: "正解", variant: "contained", color: "success", onClick: onSolve },
         ],
+        answered: []
     };
     return (<Stack direction="row" spacing={1}>
         {actionsByPhase[phase].map(a => (

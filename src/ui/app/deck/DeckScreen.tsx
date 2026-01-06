@@ -3,15 +3,14 @@ import { Box, List, ListItem, Button, Stack  } from '@mui/material';
 
 import { AppLayout } from "../../shared/AppLayout/AppLayout"
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
-import type { PlaySession, QueueItem } from '@/domain/fsm/types';
-import { usePlaySessionContext } from '@/app/providers/PlaySessionProvider';
+import type { QueueItem } from '@/domain/fsm/types';
 import { useNavigate } from 'react-router-dom';
 import { buildQueue } from '@/application/queue/queueBuilder';
 import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/types/Sort';
 import DeckFilterControl from './components/DeckFilterControl';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
-import { useFSM } from '@/hooks/useFSM';
+import { useFsm } from '@/hooks/useFsm';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 
 export default function DeckScreen(){

@@ -1,3 +1,4 @@
+import { v4 } from "uuid"
 import type { FsmAction, FsmState } from "./types"
 
 export const initialState: FsmState = {
@@ -13,6 +14,7 @@ export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
   console.log("fsmreducer", action, state)
   switch (action.type) {    
     case "START":
+      console.log("start fms", action)
       return {
         ...initialState,
         queue: action.payload.queue,
