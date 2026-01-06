@@ -7,7 +7,7 @@ export type FsmState = {
   queue: QueueItem[]
   currentIndex: number
   phase: PlayerPhase
-  plyIndex: number
+  //plyIndex: number
   isFinished: boolean
   results: { problemId: string; answerResult: AnswerResult }[]
 }
@@ -19,6 +19,7 @@ export type FsmAction =
   | { type: "FAIL" }
   | { type: "NEXT" }
   | { type: "PREV" }
+  | { type: "FINISH_RUN"}
   | { type: "ADVANCE_PHASE" }
   | { type: "RETREAT_PHASE" }
   //| { type: "ADVANCE_PLY"}

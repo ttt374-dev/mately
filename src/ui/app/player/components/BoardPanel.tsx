@@ -4,6 +4,7 @@ import { Stack, Box } from '@mui/material'
 import type { PlayerPhase } from '../../../../domain/fsm/types/PlayerPhase'
 import type { Board, Hands } from '@/domain/kif/types'
 import BoardView from './BoardView'
+import NavigationControl from './NavigationControl'
 
 export function BoardPanel({
     board, hands,
@@ -52,6 +53,7 @@ export function BoardPanel({
                     hands={hands}>
                 </BoardView>
             </Box>
+
         </Stack>
 
     )

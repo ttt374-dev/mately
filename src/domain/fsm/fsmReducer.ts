@@ -5,7 +5,7 @@ export const initialState: FsmState = {
   queue: [],
   currentIndex: 0,
   phase: "problem",
-  plyIndex: 0,
+  //plyIndex: 0,
   isFinished: false,
   results: [],
 }
@@ -40,7 +40,7 @@ export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
         ...state,
         currentIndex: Math.min(state.currentIndex + 1, state.queue.length),
         phase: "problem", // 次の問題に移ると phase はリセット
-        plyIndex: 0,
+        //plyIndex: 0,
         isFinished: state.currentIndex === state.queue.length - 1
       }
 
@@ -49,11 +49,19 @@ export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
         ...state,
         currentIndex: Math.max(state.currentIndex - 1, 0),
         phase: "problem",
-        plyIndex: 0,
+        //plyIndex: 0,
       }
 
-    case "ADVANCE_PHASE":
-      
+    case "FINISH_RUN":
+      return {
+        ...state,
+        currentIndex: state.queue.length - 1,
+        phase: "problem",
+        isFinished: true,
+      }
+      break;    
+
+    case "ADVANCE_PHASE":      
       const nextIndex = Math.min(state.currentIndex + ((state.phase === "solution") ? 1 : 0), state.queue.length)
       console.log("advance phase", state, nextIndex)
       return {

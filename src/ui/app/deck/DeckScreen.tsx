@@ -10,7 +10,6 @@ import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/type
 import DeckFilterControl from './components/DeckFilterControl';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
-import { useFsm } from '@/hooks/useFsm';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 
 export default function DeckScreen(){
@@ -22,8 +21,6 @@ export default function DeckScreen(){
     const navigate = useNavigate()
     //const [filter, setFilter] = useState<Filter>(createDefaultFilter())
     const { filter: { filter, setFilter }} = useSortFilterStateContext()
-
-    console.log("dec screen filter", filter)
 
 
     const sort: SortState = {

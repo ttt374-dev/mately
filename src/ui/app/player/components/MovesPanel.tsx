@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import type { PlayerPhase } from "../../../../domain/fsm/types/PlayerPhase";
 import MovesView from "./MoveView";
 
@@ -16,16 +16,22 @@ export default function MovesPanel({
     return (
         <Box
             border={1}
+            borderColor="divider"
             sx={{
                 display: "flex",
                 justifyContent: "center",
                 overflowY: "auto",
+                flexGrow: 1,
                 gap: 2,
                 p: 1,
                 flex: 1,
             }}
         >
-            {currentPhase === "problem" && <Box p={2}>{moves.length}手詰め</Box>}
+            {currentPhase === "problem" && 
+                <Typography p={2} variant="body2">
+                    {moves.length}手詰め
+                </Typography>
+            }
             {currentPhase === "solution" && (
                 <MovesView moves={moves} currentPlyIndex={currentPlyIndex} onMoveClick={moveToPly} />
             )}

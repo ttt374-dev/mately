@@ -33,11 +33,11 @@ export function useLearningRecords (repository: LearningRepository){
         //persist()
         repository.save(learningRecords)
     };
-    const markAnswer = (problemId: string, answer: AnswerResult) =>{
+    const markAnswer = (problemId: string, answer: AnswerResult, secondsToAnswer?: number) =>{
         const addSolved = answer === "solved" ? 1 : 0
         const addFailed = answer === "failed" ? 1 : 0
 
-        const answerQuality = judgeAnswerQuality(answer, 20) // TODO: sec
+        const answerQuality = judgeAnswerQuality(answer, secondsToAnswer ?? 20) // TODO: sec
 
         update(problemId, r => ({
             //...r,
@@ -62,8 +62,8 @@ export function useLearningRecords (repository: LearningRepository){
     return {
         learningRecords,
         markAnswer, clearAll,
-        markSolved: (id: string) => markAnswer(id, "solved"),
-        markFailed: (id: string) => markAnswer(id, "failed"),
+        markSolved: (id: string, secondsToAnswer?: number) => markAnswer(id, "solved", secondsToAnswer),
+        markFailed: (id: string, secondsToAnswer?: number) => markAnswer(id, "failed", secondsToAnswer),
         toggleStar,
     }
 }

@@ -29,8 +29,8 @@ export default function PlayerFooterActions({
 }) {
     const actionsByPhase: Record<PlayerPhase, PlayerAction[]> = {
         problem: [
-            { id: "back", label: "戻る", variant: "outlined", color: "info", onClick: onBack },
-            { id: "show", label: "手筋を見る", variant: "contained", color: "primary", flex: 3, onClick: onShowSolution },
+            //{ id: "back", label: "戻る", variant: "outlined", color: "info", onClick: onBack },
+            { id: "show", label: "手筋を見る", variant: "contained", color: "primary", onClick: onShowSolution },
         ],
         solution: [
             { id: "fail", label: "不正解", variant: "contained", color: "error", onClick: onFail },
