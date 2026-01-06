@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { AppLayout } from "@/ui/shared/AppLayout/AppLayout"
-import type { PlaySession } from '@/domain/fsm/types';
+import type { FsmState, PlaySession } from '@/domain/fsm/types';
 import { Stack, Box, List, ListItem, Button } from '@mui/material';
 import type { AnswerResult } from '@/domain/learning/types';
 import type { AnswerEntry } from '@/domain/fsm/types/AnswerEntry';
@@ -52,18 +52,19 @@ function SummaryRow({
 export default function SummaryScreen() {
     const location = useLocation();
     const navigate = useNavigate()
-    const locationState = location.state as { session?: PlaySession } | null;
-    const session = locationState?.session;
+    //const locationState = location.state as { session?: PlaySession } | null;
+    const locationState = location.state as { fsmState?: FsmState } | null;
+    const fsmState = locationState?.fsmState;
 
     useEffect(() => {
-        if (!session) {
+        if (!fsmState) {
             navigate("/deck");
         }
-    }, [session, navigate]);
+    }, [fsmState, navigate]);
 
-    if (!session) return null; // セーフティレンダリング
+    if (!fsmState) return null; // セーフティレンダリング
     //const { session } = location.state as { session: PlaySession };
-    const summary = summaryResult(session.results)
+    const summary = summaryResult(fsmState.results)
 
     return (
         <AppLayout

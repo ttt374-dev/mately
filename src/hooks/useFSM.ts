@@ -7,15 +7,18 @@ export function useFSM() {
   const [state, dispatch] = useReducer(fsmReducer, initialState)
 
   // ラッパー
-  const start = (queue: QueueItem[], startIndex?: number) => dispatch({ type: "START", payload: { queue, startIndex } })
+  const start = (queue: QueueItem[], startIndex?: number) => {
+    console.log("start fsm", queue)
+    dispatch({ type: "START", payload: { queue, startIndex } })
+  }
   const solve = () => dispatch({ type: "SOLVE" })
   const fail = () => dispatch({ type: "FAIL" })
   const next = () => dispatch({ type: "NEXT" })
   const prev = () => dispatch({ type: "PREV" })
   const advancePhase = () => dispatch({ type: "ADVANCE_PHASE" })
   const retreatPhase = () => dispatch({ type: "RETREAT_PHASE" })
-  const advancePly = () => dispatch({ type: "ADVANCE_PLY"})
-  const retreatPly = () => dispatch({ type: "RETREAT_PLY"})
+  //const advancePly = () => dispatch({ type: "ADVANCE_PLY"})
+  //const retreatPly = () => dispatch({ type: "RETREAT_PLY"})
   const reset = () => dispatch({ type: "RESET" })
 
   return {
@@ -24,7 +27,7 @@ export function useFSM() {
     solve, fail,
     next, prev,
     advancePhase, retreatPhase,
-    advancePly, retreatPly,  
+    //advancePly, retreatPly,  
     dispatch, // 必要なら生 dispatch も公開
   }
 }

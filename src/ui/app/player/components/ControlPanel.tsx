@@ -1,7 +1,7 @@
 
 ///////////////////////
 
-import type { PlaySession } from "@/domain/fsm/types";
+import type { FsmState, PlaySession } from "@/domain/fsm/types";
 import type { PlayerPhase } from "../types/PlayerPhase";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -15,14 +15,16 @@ export default function ControlsPanel({
     currentPhase,
     advancePly,
     retreatPly,
-    session,
+    //session,
+    fsmState,
 }: {
     learningEntry: { starred?: boolean; solvedCount?: number; failedCount?: number };
     onToggleStar: () => void;
     currentPhase: PlayerPhase;
     advancePly: () => void;
     retreatPly: () => void;
-    session: PlaySession | null;
+    //session: PlaySession | null;
+    fsmState: FsmState,
 }) {
     return (
         <Stack border={1} sx={{ width: 150 }} gap={2} p={2}>
@@ -42,7 +44,7 @@ export default function ControlsPanel({
             </Box>
 
             <Box>
-                session: {session ? `${session.currentIndex + 1} / ${session.queue.length}` : "-"}
+                session: {fsmState ? `${fsmState.currentIndex + 1} / ${fsmState.queue.length}` : "-"}
             </Box>
         </Stack>
     );

@@ -22,7 +22,7 @@ function reducer(
   state: PlayerPhase,
     action: PlayerPhaseAction
 ): PlayerPhase {
-    console.log("recuder", state, action)
+    //console.log("recuder", state, action)
     return phaseTransition[state][action] ?? state    
 }
 

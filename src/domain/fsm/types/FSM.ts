@@ -3,7 +3,7 @@ import type { QueueItem } from "@/domain/fsm/types/QueueItem"
 import type { PlayerPhase } from "@/ui/app/player/types/PlayerPhase"
 
 // FSM state
-export type FSMState = {
+export type FsmState = {
   queue: QueueItem[]
   currentIndex: number
   phase: PlayerPhase
@@ -13,7 +13,7 @@ export type FSMState = {
 }
 
 // FSM actions
-export type FSMAction =
+export type FsmAction =
   | { type: "START"; payload: { queue: QueueItem[]; startIndex?: number } }
   | { type: "SOLVE" }
   | { type: "FAIL" }
@@ -21,6 +21,6 @@ export type FSMAction =
   | { type: "PREV" }
   | { type: "ADVANCE_PHASE" }
   | { type: "RETREAT_PHASE" }
-  | { type: "ADVANCE_PLY"}
-  | { type: "RETREAT_PLY"}
+  //| { type: "ADVANCE_PLY"}
+  //| { type: "RETREAT_PLY"}
   | { type: "RESET" }

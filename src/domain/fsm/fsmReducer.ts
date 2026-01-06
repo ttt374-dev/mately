@@ -1,6 +1,6 @@
-import type { FSMAction, FSMState } from "./types"
+import type { FsmAction, FsmState } from "./types"
 
-export const initialState: FSMState = {
+export const initialState: FsmState = {
   queue: [],
   currentIndex: 0,
   phase: "problem",
@@ -9,8 +9,9 @@ export const initialState: FSMState = {
   results: [],
 }
 
-export function fsmReducer(state: FSMState, action: FSMAction): FSMState {
-  switch (action.type) {
+export function fsmReducer(state: FsmState, action: FsmAction): FsmState {
+  console.log("fsmreducer", action, state)
+  switch (action.type) {    
     case "START":
       return {
         ...initialState,
@@ -49,9 +50,13 @@ export function fsmReducer(state: FSMState, action: FSMAction): FSMState {
       }
 
     case "ADVANCE_PHASE":
+      
+      const nextIndex = Math.min(state.currentIndex + ((state.phase === "solution") ? 1 : 0), state.queue.length)
+      console.log("advance phase", state, nextIndex)
       return {
         ...state,
         phase: state.phase === "problem" ? "solution" : state.phase,
+        currentIndex: nextIndex
       }
 
     case "RETREAT_PHASE":
@@ -59,7 +64,7 @@ export function fsmReducer(state: FSMState, action: FSMAction): FSMState {
         ...state,
         phase: state.phase === "solution" ? "problem" : state.phase,
       }
-
+/*
     case "ADVANCE_PLY":
       return {
         ...state,
@@ -71,8 +76,9 @@ export function fsmReducer(state: FSMState, action: FSMAction): FSMState {
         ...state,
         plyIndex: state.plyIndex - 1  // TODO
       }  
+        */
     case "RESET":
-      return initialState
+      //return initialState  // TODO
 
     default:
       return state

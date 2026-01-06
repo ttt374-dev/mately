@@ -9,6 +9,7 @@ import { PlaySessionProvider } from './providers/PlaySessionProvider';
 import SummaryScreen from '@/ui/app/summary/SummaryScreen';
 import { LearningRecordsProvider } from './providers/LearningRecordsProvider';
 import { SortFilterStateProvider } from './providers/SortFilterStateProvider';
+import { FsmProvider } from './providers/FsmProvider';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
     <ProblemRecordProvider>
       <LearningRecordsProvider>
         <PlaySessionProvider>
+          <FsmProvider>
           <SortFilterStateProvider>
             
             <BrowserRouter>
@@ -30,6 +32,7 @@ export default function App() {
             </BrowserRouter>
 
           </SortFilterStateProvider>
+          </FsmProvider>
         </PlaySessionProvider>
       </LearningRecordsProvider>
     </ProblemRecordProvider>

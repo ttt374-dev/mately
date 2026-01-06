@@ -11,9 +11,12 @@ import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/type
 import DeckFilterControl from './components/DeckFilterControl';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
+import { useFSM } from '@/hooks/useFSM';
+import { useFsmContext } from '@/app/providers/FsmProvider';
 
 export default function DeckScreen(){
-    const deckPlaySession = usePlaySessionContext()
+    const fsm = useFsmContext()
+    //const deckPlaySession = usePlaySessionContext()
     const { records } = useProblemRecordsContext()
     const { learningRecords, clearAll } = useLearningRecordsContext()
     //const learningRecords = {}
@@ -34,7 +37,8 @@ export default function DeckScreen(){
         // build queue
         //const queue: QueueItem[] = Object.values(records).map((p) => ({problemId: p.id}))
         
-        deckPlaySession.startSession(queue)
+        fsm.start(queue)
+        //deckPlaySession.startSession(queue)
         navigate("/player")
     }
     const handleClearLearning = () => {
@@ -45,9 +49,7 @@ export default function DeckScreen(){
             header={"Deck"}
             footer={
                 <Stack direction="row" spacing={1}>
-                    <Button onClick={handleClearLearning} sx={{flex: 1}}>
-                        学習クリア
-                    </Button>
+
                     <Button variant="outlined" onClick={() => navigate("/library")}
                         sx={{flex: 1}}>
                         ライブラリ
