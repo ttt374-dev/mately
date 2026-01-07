@@ -1,7 +1,7 @@
 export type Filter = {
   text?: string; 
   unansweredOnly: boolean;
-  dueOnly: boolean,
+  includeNotDue: boolean,
   starredOnly: boolean,
   //mate3: boolean,
   //mate5: boolean,

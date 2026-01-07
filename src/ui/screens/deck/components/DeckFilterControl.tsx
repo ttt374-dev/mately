@@ -39,16 +39,16 @@ export default function DeckFilterControl({ filter, setFilter }: Props) {
                 <FormControlLabel
                     control={
                         <Checkbox
-                            checked={filter.dueOnly}
+                            checked={filter.includeNotDue}
                             onChange={e =>
                                 setFilter(f => ({
                                     ...f,
-                                    dueOnly: e.target.checked,
+                                    includeNotDue: e.target.checked,
                                 }))
                             }
                         />
                     }
-                    label="習熟度でレビュー対象のみ"
+                    label="レビュー対象外も含む"
                 />
                 <FormControlLabel
                     control={

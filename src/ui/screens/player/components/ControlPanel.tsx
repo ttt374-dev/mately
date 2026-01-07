@@ -5,6 +5,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { Stack, Typography, Divider, Card, Box, Button, IconButton, toggleButtonClasses } from '@mui/material';
 import { PlyControl } from "./PlyControl";
 import { StarControl } from "./StarControl";
+import type { LearningEntry } from "@/domain/learning/types";
 
 function Stat({ label, value }: { label: string; value: number }) {
     
@@ -31,8 +32,6 @@ function formatTime(sec: number) {
     const s = sec % 60
     return `${m}:${s.toString().padStart(2, "0")}`
 }
-
-
 
 export const ResultSummary = ({solvedCount, failedCount}: {
     solvedCount: number,
@@ -82,29 +81,32 @@ export const FsmStatus = ({index, length}: {
 //////////////////////////////////////////////
 // コントロールパネル
 export default function ControlsPanel({
-    isStarred,
     learningEntry,
-    onToggleStar,
-    currentPhase,
+    //currentPhase,
+    showMoves,
     advancePly,
     retreatPly,
-    elaspedSec,
-    toggleTimer,
-    isTimerRunning,
+    timer: {
+        elaspedSec,
+        toggleTimer,
+        isTimerRunning,
+    },
     fsmState,
 }: {
-    learningEntry: { starred?: boolean; solvedCount?: number; failedCount?: number };
-    isStarred: boolean
-    onToggleStar: () => void;
-    currentPhase: PlayerPhase;
+    //learningEntry: { starred?: boolean; solvedCount?: number; failedCount?: number };
+    learningEntry: LearningEntry | undefined;
+    //currentPhase: PlayerPhase;
+    showMoves: boolean,
     advancePly: () => void;
     retreatPly: () => void;
-    elaspedSec: number,
-    toggleTimer: () => void,
-    isTimerRunning: boolean,
+    timer: {
+        elaspedSec: number,
+        toggleTimer: () => void,
+        isTimerRunning: boolean,
+    }
     fsmState: FsmState,
 }) {
-    const accuracy = calcRate(learningEntry.solvedCount, learningEntry.failedCount)
+    //const accuracy = calcRate(learningEntry.solvedCount, learningEntry.failedCount)
 
     return (
         <Stack
@@ -116,12 +118,11 @@ export default function ControlsPanel({
         >
             {/* ===== 上段：操作・進行 ===== */}
             <Stack spacing={0.5}>
-                { currentPhase === "solution" &&
+                { showMoves &&
                     <PlyControl advancePly={advancePly} retreatPly={retreatPly}/>}
 
                 {/* スター + インデックス */}
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                    <StarControl isStarred={isStarred} onToggleStar={onToggleStar}/>
+                <Stack direction="row" alignItems="center" justifyContent="space-between">                    
                     <FsmStatus index={fsmState.currentIndex} length={fsmState.queue.length}/>                    
                     <TimerControl isTimerRunning={isTimerRunning} 
                         elaspedSec={elaspedSec}
@@ -131,8 +132,8 @@ export default function ControlsPanel({
 
             <Divider />
 
-            <ResultSummary solvedCount={learningEntry.solvedCount ?? 0} 
-                failedCount={learningEntry.failedCount ?? 0}/>
+            { learningEntry && <ResultSummary solvedCount={learningEntry.solvedCount ?? 0} 
+                failedCount={learningEntry.failedCount ?? 0}/>}
             
         </Stack>
     );

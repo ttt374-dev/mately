@@ -35,7 +35,7 @@ export const filterProblems = (
         }
 
         // 次回レビュー対象のみ
-        if (filter.dueOnly &&
+        if (!filter.includeNotDue &&
             record?.nextReviewedAt !== undefined &&
             record.nextReviewedAt > now
         ) {

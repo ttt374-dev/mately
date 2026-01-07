@@ -1,7 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styles from "./AppLayout.module.css";
-import { AppBar, Box, Drawer, IconButton, List, ListItemButton, ListItemText, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Drawer, IconButton, List, ListItemButton, ListItemText, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import MoreVertIcon from "@mui/icons-material/MoreVert"
 import { useNavigate } from "react-router-dom";
 import BackupRestoreDialog from "../backupRestore/BackupRestoreDialog";
 import MultipleFilesButton from "@/ui/sharedComponents/MultipleFilesButton";
@@ -14,9 +15,10 @@ interface Props {
   header?: React.ReactNode;
   footer?: React.ReactNode;
   children: React.ReactNode;
+  rightActions?: React.ReactNode;
 }
 
-export function AppLayout({ header, footer, children }: Props) {
+export function AppLayout({ header, footer, children, rightActions  }: Props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [backupDialogOpen, setBackupDialogOpen] = useState(false);
   const navigate = useNavigate()
@@ -29,10 +31,28 @@ export function AppLayout({ header, footer, children }: Props) {
     learningApi.clearAll()
   }
 
+  function ListMenu(){
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  // handlers
-  const handleSelectFiles = async (files: File[]) => {
-   
+  return (
+    <>
+      <IconButton
+        color="inherit"
+        onClick={(e) => setAnchorEl(e.currentTarget)}
+      >
+        <MoreVertIcon />
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+      >
+        <MenuItem>並び替え</MenuItem>
+        <MenuItem>フィルタ</MenuItem>
+      </Menu>
+    </>
+  );
   }
   return (
     <div className={styles.container}>
@@ -46,7 +66,14 @@ export function AppLayout({ header, footer, children }: Props) {
           >
             <MenuIcon />
           </IconButton>
-          { header }
+          
+          <Typography>
+            { header }
+          </Typography>
+          <Box sx={{flexGrow: 1}}></Box>
+
+          
+          { rightActions}          
         </Toolbar>
       </AppBar>
 

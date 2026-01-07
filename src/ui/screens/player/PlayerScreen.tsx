@@ -15,6 +15,8 @@ import ControlsPanel from './components/ControlPanel';
 import { createKifContent } from '@/domain/kif/factory';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 import { useTimer } from './hooks/useTimer';
+import { StarControl } from './components/StarControl';
+import type { LearningEntry } from '@/domain/learning/types';
 
 const getCurrentProblem = (fsmState: FsmState, records: Record<string, Problem>): Problem | null => {
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
@@ -78,7 +80,7 @@ export default function PlayerScreen() {
     }
 
     // 学習情報
-    const learningEntry = learningRecords[currentProblem.id] ?? {}
+    const learningEntry: LearningEntry | undefined = learningRecords[currentProblem.id]
     /////////////////////////////////////
     // ハンドラー
     const handleSolve = () => {
@@ -96,10 +98,15 @@ export default function PlayerScreen() {
     const handleStar = () => {
         toggleStar(currentProblem.id)
     }
-
+    
+    const timerProps = {
+        elaspedSec: timer.seconds,
+        toggleTimer: timer.toggle,
+        isTimerRunning: timer.isRunning
+    }
     return (
         <AppLayout
-            header={`${currentProblem.title}`}
+            header={currentProblem.title}
             footer={<PlayerFooterActions
                 phase={currentPhase}
                 onShowSolution={advancePhase}
@@ -107,6 +114,7 @@ export default function PlayerScreen() {
                 onFail={handleFail}
                 onBack={handleBack}
             />}
+            rightActions={<StarControl isStarred={currentProblem.starred} onToggleStar={handleStar}/>}
         >
 
             <Stack direction="column" sx={{ minHeight: 0, height: "100%" }} spacing={1}>
@@ -135,16 +143,18 @@ export default function PlayerScreen() {
                         currentPlyIndex={currentPlyIndex}
                         moveToPly={moveToPly} />
                     <ControlsPanel
-                        isStarred={currentProblem.starred   }
-                        learningEntry={learningEntry}
-                        fsmState={fsmState}
-                        currentPhase={currentPhase}
+                        //currentPhase={currentPhase}
+                        showMoves={currentPhase==="problem"}
                         advancePly={advancePly}
                         retreatPly={retreatPly}
-                        onToggleStar={handleStar}
-                        elaspedSec={timer.seconds}
-                        toggleTimer={() => timer.toggle()}
-                        isTimerRunning={timer.isRunning} />
+                        timer={timerProps}
+                        //elaspedSec={timer.seconds}
+                        //toggleTimer={() => timer.toggle()}
+                        //isTimerRunning={timer.isRunning}
+
+                        learningEntry={learningEntry}
+                        fsmState={fsmState}                        
+                        />
                 </Stack>
             </Stack>
         </AppLayout>

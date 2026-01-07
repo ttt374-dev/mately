@@ -4,7 +4,7 @@ import type { Filter, SortState } from "@/domain/problemCatalog/types"
 
 const DefaultFilter = {
     unansweredOnly: false,
-    dueOnly: false,
+    includeNotDue: false,
     starredOnly: false,
 };
 

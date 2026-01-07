@@ -30,9 +30,14 @@ export default function ViewScreen() {
         advancePly, retreatPly, moveToPly, 
     } = useReplayView(currentProblem.kifContent)
 
+    const handleStar = () => {
+        toggleStar(currentProblem.id)
+    }
+
     return (
         <AppLayout
             header={`${currentProblem.title}`}
+            rightActions={<StarControl isStarred={currentProblem.starred} onToggleStar={handleStar}/>}
         >
 
             <Stack direction="column" sx={{ minHeight: 0, height: "100%" }} spacing={1}>
@@ -64,8 +69,6 @@ export default function ViewScreen() {
                         p={1}
                         spacing={1}>
                         <PlyControl advancePly={advancePly} retreatPly={retreatPly}/>
-                        <StarControl isStarred={currentProblem.starred} 
-                            onToggleStar={() => { toggleStar(currentProblem.id)}}/>
                     </Stack>
 
                 </Stack>
