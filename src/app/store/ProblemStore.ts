@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 
 import type { Problem} from'@/domain/problem/types/Problem'
-import type { ProblemRecord } from '@/domain/problemCatalog/types/ProblemRecord'
 import type { ProblemRepository } from '@/domain/problem/problemRepository';
 import { createProblem } from '@/domain/problem/factory';
 

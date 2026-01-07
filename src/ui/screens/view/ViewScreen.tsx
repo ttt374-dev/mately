@@ -6,8 +6,8 @@ import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';
 import { createProblem } from '@/domain/problem/factory';
 import { BoardPanel } from '../player/components/BoardPanel';
 import MovesPanel from '../player/components/MovesPanel';
-import { PlyControl } from '../player/components/PlyControl';
-import { StarControl } from '../player/components/StarControl';
+import { PlyControl } from '../player/components/controlPanels/PlyControl';
+import { StarControl } from '../player/components/controlPanels/StarControl';
 import { useStoreContext } from '@/app/providers/StoreProvider';
 
 export default function ViewScreen() {

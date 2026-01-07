@@ -1,7 +1,6 @@
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
 import type { Problem } from "./types/Problem";
-import type { ProblemRecord } from '@/domain/problemCatalog/types/ProblemRecord'
 
 const LIB_FILE = "problem.json";
 

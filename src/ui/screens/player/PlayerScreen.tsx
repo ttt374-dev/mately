@@ -9,11 +9,11 @@ import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';
 import { BoardPanel } from './components/BoardPanel';
 import PlayerFooterActions from './components/PlayerFooterActions';
 import MovesPanel from './components/MovesPanel';
-import ControlsPanel from './components/ControlPanel';
+import ControlsPanel from './components/controlPanels/ControlPanel';
 import { createKifContent } from '@/domain/kif/factory';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 import { useTimer } from './hooks/useTimer';
-import { StarControl } from './components/StarControl';
+import { StarControl } from './components/controlPanels/StarControl';
 import type { LearningEntry } from '@/domain/learning/types';
 import { useStoreContext } from '@/app/providers/StoreProvider';
 
