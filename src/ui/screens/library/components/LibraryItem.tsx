@@ -7,7 +7,7 @@ import type { LearningEntry } from '@/domain/learning/types';
 import { calcAccuracy } from '@/domain/learning/calcAccuracy';
 import { formatDate } from '@/utils';
 
-function inDays(date: number): number {
+export function inDays(date: number): number {
     return (date - Date.now()) / (60*60*24*100)
 }
 

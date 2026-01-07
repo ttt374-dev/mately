@@ -54,7 +54,7 @@ export default function DeckScreen(){
                 </Stack>
             }*/
         >
-            <Stack p={1} spacing={2}>
+            <Stack p={2} spacing={2}>
                 <DeckFilterControl filter={filter} setFilter={setFilter}/>
                 <Box>
                     問題数：{ queue.length}

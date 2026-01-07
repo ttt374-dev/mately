@@ -49,7 +49,6 @@ export default function ControlsPanel({
                 { showMoves &&
                     <PlyControl advancePly={advancePly} retreatPly={retreatPly}/>}
 
-                {/* スター + インデックス */}
                 <Stack direction="row" alignItems="center" justifyContent="space-between">                    
                     <FsmStatus index={fsmState.currentIndex} length={fsmState.queue.length}/>                    
                     <TimerControl isTimerRunning={isTimerRunning} 
@@ -60,8 +59,7 @@ export default function ControlsPanel({
 
             <Divider />
 
-            { learningEntry && <ResultSummary solvedCount={learningEntry.solvedCount ?? 0} 
-                failedCount={learningEntry.failedCount ?? 0}/>}
+            { learningEntry && <ResultSummary learningEntry={learningEntry}/>}
             
         </Stack>
     );

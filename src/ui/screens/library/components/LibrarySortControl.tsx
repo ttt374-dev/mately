@@ -20,6 +20,7 @@ export default function LibrarySortControl({ sort, setSortKey, setSortOrder }: {
                 <option key="title" value="title">名前順</option>
                 <option key="accuracy" value="accuracy">正答率</option>
                 <option key="easeFactor" value="easeFactor">習熟度</option>
+                <option key="nextReviewedAt" value="nextReviewedAt">次レビュー日</option>
             </select>
 
             <IconButton onClick={() => {

@@ -1,8 +1,4 @@
-import type { FsmState, } from "@/domain/fsm/types";
-import type { PlayerPhase } from "../../../../domain/fsm/types/PlayerPhase";
-import StarIcon from "@mui/icons-material/Star";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import { Stack, Typography, Divider, Card, Box, Button, IconButton, toggleButtonClasses } from '@mui/material';
+import { Stack, Divider, Button, IconButton, toggleButtonClasses } from '@mui/material';
 
 
 export const PlyControl = ({advancePly, retreatPly }: {

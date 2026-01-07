@@ -1,8 +1,10 @@
 
+import type { LearningEntry } from '@/domain/learning/types';
+import { inDays } from '@/ui/screens/library/components/LibraryItem';
 import { Stack, Typography, Divider, } from '@mui/material';
 
 
-function Stat({ label, value }: { label: string; value: number }) {    
+function Stat({ label, value }: { label: string; value: number }) {
     return (
         <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="caption" color="text.secondary">
@@ -20,25 +22,29 @@ function calcRate(solved = 0, failed = 0) {
     if (total === 0) return 0
     return Math.round((solved / total) * 100)
 }
-export const ResultSummary = ({solvedCount, failedCount}: {
-    solvedCount: number,
-    failedCount: number,    
+export const ResultSummary = ({ learningEntry }: {
+    learningEntry: LearningEntry,
+    
 }) => {
     return (
-        <Stack direction = "row" alignItems = "center" justifyContent = "space-between" >
-            < Stack direction = "row" spacing = { 1} >
-                    <Stat label="正" value={solvedCount} />
-                    <Stat label="誤" value={failedCount} />
-                    <Typography
-                        variant="body2"
-                        fontWeight="bold"
-                        color="success.main"
-                        textAlign="right"
-                    >
-                        {calcRate(solvedCount, failedCount) } %
-                        
-                    </Typography> 
-                </Stack>
+        <Stack direction="column" alignItems="center" justifyContent="space-between" >
+            <Stack direction="row" spacing={1} >
+                <Stat label="正" value={learningEntry.solvedCount} />
+                <Stat label="誤" value={learningEntry.failedCount} />
+                <Typography
+                    variant="body2"
+                    fontWeight="bold"
+                    color="success.main"
+                    textAlign="right"
+                >
+                    {calcRate(learningEntry.solvedCount, learningEntry.failedCount)} %
+
+                </Typography>
+            </Stack>
+            <Stack direction="row">
+                <Typography variant="body2">ef:{`${learningEntry.easeFactor.toFixed(2)}`}  /</Typography> 
+                <Typography variant="body2">/ in {inDays(learningEntry.nextReviewedAt).toFixed(0)}d</Typography>
+            </Stack>
         </Stack>
     )
 }

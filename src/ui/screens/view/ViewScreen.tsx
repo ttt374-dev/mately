@@ -9,6 +9,8 @@ import MovesPanel from '../player/components/MovesPanel';
 import { PlyControl } from '../player/components/controlPanels/PlyControl';
 import { StarControl } from '../player/components/controlPanels/StarControl';
 import { useStoreContext } from '@/app/providers/StoreProvider';
+import BoardView from '../player/components/BoardView';
+import { SwipeWrapper } from '../player/components/SwipeWrapper';
 
 export default function ViewScreen() {
     const { id } = useParams<{ id: string }>();
@@ -37,17 +39,15 @@ export default function ViewScreen() {
         >
 
             <Stack direction="column" sx={{ minHeight: 0, height: "100%" }} spacing={1}>
-                <BoardPanel
-                    board={board}
-                    hands={hands}
-                    currentPhase={"problem"}
-                    advancePly={advancePly}
-                    retreatPly={retreatPly}
-                    advancePhase={noop}
-                    retreatPhase={noop}
-                    advanceQueue={noop}
-                    retreatQueue={noop}
-                />
+                <SwipeWrapper actions={{
+                    onUp: retreatPly,
+                    onDown: advancePly,
+                }}>
+                    <BoardView
+                        board={board}
+                        hands={hands}>
+                    </BoardView>                
+                </SwipeWrapper>
 
                 <Stack direction="row" pb={1}
                     sx={{ minHeight: 0, flexGrow: 1 }} spacing={1} >

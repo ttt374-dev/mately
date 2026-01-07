@@ -83,8 +83,8 @@ export default function SummaryScreen() {
                 {/* 結果カード */}
                 <Box
                     sx={{
-                        width: "100%",
-                        maxWidth: 360,
+                        //width: "100%",
+                        //maxWidth: 360,
                         border: 1,
                         borderColor: "divider",
                         borderRadius: 2,
@@ -92,7 +92,7 @@ export default function SummaryScreen() {
                         p: 2,
                     }}
                 >
-                    <Stack spacing={2}>
+                    <Stack spacing={2} p={2}>
                         <SummaryRow label="正解" value={summary.solved} />
                         <SummaryRow label="不正解" value={summary.failed} />
                         <SummaryRow label="正解率" value={`${Math.round(summary.accuracy * 100)} %`} />

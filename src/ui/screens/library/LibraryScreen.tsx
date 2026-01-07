@@ -1,6 +1,9 @@
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText,
-    Box, Stack, Checkbox} from '@mui/material';
+    Box, Stack, Checkbox,
+    IconButton, MenuItem,
+    Menu} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import MoreVertIcon from "@mui/icons-material/MoreVert"
 
 import { AppLayout } from "@/ui/common/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
@@ -13,9 +16,18 @@ import LibrarySelectionControl from './components/LibrarySelectionControl';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
 import LibraryItem from './components/LibraryItem';
 import { useStoreContext } from '@/app/providers/StoreProvider';
+import { useRef, useState } from 'react';
+import { useToast } from '@/app/providers/ToastProvider';
+import ImportFilesButton from '@/ui/common/ImportFilesButton';
+import BackupRestoreDialog from '@/ui/common/BackupRestoreDialog';
+import { ListMenu } from './components/ListMenu';
 
 
 export default function LibraryScreen() {
+    const [backupDialogOpen, setBackupDialogOpen] = useState(false);
+    const [selectionMode, setSelectionMode] = useState(false)
+    const toggleSelectionMode = () => { setSelectionMode(!selectionMode)}
+
     const stores = useStoreContext()    
     //const { problemRecords, removeMany, toggleStar } = useProblemRecordsContext()
     const { sort: { sortState, setSortKey, setSortOrder } } = useSortFilterStateContext()
@@ -29,31 +41,50 @@ export default function LibraryScreen() {
     const targetProblems = stores.problem.problems.filter(e => checkedIds.has(e.id))
 
     const handleSelectProblem = (problem: Problem) => {
-        const queue: QueueItem[] = [{ problemId: problem.id }]
-        //startSession(queue)
-        //console.log("library player start", queue)
-        //fsm.start(queue)
-        //navigate("/player")
-        navigate(`/view/${problem.id}`)
+        if (selectionMode){                       
+            
+            
+            toggleChecked(problem.id)
+        } else {
+            navigate(`/view/${problem.id}`)
+        }
     }
 
     // 削除
     const handleDelete = async (problems: Problem[]) => {        
         stores.problem.removeMany(problems.map((p) => p.id))
     }
-    
+    // 長押し
+    // 長押しで edit mode / view mode 切り替え
+    const LONG_PRESS_MS = 500;
+    const timerRef = useRef<number | null>(null);
+    const longPressedRef = useRef(false);
+
+    const onPressStart = (entryId: string) => {
+        longPressedRef.current = false;
+
+        timerRef.current = window.setTimeout(() => {
+            longPressedRef.current = true;
+            toggleChecked(entryId)
+            toggleSelectionMode()
+            //toggleEditMode()
+        }, LONG_PRESS_MS);
+    }
+
+    const onPressEnd = () => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+    };
     //////////////////////////////////////////////////
     return (
         <AppLayout
             header={"Library"}
-            /*
-            footer={ 
-                <LibraryFooterActions
-                    onFileSelected={handleSelectFiles}
-                    onBackToDeck={() => navigate("/deck")}
-                />}
-                */
-            
+            rightActions={
+            <ListMenu onClearAllLearnings={stores.learning.clearAll}
+                onBackupDialogOpen={()=>setBackupDialogOpen(true)}
+            />}            
         >
             <Stack direction="row">
                 <LibrarySelectionControl
@@ -72,13 +103,25 @@ export default function LibraryScreen() {
             <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
                 <List>
                     {libraryList.map((p) => (
-                        <ListItem disablePadding key={p.id} sx={{
-                            borderBottom: 1,
-                            borderColor: "divider",
-                        }}>
-                            <ListItemButton onClick={() => handleSelectProblem(p)}>
+                        <ListItem disablePadding 
+                            key={p.id}
+                            onMouseDown={() => onPressStart(p.id)}
+                            onMouseUp={onPressEnd}
+                            onMouseLeave={onPressEnd}
+                            onTouchStart={() => onPressStart(p.id)}
+                            onTouchEnd={onPressEnd}                                                                                   
+                            sx={{
+                                borderBottom: 1,
+                                borderColor: "divider",
+                            }}>
+                            <ListItemButton onClick={() => {
+                                if (longPressedRef.current) return
+                                handleSelectProblem(p)
+                            }
+                            }>
                                 <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>
-                                    <Checkbox
+                                    {selectionMode &&
+                                        <Checkbox                                        
                                         size="small"
                                         edge="start"
 
@@ -88,6 +131,7 @@ export default function LibraryScreen() {
                                             toggleChecked(p.id)
                                         }}
                                     />
+}
                                 </ListItemIcon>
 
                                 <ListItemText>
@@ -101,6 +145,8 @@ export default function LibraryScreen() {
                     ))}
                 </List>
             </Box>
+            { <BackupRestoreDialog open={backupDialogOpen} 
+                    onClose={()=>setBackupDialogOpen(false)}/>}
         </AppLayout>
     )
 }

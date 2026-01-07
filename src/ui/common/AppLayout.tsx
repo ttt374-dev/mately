@@ -81,23 +81,10 @@ export function AppLayout({ header, footer, children, rightActions  }: Props) {
         <Box sx={{ width: 250 }} role="presentation"  className={styles.header}>
           <List>
             <ListItemButton onClick={() => navigate("/deck")}>
-              <ListItemText primary="デッキに戻る" />
+              <ListItemText primary="デッキ" />
             </ListItemButton>
             <ListItemButton onClick={() => navigate("/library")}>
               <ListItemText primary="ライブラリ" />
-            </ListItemButton>
-
-            <ImportFilesButton buttonType="listItem"/>
-
-            <ListItemButton onClick={() => {
-              setDrawerOpen(false);          // ① Drawer を閉じる
-              setBackupDialogOpen(true);     // ② Dialog を開く
-            }}>
-              <ListItemText primary="バックアップ/レストア" />
-            </ListItemButton>
-
-            <ListItemButton onClick={handleClearLearnings}>
-              <ListItemText primary="学習データをクリア" />
             </ListItemButton>
 
             <ListItemButton onClick={() => console.log("settings")}>

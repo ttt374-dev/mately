@@ -6,7 +6,6 @@ import type { Problem } from '@/domain/problem/types/Problem';
 import type { FsmState } from '@/domain/fsm/types';
 import { useEffect, useMemo } from 'react';
 import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';
-import { BoardPanel } from './components/BoardPanel';
 import PlayerFooterActions from './components/PlayerFooterActions';
 import MovesPanel from './components/MovesPanel';
 import ControlsPanel from './components/controlPanels/ControlPanel';
@@ -16,6 +15,8 @@ import { useTimer } from './hooks/useTimer';
 import { StarControl } from './components/controlPanels/StarControl';
 import type { LearningEntry } from '@/domain/learning/types';
 import { useStoreContext } from '@/app/providers/StoreProvider';
+import { SwipeWrapper } from './components/SwipeWrapper';
+import BoardView from './components/BoardView';
 
 const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | null => {
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
@@ -27,7 +28,6 @@ export default function PlayerScreen() {
         advancePhase, retreatPhase, 
     } = useFsmContext()
     const currentPhase = fsmState.phase
-    //const { problemRecords, toggleStar } = useProblemRecordsContext()
     const stores = useStoreContext()
     const currentProblem = useMemo(()=>
         getCurrentProblem(fsmState, stores.problem.problems),
@@ -94,15 +94,26 @@ export default function PlayerScreen() {
     const handleBack = () => {
         navigate(-1)
     }
-
     const handleStar = () => {
         stores.problem.toggleStar(currentProblem.id)
     }
-    
+  
     const timerProps = {
         elaspedSec: timer.seconds,
         toggleTimer: timer.toggle,
         isTimerRunning: timer.isRunning
+    }
+    const swipeActions = {
+        onRight: prev,
+        onLeft: next,
+        onDown: () => {
+            currentPhase === "problem" && advancePhase();
+            advancePly()
+        },
+        onUp: () => {
+            currentPhase === "solution" && retreatPhase()
+            retreatPly()
+        }
     }
     return (
         <AppLayout
@@ -118,22 +129,13 @@ export default function PlayerScreen() {
         >
 
             <Stack direction="column" sx={{ minHeight: 0, height: "100%" }} spacing={1}>
-                <BoardPanel
-                    board={board}
-                    hands={hands}
-                    currentPhase={currentPhase}
-                    advancePly={advancePly}
-                    retreatPly={retreatPly}
-                    advancePhase={advancePhase}
-                    retreatPhase={retreatPhase}
-                    advanceQueue={next}
-                    retreatQueue={prev}
-                />
-                { /* 
-                <NavigationControl 
-                    onNext={next} onPrev={prev} 
-                    onFinishRun={finishRun} onBackToDeck={handleBackToDeck}/>
-                        */ }
+                <SwipeWrapper actions={swipeActions}>
+                    <BoardView
+                        board={board}
+                        hands={hands}>
+                    </BoardView>                
+                </SwipeWrapper>
+
                 <Stack direction="row" pb={1}
                     sx={{ minHeight: 0, flexGrow: 1 }} spacing={1} >
 
@@ -143,15 +145,10 @@ export default function PlayerScreen() {
                         currentPlyIndex={currentPlyIndex}
                         moveToPly={moveToPly} />
                     <ControlsPanel
-                        //currentPhase={currentPhase}
-                        showMoves={currentPhase==="problem"}
+                        showMoves={currentPhase==="solution"}
                         advancePly={advancePly}
                         retreatPly={retreatPly}
                         timer={timerProps}
-                        //elaspedSec={timer.seconds}
-                        //toggleTimer={() => timer.toggle()}
-                        //isTimerRunning={timer.isRunning}
-
                         learningEntry={learningEntry}
                         fsmState={fsmState}                        
                         />

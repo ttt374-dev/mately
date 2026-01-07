@@ -12,7 +12,7 @@ export default function LibraryFooterActions({ onFileSelected, onBackToDeck }: {
             <ImportFilesButton/>
             <Button fullWidth variant='outlined'
                 onClick={onBackToDeck}>
-                デッキに戻る
+                デッキ
             </Button>
         </Stack>
     )
