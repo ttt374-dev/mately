@@ -3,9 +3,7 @@ import { Stack, Button, Box } from '@mui/material';
 
 import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
-import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { FsmState } from '@/domain/fsm/types';
-import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useEffect, useMemo } from 'react';
 import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';
 import { BoardPanel } from './components/BoardPanel';
@@ -17,6 +15,7 @@ import { useFsmContext } from '@/app/providers/FsmProvider';
 import { useTimer } from './hooks/useTimer';
 import { StarControl } from './components/StarControl';
 import type { LearningEntry } from '@/domain/learning/types';
+import { useStoreContext } from '@/app/providers/StoreProvider';
 
 const getCurrentProblem = (fsmState: FsmState, records: Record<string, Problem>): Problem | null => {
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
@@ -28,10 +27,11 @@ export default function PlayerScreen() {
         advancePhase, retreatPhase, 
     } = useFsmContext()
     const currentPhase = fsmState.phase
-    const { problemRecords, toggleStar } = useProblemRecordsContext()
+    //const { problemRecords, toggleStar } = useProblemRecordsContext()
+    const stores = useStoreContext()
     const currentProblem = useMemo(()=>
-        getCurrentProblem(fsmState, problemRecords),
-    [fsmState, problemRecords])
+        getCurrentProblem(fsmState, stores.problem.records),
+    [fsmState, stores.problem.records])
 
     // replay
     const kifContent = currentProblem?.kifContent ?? createKifContent()
@@ -42,7 +42,7 @@ export default function PlayerScreen() {
 
     const { learningRecords, //toggleStar,
         markSolved: learningMarkSolved, markFailed: learningMarkFailed,
-    } = useLearningRecordsContext()
+    } = stores.learning //useLearningRecordsContext()
 
     // use tools
     const timer = useTimer()
@@ -96,7 +96,7 @@ export default function PlayerScreen() {
     }
 
     const handleStar = () => {
-        toggleStar(currentProblem.id)
+        stores.problem.toggleStar(currentProblem.id)
     }
     
     const timerProps = {

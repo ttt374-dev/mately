@@ -7,14 +7,22 @@ import type { ProblemRecord } from '@/domain/problemCatalog/types/ProblemRecord'
 import type { ProblemRepository } from '@/domain/problem/problemRepository';
 import { createProblem } from '@/domain/problem/factory';
 
-export function useProblemRecords (repository: ProblemRepository){
+export function createProblemStore (repository: ProblemRepository){
     const [records, setRecords] = useState<ProblemRecord>({})
 
     useEffect(() => {
-        repository.load().
-            then(setRecords).
-            catch(() => setRecords({}))
+        reload().catch(() => setRecords({}))
     }, []);
+
+    const reload = async () => {
+        try {
+            const data = await repository.load()
+            setRecords(data)
+            console.log("problems reload", data)
+        } catch {
+            setRecords({})
+        }
+    }
 
     
     const addProblem = (newProblem: Problem) => {
@@ -50,14 +58,15 @@ export function useProblemRecords (repository: ProblemRepository){
         const update = (problemId: string, updater: (r: Problem) => Problem) => {        
             //console.log("update", entryId, updater)
             setRecords(prev => {
-                const current = prev[problemId] ?? createProblem();
-                return {
+                const next = {
                     ...prev,
-                    [problemId]: updater(current),
+                    [problemId]: updater(prev[problemId] ?? createProblem()),
                 };
+                repository.save(next);
+                return next;
             });
             //persist()
-            repository.save(records)
+            
         };
     const toggleStar = (problemId: string) =>{
         //console.log("toggleStar in hook", )
@@ -76,6 +85,7 @@ export function useProblemRecords (repository: ProblemRepository){
 
     return {
         records,
+        reload,
         problemRecords: records,
         //getAll: records,
         replaceAll,

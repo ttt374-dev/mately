@@ -1,11 +1,12 @@
 import { buildProblem } from "@/domain/problem/factory";
+import type { ProblemRepository } from "@/domain/problem/problemRepository";
 import type { Problem } from "@/domain/problem/types/Problem";
 
 type ImportResult = 
     | { ok: true, count: number}
     | { ok: false, message: string }
 
-export function createImportProblemsUsecase(addProblem: (problem: Problem) => void) {
+export function createImportProblemsUsecase(problemRepo: ProblemRepository) {
     let count = 0
     const importFile = async (file: File): Promise<ImportResult> => {
         console.log("import file", file)
@@ -14,7 +15,7 @@ export function createImportProblemsUsecase(addProblem: (problem: Problem) => vo
             const text = new TextDecoder("shift_jis").decode(buf);
 
             const newProblem = buildProblem(text, file.name)            
-            newProblem && addProblem(newProblem)
+            newProblem && problemRepo.add(newProblem)
             
             return { ok: true, count: 1}
         } catch (e) {

@@ -2,27 +2,29 @@ import { useRef } from "react"
 import { Dialog, DialogTitle, DialogContent, DialogActions,
     Button, Box, Typography, Divider } from "@mui/material"
 
-import { useLearningRecordsContext } from "@/app/providers/LearningRecordsProvider"
-import { useProblemRecordsContext } from "@/app/providers/ProblemCollectionProvider"
 import { useToast } from "@/app/providers/ToastProvider"
-import { createBackupRestoreUsecase } from "@/usecase/backupRestore/backupRestoreUsecase"
+import { createBackupRestoreUsecase, type BackupData } from "@/usecase/backupRestore/backupRestoreUsecase"
 import { fileBackupWriter } from "@/infra/backup/backupWriter"
+import { useRepositoryContext } from "@/app/providers/RepositoryProvider"
+import { useStoreContext } from "@/app/providers/StoreProvider"
 
 const useBackupRestore = () => {
-    const problemApi = useProblemRecordsContext()
-    const learningApi = useLearningRecordsContext()
-    return createBackupRestoreUsecase(
-        {
-            records: problemApi.records,
-            replaceAll: problemApi.replaceAll
-        }, 
-        {
-            records: learningApi.records,
-            replaceAll: learningApi.replaceAll
-        },
-        
-        fileBackupWriter
-    )
+    const repos = useRepositoryContext()
+    const stores = useStoreContext()
+
+    const usecase = createBackupRestoreUsecase(repos.problem, repos.learning, fileBackupWriter)
+    const backup = async () => {
+        await usecase.backup()        
+    }
+    const restore = async (data: BackupData) => {
+        await usecase.restore(data)
+        stores.problem.reload()
+        stores.learning.reload()
+    }
+    return {
+        backup, restore
+    }
+    
 }
 type DialogProps = {
     open: boolean
@@ -38,7 +40,7 @@ export default function BackupRestoreDialog({ open, onClose }: DialogProps) {
     const handleBackup = async () => {
         try {
             const result = await backup()
-            toast({message: `バックアップ完了しました(${result.filename}): problem: ${result.count.problem}件, learing: ${result.count.learning}件`})
+            //toast({message: `バックアップ完了しました(${result.filename}): problem: ${result.count.problem}件, learing: ${result.count.learning}件`})
             onClose()
         } catch (e){
             const message = e instanceof Error ? e.message :  "バックアップエラー"
@@ -57,7 +59,10 @@ export default function BackupRestoreDialog({ open, onClose }: DialogProps) {
                 return
             }
             const result = await restore(json)
-            toast({ message: `リストア完了しました: problem: ${result.count.problem}件, learing: ${result.count.learning}件` })
+            
+
+            //toast({ message: `リストア完了しました: problem: ${result.count.problem}件, learing: ${result.count.learning}件` })
+
             onClose()
         } catch (e) {
             const message = e instanceof Error ? e.message :  "リストアエラー"

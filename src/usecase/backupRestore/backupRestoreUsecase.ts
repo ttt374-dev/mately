@@ -22,24 +22,18 @@ export type BackupRestoreResult = {
 }
 
 export function createBackupRestoreUsecase(
-  problem: {
-    records: ProblemRecord,
-    replaceAll: (problemRecords: ProblemRecord) => void,
-  },
-  learning: {
-    records: LearningRecord,
-    replaceAll: (LearningRecord: LearningRecord) => void,  
-  }
-  ,
+  problemRepo: ProblemRepository, 
+  learningRepo: LearningRepository,  
   writer: BackupWriter,
 ): BackupRestoreUsecase {
 
   // TODO: error check
   return {
-    async backup(): Promise<BackupRestoreResult> {    
+    async backup(): Promise<BackupRestoreResult> {         
+
       const backupData = {
-        problem: problem.records,
-        learning: learning.records,
+        problem: await problemRepo.load(),
+        learning: await learningRepo.load(),
       }
       const json = JSON.stringify(backupData, null, 2)
       const filename = `kif-backup-${Date.now()}.json`
@@ -62,10 +56,8 @@ export function createBackupRestoreUsecase(
       if (!backupData.problem){
         throw new Error("Invalid Backup Data")
       }
-      problem.replaceAll(backupData.problem)
-      learning.replaceAll(backupData.learning)
-
-      
+      problemRepo.save(backupData.problem)
+      learningRepo.save(backupData.learning)          
 
       return {
         count: {

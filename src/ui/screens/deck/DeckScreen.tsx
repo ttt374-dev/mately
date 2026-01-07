@@ -2,20 +2,20 @@ import { Box, List, ListItem, Button, Stack  } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { AppLayout } from "../../common/AppLayout/AppLayout"
-import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { QueueItem } from '@/domain/fsm/types';
 import { buildQueue } from '@/usecase/listBuilder/queueBuilder';
 import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/types/Sort';
 import DeckFilterControl from './components/DeckFilterControl';
-import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
 import { useFsmContext } from '@/app/providers/FsmProvider';
+import { useStoreContext } from '@/app/providers/StoreProvider';
 
 export default function DeckScreen(){
     const fsm = useFsmContext()
     //const deckPlaySession = usePlaySessionContext()
-    const { problemRecords } = useProblemRecordsContext()
-    const { learningRecords, clearAll } = useLearningRecordsContext()
+    const stores = useStoreContext()
+    //const { problemRecords } = useProblemRecordsContext()
+    //const { learningRecords, clearAll } = useLearningRecordsContext()
     //const learningRecords = {}
     const navigate = useNavigate()
     //const [filter, setFilter] = useState<Filter>(createDefaultFilter())
@@ -26,7 +26,7 @@ export default function DeckScreen(){
         key: "nextReviewedAt",
         order: "asc"
     }
-    const queue: QueueItem[] = buildQueue(problemRecords, sort, filter, learningRecords)
+    const queue: QueueItem[] = buildQueue(stores.problem.records, sort, filter, stores.learning.records)
 
     const handleStart = () => {
         // build queue
@@ -37,7 +37,7 @@ export default function DeckScreen(){
         navigate("/player")
     }
     const handleClearLearning = () => {
-        clearAll()
+        stores.learning.clearAll()
     }
     return (
         <AppLayout 

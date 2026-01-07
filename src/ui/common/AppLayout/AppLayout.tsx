@@ -4,12 +4,10 @@ import { AppBar, Box, Drawer, IconButton, List, ListItemButton, ListItemText, Me
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import { useNavigate } from "react-router-dom";
+
 import BackupRestoreDialog from "../backupRestore/BackupRestoreDialog";
-import MultipleFilesButton from "@/ui/sharedComponents/MultipleFilesButton";
-import { buildProblem } from "@/domain/problem/factory";
 import ImportFilesButton from "../importFiles/ImportFilesButton";
-import { useProblemRecordsContext } from "@/app/providers/ProblemCollectionProvider";
-import { useLearningRecordsContext } from "@/app/providers/LearningRecordsProvider";
+import { useStoreContext } from "@/app/providers/StoreProvider";
 
 interface Props {
   header?: React.ReactNode;
@@ -22,13 +20,14 @@ export function AppLayout({ header, footer, children, rightActions  }: Props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [backupDialogOpen, setBackupDialogOpen] = useState(false);
   const navigate = useNavigate()
-  const learningApi = useLearningRecordsContext() // TODO: temp
+  //const learningApi = useLearningRecordsContext() // TODO: temp
+  const stores = useStoreContext()
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
   const handleClearLearnings = () => {
     
-    learningApi.clearAll()
+    stores.learning.clearAll()
   }
 
   function ListMenu(){

@@ -5,18 +5,25 @@ import type { LearningEntry, LearningRecord } from '@/domain/learning/types/Lear
 import type { AnswerResult } from '@/domain/learning/types';
 import { judgeAnswerQuality, scheduleNext } from '@/domain/learning/scheduleNext';
 
-export function useLearningRecords (repository: LearningRepository){
-    const [learningRecords, setLearningRecords] = useState<LearningRecord>({})
+export function createLearningStore (repository: LearningRepository){
+    const [records, setRecords] = useState<LearningRecord>({})
 
     useEffect(() => {
-        repository.load().
-            then(setLearningRecords).
-            catch(() => setLearningRecords({}))
+        reload().catch(() => setRecords({}))
     }, []);
+
+    const reload = async () => {
+        try {
+            const data = await repository.load()
+            setRecords(data)
+        } catch {
+            setRecords({})
+        }
+    }
 
     const update = (problemId: string, updater: (r: LearningEntry) => LearningEntry) => {        
         //console.log("update", entryId, updater)
-        setLearningRecords(prev => {
+        setRecords(prev => {
             const current = prev[problemId] ?? {
                 problemId: problemId,
                 solvedCount: 0,
@@ -31,7 +38,7 @@ export function useLearningRecords (repository: LearningRepository){
             };
         });
         //persist()
-        repository.save(learningRecords)
+        repository.save(records)
     };
     const markAnswer = (problemId: string, answer: AnswerResult, secondsToAnswer?: number) =>{
         const addSolved = answer === "solved" ? 1 : 0
@@ -57,18 +64,20 @@ export function useLearningRecords (repository: LearningRepository){
     }*/
     const replaceAll = (records: LearningRecord) => {
         repository.save(records)
-        setLearningRecords(records)
+        setRecords(records)
     }
     const clearAll = () => {
         console.log("learning daata cleared")
         repository.save({})
-        setLearningRecords({})
+        setRecords({})
     }
 
     return {
-        records: learningRecords,
-        learningRecords,
-        setLearningRecords,
+        records,
+        learningRecords: records,
+        setLearningRecords: setRecords,
+        reload,
+        
         markAnswer, clearAll,
         markSolved: (id: string, secondsToAnswer?: number) => markAnswer(id, "solved", secondsToAnswer),
         markFailed: (id: string, secondsToAnswer?: number) => markAnswer(id, "failed", secondsToAnswer),

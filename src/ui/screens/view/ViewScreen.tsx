@@ -2,18 +2,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Stack, Button, Box } from '@mui/material';
 
 import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
-import type { Problem } from '@/domain/problem/types/Problem';
-import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
-import type { FsmState } from '@/domain/fsm/types';
-import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
-import { useEffect, useMemo } from 'react';
 import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';
 import { createProblem } from '@/domain/problem/factory';
 import { BoardPanel } from '../player/components/BoardPanel';
 import MovesPanel from '../player/components/MovesPanel';
-import ControlsPanel from '../player/components/ControlPanel';
 import { PlyControl } from '../player/components/PlyControl';
 import { StarControl } from '../player/components/StarControl';
+import { useStoreContext } from '@/app/providers/StoreProvider';
 
 export default function ViewScreen() {
     const { id } = useParams<{ id: string }>();
@@ -21,7 +16,8 @@ export default function ViewScreen() {
     if (!id) {
         return <div>invalid id</div>;
     }
-    const { records, toggleStar } = useProblemRecordsContext()
+    const stores = useStoreContext()
+    const { records, toggleStar } = stores.problem
 
     const currentProblem = records[id] ?? createProblem()
 

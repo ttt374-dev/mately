@@ -1,4 +1,5 @@
-import { useProblemRecordsContext } from "@/app/providers/ProblemCollectionProvider"
+import { useRepositoryContext } from "@/app/providers/RepositoryProvider"
+import { useStoreContext } from "@/app/providers/StoreProvider"
 import { useToast } from "@/app/providers/ToastProvider"
 import MultipleFilesButton, { type ButtonType } from "@/ui/sharedComponents/MultipleFilesButton"
 import { createImportProblemsUsecase } from "@/usecase/importProblems/importProblemsUsecase"
@@ -6,9 +7,12 @@ import { createImportProblemsUsecase } from "@/usecase/importProblems/importProb
 ////////////////////
 // 専用フック
 const useImportFiles = () => {
-    const problemApi = useProblemRecordsContext()
-    const addProblem = problemApi.addProblem
-    const usecase = createImportProblemsUsecase(addProblem)
+    //const addProblem = problemApi.addProblem
+    const repos = useRepositoryContext()
+    const usecase = createImportProblemsUsecase(repos.problem)
+    const stores = useStoreContext()
+    stores.problem.reload()
+    
     return {
         importFiles: usecase.importFiles
     }

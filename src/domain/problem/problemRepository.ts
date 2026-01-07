@@ -8,8 +8,9 @@ const LIB_FILE = "problem.json";
 export interface ProblemRepository {
     load(): Promise<ProblemRecord>
     save(collection: ProblemRecord): Promise<void>
+    add(problem: Problem): Promise<void>
 }
-
+///////////////////////////////////////////////
 export const createProblemRepository = (): ProblemRepository => {
     async function load(): Promise<ProblemRecord> {
         const result = await Filesystem.readFile({
@@ -44,6 +45,20 @@ export const createProblemRepository = (): ProblemRepository => {
             encoding: Encoding.UTF8,
         });
     };
+    async function add(problem: Problem){
+        const records = await load()
+        // 既存IDチェック（必要なら）
+        if (records[problem.id]) {
+            throw new Error(`Problem already exists: ${problem.id}`)
+        }
+        const next: ProblemRecord = {
+            ...records,
+            [problem.id]: problem,
+        }
 
-    return { load, save }
+        await save(next)
+        
+    }
+
+    return { load, save, add }
 }

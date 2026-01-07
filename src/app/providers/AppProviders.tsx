@@ -1,21 +1,23 @@
 import { FsmProvider } from "./FsmProvider";
-import { LearningRecordsProvider } from "./LearningRecordsProvider";
-import { ProblemRecordProvider } from "./ProblemCollectionProvider";
+import { RepositoryProvider } from "./RepositoryProvider";
 import { SortFilterStateProvider } from "./SortFilterStateProvider";
+import { StoreProvider } from "./StoreProvider";
 import { ToastProvider } from "./ToastProvider";
 
 
 export const AppProvsiders: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <ToastProvider>
-    <ProblemRecordProvider>
-      <LearningRecordsProvider>
-        <FsmProvider>
-          <SortFilterStateProvider>
-            {children}
-          </SortFilterStateProvider>
-        </FsmProvider>
-      </LearningRecordsProvider>
-    </ProblemRecordProvider>
+    <RepositoryProvider>
+      <StoreProvider>
+        
+          <FsmProvider>
+            <SortFilterStateProvider>
+              {children}
+            </SortFilterStateProvider>
+          </FsmProvider>
+        
+      </StoreProvider>
+    </RepositoryProvider>
   </ToastProvider>
 );
 

@@ -1,36 +1,32 @@
-import {
-    List, ListItem, ListItemButton, ListItemIcon, ListItemText,
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText,
     Box, Stack, Checkbox} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
-import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { QueueItem } from '@/domain/fsm/types';
 import { buildLibraryList } from '@/usecase/listBuilder/libraryListBuilder';
 import LibrarySortControl from './components/LibrarySortControl';
 import { useLibraryChecked } from './hooks/useLibraryChecked';
 import LibraryDeleteControl from './components/LibraryDeleteControl';
 import LibrarySelectionControl from './components/LibrarySelectionControl';
-import { buildProblem } from '@/domain/problem/factory/';
-import LibraryFooterActions from './components/LibraryFooterActions';
-import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
-import { useFsmContext } from '@/app/providers/FsmProvider';
 import LibraryItem from './components/LibraryItem';
+import { useStoreContext } from '@/app/providers/StoreProvider';
 
 
 export default function LibraryScreen() {
-    const { problemRecords, removeMany, toggleStar } = useProblemRecordsContext()
+    const stores = useStoreContext()    
+    //const { problemRecords, removeMany, toggleStar } = useProblemRecordsContext()
     const { sort: { sortState, setSortKey, setSortOrder } } = useSortFilterStateContext()
-    const { learningRecords } = useLearningRecordsContext()
-    const libraryList = buildLibraryList(problemRecords, sortState, learningRecords)
+    //const { learningRecords } = useLearningRecordsContext()
+    const libraryList = buildLibraryList(stores.problem.records, sortState, stores.learning.records)
     //const fsm = useFsmContext()
     const { isChecked, checkedIds,
         toggleChecked, clearChecked, selectAllChecked
-    } = useLibraryChecked(Object.keys(problemRecords))
+    } = useLibraryChecked(Object.keys(stores.problem.records))
     const navigate = useNavigate()
-    const targetProblems = Object.values(problemRecords).filter(e => checkedIds.has(e.id))
+    const targetProblems = Object.values(stores.problem.records).filter(e => checkedIds.has(e.id))
 
     const handleSelectProblem = (problem: Problem) => {
         const queue: QueueItem[] = [{ problemId: problem.id }]
@@ -43,7 +39,7 @@ export default function LibraryScreen() {
 
     // 削除
     const handleDelete = async (problems: Problem[]) => {
-        removeMany(problems)
+        stores.problem.removeMany(problems)
     }
     
     //////////////////////////////////////////////////
@@ -61,7 +57,7 @@ export default function LibraryScreen() {
         >
             <Stack direction="row">
                 <LibrarySelectionControl
-                    isAllChecked={checkedIds.size == Object.keys(problemRecords).length}
+                    isAllChecked={checkedIds.size == Object.keys(stores.problem.records).length}
                     onSelectAll={selectAllChecked}
                     onClearAll={clearChecked}
                 />
@@ -96,8 +92,8 @@ export default function LibraryScreen() {
 
                                 <ListItemText>
                                     <LibraryItem 
-                                        problem={p} learningEntry={learningRecords[p.id]}
-                                        onToggleStar={toggleStar}
+                                        problem={p} learningEntry={stores.learning.records[p.id]}
+                                        onToggleStar={stores.problem.toggleStar}
                                     />
                                 </ListItemText>
                             </ListItemButton>
