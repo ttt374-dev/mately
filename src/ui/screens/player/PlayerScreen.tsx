@@ -15,7 +15,6 @@ import ControlsPanel from './components/ControlPanel';
 import { createKifContent } from '@/domain/kif/factory';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 import { useTimer } from './hooks/useTimer';
-import NavigationControl from './components/NavigationControl';
 
 const getCurrentProblem = (fsmState: FsmState, records: Record<string, Problem>): Problem | null => {
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId

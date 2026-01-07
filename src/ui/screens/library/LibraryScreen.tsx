@@ -65,12 +65,13 @@ export default function LibraryScreen() {
     return (
         <AppLayout
             header={"Library"}
-            
+            /*
             footer={ 
                 <LibraryFooterActions
                     onFileSelected={handleSelectFiles}
                     onBackToDeck={() => navigate("/deck")}
                 />}
+                */
             
         >
             <Stack direction="row">

@@ -6,6 +6,7 @@ import DeckScreen from '@/ui/screens/deck/DeckScreen';
 import PlayerScreen from '@/ui/screens/player/PlayerScreen';
 import SummaryScreen from '@/ui/screens/summary/SummaryScreen';
 import { AppProvsiders } from './providers/AppProviders';
+import ViewScreen from '@/ui/screens/view/ViewScreen';
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/library" element={<LibraryScreen />} />
           <Route path="/summary" element={<SummaryScreen />} />
           <Route path="/deck" element={<DeckScreen />} />
+          <Route path="/view/:id" element={<ViewScreen />} />
           <Route path="/" element={<Navigate to="/deck" />} />
           <Route path="/player" element={<PlayerScreen />} />
         </Routes>
