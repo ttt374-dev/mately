@@ -1,6 +1,6 @@
 import { Button, Stack } from "@mui/material";
 
-import ImportFilesButton from "@/ui/common/importFiles/ImportFilesButton";
+import ImportFilesButton from "@/ui/common/ImportFilesButton";
 
 export default function LibraryFooterActions({ onFileSelected, onBackToDeck }: {
     onFileSelected: (files: File[]) => Promise<void>

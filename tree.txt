@@ -2,17 +2,28 @@ src
 ├── app
 │   ├── App.css
 │   ├── App.tsx
-│   └── providers
-│       ├── LearningRecordsProvider.tsx
-│       ├── PlaySessionProvider.tsx
-│       ├── ProblemCollectionProvider.tsx
-│       └── SortFilterProvider.tsx
-├── application
-│   ├── library
-│   │   └── libraryListBuilder.ts
-│   └── queue
-│       └── queueBuilder.ts
+│   ├── providers
+│   │   ├── AppProviders.tsx
+│   │   ├── FsmProvider.tsx
+│   │   ├── RepositoryProvider.tsx
+│   │   ├── SortFilterStateProvider.tsx
+│   │   ├── StoreProvider.tsx
+│   │   └── ToastProvider.tsx
+│   └── store
+│       ├── LearningStore.ts
+│       └── ProblemStore.ts
 ├── domain
+│   ├── fsm
+│   │   ├── __tests__
+│   │   │   └── fsmReducer.test.ts
+│   │   ├── fsmReducer.ts
+│   │   ├── replayReducer.ts
+│   │   └── types
+│   │       ├── AnswerEntry.ts
+│   │       ├── Fsm.ts
+│   │       ├── PlayerPhase.ts
+│   │       ├── QueueItem.ts
+│   │       └── index.ts
 │   ├── kif
 │   │   ├── builder
 │   │   │   ├── applyMove.ts
@@ -25,17 +36,18 @@ src
 │   │   ├── formatter
 │   │   │   └── formatHand.ts
 │   │   ├── parser
+│   │   │   ├── __test__
+│   │   │   │   ├── kifParseEvent.test.ts
+│   │   │   │   ├── kifParseHand.test.ts
+│   │   │   │   ├── kifParsePosition.test.ts
+│   │   │   │   └── kifParser.test.ts
 │   │   │   ├── index.ts
 │   │   │   ├── kanToNumber.ts
 │   │   │   ├── kifParseBoard.ts
-│   │   │   ├── kifParseEvent.test.ts
 │   │   │   ├── kifParseEvent.ts
-│   │   │   ├── kifParseHand.test.ts
 │   │   │   ├── kifParseHand.ts
 │   │   │   ├── kifParseHeader.ts
-│   │   │   ├── kifParsePosition.test.ts
 │   │   │   ├── kifParsePosition.ts
-│   │   │   ├── kifParser.test.ts
 │   │   │   ├── kifParser.ts
 │   │   │   └── parseResult.ts
 │   │   └── types
@@ -48,6 +60,7 @@ src
 │   │       └── index.ts
 │   ├── learning
 │   │   ├── LearningRepository.ts
+│   │   ├── calcAccuracy.ts
 │   │   ├── scheduleNext.ts
 │   │   └── types
 │   │       ├── AnswerResult.ts
@@ -61,75 +74,85 @@ src
 │   │   ├── problemRepository.ts
 │   │   └── types
 │   │       └── Problem.ts
-│   ├── problemCatalog
-│   │   ├── filterProblems.ts
-│   │   ├── sortProblems.ts
-│   │   └── types
-│   │       ├── Filter.ts
-│   │       ├── ProblemRecord.ts
-│   │       ├── Sort.ts
-│   │       └── index.ts
-│   └── session
+│   └── problemCatalog
+│       ├── filterProblems.ts
+│       ├── sortProblems.ts
 │       └── types
-│           ├── AnswerEntry.ts
-│           ├── PlaySession.ts
-│           ├── QueueItem.ts
+│           ├── Filter.ts
+│           ├── ProblemRecord.ts
+│           ├── Sort.ts
 │           └── index.ts
+├── hooks
+│   └── useFsm.ts
 ├── index.css
+├── infra
+│   └── backup
+│       └── backupWriter.ts
 ├── main.tsx
-├── shared
-│   ├── components
+├── ui
+│   ├── common
 │   │   ├── AppLayout
 │   │   │   ├── AppLayout.module.css
 │   │   │   └── AppLayout.tsx
-│   │   ├── FileButton.tsx
-│   │   ├── FixedScrollScreen.tsx
-│   │   ├── FrameLayout.tsx
-│   │   ├── MultipleFilesButton.tsx
-│   │   └── MyAppBar.tsx
-│   ├── hooks
-│   │   └── useAndroidBackHandler.ts
-│   └── utils
-│       ├── formatDate.ts
-│       ├── formatPercent.ts
-│       └── index.ts
-└── ui
-    ├── deck
-    │   ├── DeckScreen.tsx
-    │   ├── components
-    │   │   └── DeckFilterControl.tsx
-    │   └── hooks
-    │       └── usePlaySession.ts
-    ├── hooks
-    │   ├── useLearningRecords.ts
-    │   └── useProblemRecords.ts
-    ├── library
-    │   ├── LibraryScreen.tsx
-    │   ├── components
-    │   │   ├── LibraryDeleteControl.tsx
-    │   │   ├── LibraryFooterActions.tsx
-    │   │   ├── LibrarySelectionControl.tsx
-    │   │   └── LibrarySortControl.tsx
-    │   └── hooks
-    │       ├── useLibraryChecked.ts
-    │       ├── useLibraryFilter.ts
-    │       └── useLibrarySort.ts
-    ├── player
-    │   ├── PlayerScreen.tsx
-    │   ├── components
-    │   │   ├── BoardPanel.tsx
-    │   │   ├── BoardView.module.css
-    │   │   ├── BoardView.tsx
-    │   │   ├── ControlPanel.tsx
-    │   │   ├── MoveView.tsx
-    │   │   ├── MovesPanel.tsx
-    │   │   └── PlayerFooterActions.tsx
-    │   ├── hooks
-    │   │   ├── usePlayerPhase.ts
-    │   │   └── useReplayView.ts
-    │   └── types
-    │       └── PlayerPhase.ts
-    └── summary
-        └── SummaryScreen.tsx
+│   │   ├── backupRestore
+│   │   │   └── BackupRestoreDialog.tsx
+│   │   └── importFiles
+│   │       └── ImportFilesButton.tsx
+│   ├── screens
+│   │   ├── deck
+│   │   │   ├── DeckScreen.tsx
+│   │   │   └── components
+│   │   │       └── DeckFilterControl.tsx
+│   │   ├── library
+│   │   │   ├── LibraryScreen.tsx
+│   │   │   ├── components
+│   │   │   │   ├── LibraryDeleteControl.tsx
+│   │   │   │   ├── LibraryFooterActions.tsx
+│   │   │   │   ├── LibraryItem.tsx
+│   │   │   │   ├── LibrarySelectionControl.tsx
+│   │   │   │   └── LibrarySortControl.tsx
+│   │   │   └── hooks
+│   │   │       ├── useLibraryChecked.ts
+│   │   │       ├── useLibraryFilter.ts
+│   │   │       └── useLibrarySort.ts
+│   │   ├── player
+│   │   │   ├── PlayerScreen.tsx
+│   │   │   ├── components
+│   │   │   │   ├── BoardPanel.tsx
+│   │   │   │   ├── BoardView.module.css
+│   │   │   │   ├── BoardView.tsx
+│   │   │   │   ├── ControlPanel.tsx
+│   │   │   │   ├── MoveView.tsx
+│   │   │   │   ├── MovesPanel.tsx
+│   │   │   │   ├── NavigationControl.tsx
+│   │   │   │   ├── PlayerFooterActions.tsx
+│   │   │   │   ├── PlyControl.tsx
+│   │   │   │   └── StarControl.tsx
+│   │   │   └── hooks
+│   │   │       ├── useReplayView.ts
+│   │   │       └── useTimer.ts
+│   │   ├── summary
+│   │   │   └── SummaryScreen.tsx
+│   │   └── view
+│   │       └── ViewScreen.tsx
+│   └── sharedComponents
+│       ├── FileButton.tsx
+│       ├── FixedScrollScreen.tsx
+│       ├── FrameLayout.tsx
+│       ├── MultipleFilesButton.tsx
+│       └── MyAppBar.tsx
+├── usecase
+│   ├── backupRestore
+│   │   └── backupRestoreUsecase.ts
+│   ├── deleteProblem
+│   ├── importProblems
+│   │   └── importProblemsUsecase.ts
+│   └── listBuilder
+│       ├── libraryListBuilder.ts
+│       └── queueBuilder.ts
+└── utils
+    ├── formatDate.ts
+    ├── formatPercent.ts
+    └── index.ts
 
-40 directories, 93 files
+48 directories, 108 files

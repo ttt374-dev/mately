@@ -1,7 +1,7 @@
 import { Box, List, ListItem, Button, Stack  } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import { AppLayout } from "../../common/AppLayout/AppLayout"
+import { AppLayout } from "../../common/AppLayout"
 import type { QueueItem } from '@/domain/fsm/types';
 import { buildQueue } from '@/usecase/listBuilder/queueBuilder';
 import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/types/Sort';

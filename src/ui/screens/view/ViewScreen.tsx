@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Stack, Button, Box } from '@mui/material';
 
-import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
+import { AppLayout } from "@/ui/common/AppLayout"
 import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';
 import { createProblem } from '@/domain/problem/factory';
 import { BoardPanel } from '../player/components/BoardPanel';

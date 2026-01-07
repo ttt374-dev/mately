@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Stack, Button, Box } from '@mui/material';
 
-import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
+import { AppLayout } from "@/ui/common/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
 import type { FsmState } from '@/domain/fsm/types';
 import { useEffect, useMemo } from 'react';
