@@ -15,14 +15,15 @@ export function useProblemRecords (repository: ProblemRepository){
             catch(() => setRecords({}))
     }, []);
 
-    /*
+    
     const addProblem = (newProblem: Problem) => {
+        console.log("add problem", newProblem)
         setRecords(prev => {
             const updated = { ...prev, [newProblem.id]: newProblem };
             repository.save(updated);  // ← prev ではなく updated を保存
             return updated;
         });
-    }*/
+    }
     const replaceAll = (problemRecords: ProblemRecord) => {
         setRecords(problemRecords)
         repository.save(problemRecords)
@@ -57,7 +58,7 @@ export function useProblemRecords (repository: ProblemRepository){
         //getAll: records,
         replaceAll,
         //setRecords,
-        //addProblem, 
+        addProblem, 
         removeAll,
         removeMany,
 

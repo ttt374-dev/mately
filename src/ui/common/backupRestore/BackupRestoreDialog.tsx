@@ -2,7 +2,7 @@ import { useLearningRecordsContext } from "@/app/providers/LearningRecordsProvid
 import { useProblemRecordsContext } from "@/app/providers/ProblemCollectionProvider"
 import { createLearningRepository } from "@/domain/learning/LearningRepository"
 import { createProblemRepository } from "@/domain/problem/problemRepository"
-import { createBackupRestoreUsecase, type BackupWriter } from "@/usecase/backupRestore/backupRestoreUsecasets"
+import { createBackupRestoreUsecase, type BackupWriter } from "@/usecase/backupRestore/backupRestoreUsecase"
 import { Capacitor } from "@capacitor/core"
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import { LeakRemove } from "@mui/icons-material"

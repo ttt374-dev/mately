@@ -3,7 +3,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Button, IconButton, ListItemButton } from "@mui/material";
 import type { ButtonProps, IconButtonProps, ListItemButtonProps } from "@mui/material";
 
-type ButtonType = "button" | "icon" | "listItem";
+export type ButtonType = "button" | "icon" | "listItem";
 
 type Props = {
   label?: string;

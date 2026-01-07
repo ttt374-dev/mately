@@ -1,6 +1,6 @@
 import { Button, Stack } from "@mui/material";
 
-import MultipleFilesButton from "@/ui/sharedComponents/MultipleFilesButton";
+import ImportFilesButton from "@/ui/common/importFiles/ImportFilesButton";
 
 export default function LibraryFooterActions({ onFileSelected, onBackToDeck }: {
     onFileSelected: (files: File[]) => Promise<void>
@@ -9,11 +9,7 @@ export default function LibraryFooterActions({ onFileSelected, onBackToDeck }: {
 
     return (
         <Stack direction="row">
-            <MultipleFilesButton
-                onFileSelected={onFileSelected}
-                label="インポート"
-                buttonProps={{ fullWidth: true, variant: "outlined" }}
-            />
+            <ImportFilesButton/>
             <Button fullWidth variant='outlined'
                 onClick={onBackToDeck}>
                 デッキに戻る

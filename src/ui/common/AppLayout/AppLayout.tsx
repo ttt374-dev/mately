@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import BackupRestoreDialog from "../backupRestore/BackupRestoreDialog";
 import MultipleFilesButton from "@/ui/sharedComponents/MultipleFilesButton";
 import { buildProblem } from "@/domain/problem/factory";
+import ImportFilesButton from "../importFiles/ImportFilesButton";
 
 interface Props {
   header?: React.ReactNode;
@@ -54,12 +55,7 @@ export function AppLayout({ header, footer, children }: Props) {
               <ListItemText primary="ライブラリ" />
             </ListItemButton>
 
-            <MultipleFilesButton
-              onFileSelected={handleSelectFiles}
-              label="インポート"
-              type="listItem"
-              buttonProps={{ fullWidth: true, variant: "outlined" }}
-            />
+            <ImportFilesButton buttonType="listItem"/>
 
             <ListItemButton onClick={() => {
               setDrawerOpen(false);          // ① Drawer を閉じる
