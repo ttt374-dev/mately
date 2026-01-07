@@ -1,28 +1,45 @@
 import { buildProblem } from "@/domain/problem/factory";
 import type { Problem } from "@/domain/problem/types/Problem";
 
+type ImportResult = 
+    | { ok: true, count: number}
+    | { ok: false, message: string }
 
 export function createImportProblemsUsecase(addProblem: (problem: Problem) => void) {
-    const importFile = async (file: File) => {
+    let count = 0
+    const importFile = async (file: File): Promise<ImportResult> => {
         console.log("import file", file)
         try {
             const buf = await file.arrayBuffer();
             const text = new TextDecoder("shift_jis").decode(buf);
 
-            const newProblem = buildProblem(text, file.name)
-            console.log("add program info", addProblem)
-            console.log("new problem", newProblem)
-
+            const newProblem = buildProblem(text, file.name)            
             newProblem && addProblem(newProblem)
-            console.log("add problem must be done/????")
+            
+            return { ok: true, count: 1}
         } catch (e) {
-            console.error(`Failed to import file ${file.name}:`, e);
+            const message = `Failed to import file ${file.name}:`
+            console.error(message, e);
+            
+            return { ok: false, message: message }
         }
     }
-    const importFiles = (files: File[]) => {
+    const importFiles =  async (files: File[]): Promise<ImportResult> => {
+        let successCount = 0
+        let failedCount = 0
+
         for (const file of files) {
-            importFile(file)
+            const result = await importFile(file)
+            if (result.ok){
+                successCount++
+            } else {
+                failedCount++
+            }
         }
+        if (failedCount > 0){
+            return { ok: false, message: `failed to import ${failedCount} files`}    
+        }
+        return { ok: true, count: successCount}        
     }
     return {
         importFile,

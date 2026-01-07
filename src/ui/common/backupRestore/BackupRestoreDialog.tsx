@@ -1,46 +1,13 @@
+import { useRef } from "react"
+import { Dialog, DialogTitle, DialogContent, DialogActions,
+    Button, Box, Typography, Divider } from "@mui/material"
+
 import { useLearningRecordsContext } from "@/app/providers/LearningRecordsProvider"
 import { useProblemRecordsContext } from "@/app/providers/ProblemCollectionProvider"
-import { createLearningRepository } from "@/domain/learning/LearningRepository"
-import { createProblemRepository } from "@/domain/problem/problemRepository"
-import { createBackupRestoreUsecase, type BackupWriter } from "@/usecase/backupRestore/backupRestoreUsecase"
-import { Capacitor } from "@capacitor/core"
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
-import { LeakRemove } from "@mui/icons-material"
-import {
-    Dialog, DialogTitle, DialogContent, DialogActions,
-    Button, Box, Typography, Divider
-} from "@mui/material"
-import { useRef } from "react"
-//import { useKifBackupRestore } from "../hooks/library/useKifBackupRestore"
+import { useToast } from "@/app/providers/ToastProvider"
+import { createBackupRestoreUsecase } from "@/usecase/backupRestore/backupRestoreUsecase"
+import { fileBackupWriter } from "@/infra/backup/backupWriter"
 
-type Props = {
-    open: boolean
-    onClose: () => void
-}
-
-const writer: BackupWriter = {
-    write: async (data: string, filename: string) => {
-        if (Capacitor.isNativePlatform()) {
-            // Android / iOS
-            await Filesystem.writeFile({
-                path: `Download/kif-backup-${Date.now()}.json`,
-                directory: Directory.External,
-                data: data,
-                encoding: Encoding.UTF8,
-            })
-            //alert("バックアップを保存しました")
-        } else {
-            // Web
-            const blob = new Blob([data], { type: "application/json" })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement("a")
-            a.href = url
-            a.download = `kif-backup-${Date.now()}.json`
-            a.click()
-            URL.revokeObjectURL(url)
-        }
-    }
-}
 const useBackupRestore = () => {
     const problemApi = useProblemRecordsContext()
     const learningApi = useLearningRecordsContext()
@@ -54,32 +21,49 @@ const useBackupRestore = () => {
             replaceAll: learningApi.replaceAll
         },
         
-        writer
-
+        fileBackupWriter
     )
 }
+type DialogProps = {
+    open: boolean
+    onClose: () => void
+}
 
-export default function BackupRestoreDialog({ open, onClose }: Props) {
-
+export default function BackupRestoreDialog({ open, onClose }: DialogProps) {
     const { backup, restore } = useBackupRestore()
     const fileInputRef = useRef<HTMLInputElement>(null)
+    const toast = useToast()
 
     /* ===== backup ===== */   
     const handleBackup = async () => {
-        backup()
+        try {
+            const result = await backup()
+            toast({message: `バックアップ完了しました(${result.filename}): problem: ${result.count.problem}件, learing: ${result.count.learning}件`})
+            onClose()
+        } catch (e){
+            const message = e instanceof Error ? e.message :  "バックアップエラー"
+            toast({message: message, severity: "error"})
+        }
+        
     }
 
     /* ===== restore ===== */
     const handleRestoreFile = async (file: File) => {
-        const text = await file.text()
-        const json = JSON.parse(text)
+        try {
+            const text = await file.text()
+            const json = JSON.parse(text)
 
-        if (!window.confirm("現在の棋譜・学習履歴はすべて上書きされます。よろしいですか？")) {
-            return
+            if (!window.confirm("現在の棋譜・学習履歴はすべて上書きされます。よろしいですか？")) {
+                return
+            }
+            const result = await restore(json)
+            toast({ message: `リストア完了しました: problem: ${result.count.problem}件, learing: ${result.count.learning}件` })
+            onClose()
+        } catch (e) {
+            const message = e instanceof Error ? e.message :  "リストアエラー"
+            toast({message: message, severity: "error"})
         }
 
-        restore(json)
-        onClose()
     }
 
     return (
