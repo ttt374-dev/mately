@@ -9,6 +9,7 @@ export interface ProblemRepository {
     load(): Promise<ProblemRecord>
     save(collection: ProblemRecord): Promise<void>
     add(problem: Problem): Promise<void>
+    remove(problemId: string): Promise<void>
 }
 ///////////////////////////////////////////////
 export const createProblemRepository = (): ProblemRepository => {
@@ -59,6 +60,30 @@ export const createProblemRepository = (): ProblemRepository => {
         await save(next)
         
     }
+    async function remove(problemId: string): Promise<void> {
+        const records = await load()
 
-    return { load, save, add }
+        // 存在しない場合は何もしない（方針）
+        if (!records[problemId]) {
+            return
+        }
+
+        const { [problemId]: _, ...next } = records
+
+        await save(next)
+    }
+    async function removeMany(problemIds: string[]): Promise<void> {
+        const records = await load();
+
+        const next = { ...records };
+        for (const id of problemIds) {
+            delete next[id];
+        }
+
+        await save(next);
+    }
+
+
+
+    return { load, save, add, remove }
 }

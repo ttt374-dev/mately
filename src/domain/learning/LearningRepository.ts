@@ -7,6 +7,7 @@ const LIB_FILE = "learning.json";
 export interface LearningRepository {
     load(): Promise<LearningRecord>
     save(learningrecord: LearningRecord): Promise<void>
+    deleteByProblemId(problemId: string): Promise<void>
 }
 
 export const createLearningRepository = (): LearningRepository => {
@@ -36,6 +37,18 @@ export const createLearningRepository = (): LearningRepository => {
             encoding: Encoding.UTF8,
         });
     };
+     async function deleteByProblemId(problemId: string) {
+        const records = await load();
 
-    return { load, save }
+        // problemId が存在しなければ何もしない
+        if (!records[problemId]) return;
+
+        // 削除
+        const { [problemId]: _, ...next } = records;
+
+        // 永続化
+        await save(next);
+    }
+
+    return { load, save, deleteByProblemId }
 }

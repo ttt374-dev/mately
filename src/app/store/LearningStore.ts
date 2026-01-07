@@ -62,6 +62,8 @@ export function createLearningStore (repository: LearningRepository){
             starred: !(r?.starred ?? false),
         }))
     }*/
+   
+
     const replaceAll = (records: LearningRecord) => {
         repository.save(records)
         setRecords(records)
@@ -76,6 +78,7 @@ export function createLearningStore (repository: LearningRepository){
         records,
         learningRecords: records,
         setLearningRecords: setRecords,
+        
         reload,
         
         markAnswer, clearAll,

@@ -91,13 +91,10 @@ src
 ├── main.tsx
 ├── ui
 │   ├── common
-│   │   ├── AppLayout
-│   │   │   ├── AppLayout.module.css
-│   │   │   └── AppLayout.tsx
-│   │   ├── backupRestore
-│   │   │   └── BackupRestoreDialog.tsx
-│   │   └── importFiles
-│   │       └── ImportFilesButton.tsx
+│   │   ├── AppLayout.module.css
+│   │   ├── AppLayout.tsx
+│   │   ├── BackupRestoreDialog.tsx
+│   │   └── ImportFilesButton.tsx
 │   ├── screens
 │   │   ├── deck
 │   │   │   ├── DeckScreen.tsx
@@ -155,4 +152,4 @@ src
     ├── formatPercent.ts
     └── index.ts
 
-48 directories, 108 files
+45 directories, 108 files
