@@ -12,7 +12,6 @@ export default function LibraryFooterActions({ onFileSelected, onBackToDeck }: {
             <MultipleFilesButton
                 onFileSelected={onFileSelected}
                 label="インポート"
-                useIconButton={false}
                 buttonProps={{ fullWidth: true, variant: "outlined" }}
             />
             <Button fullWidth variant='outlined'

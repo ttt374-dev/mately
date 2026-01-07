@@ -1,4 +1,8 @@
-import { useBackupRestoreContext } from "@/app/providers/BackupRestoreProvider"
+import { useLearningRecordsContext } from "@/app/providers/LearningRecordsProvider"
+import { useProblemRecordsContext } from "@/app/providers/ProblemCollectionProvider"
+import { createLearningRepository } from "@/domain/learning/LearningRepository"
+import { createProblemRepository } from "@/domain/problem/problemRepository"
+import { createBackupRestoreUsecase, type BackupWriter } from "@/usecase/backupRestore/backupRestoreUsecasets"
 import { Capacitor } from "@capacitor/core"
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import {
@@ -13,15 +17,50 @@ type Props = {
     onClose: () => void
 }
 
+const writer: BackupWriter = {
+    write: async (data: string, filename: string) => {
+        if (Capacitor.isNativePlatform()) {
+            // Android / iOS
+            await Filesystem.writeFile({
+                path: `Download/kif-backup-${Date.now()}.json`,
+                directory: Directory.External,
+                data: data,
+                encoding: Encoding.UTF8,
+            })
+            //alert("バックアップを保存しました")
+        } else {
+            // Web
+            const blob = new Blob([data], { type: "application/json" })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement("a")
+            a.href = url
+            a.download = `kif-backup-${Date.now()}.json`
+            a.click()
+            URL.revokeObjectURL(url)
+        }
+    }
+}
+const useBackupRestore = () => {
+    const problemRepo = createProblemRepository()
+    const learningRepo = createLearningRepository()
+
+    const problems = useProblemRecordsContext()
+    const learningRecords = useLearningRecordsContext()
+    return createBackupRestoreUsecase(problemRepo, learningRepo,
+        problems.setProblems, learningRecords.setLearningRecords,
+        writer
+    )
+}
+
 export default function BackupRestoreDialog({ open, onClose }: Props) {
-    const { backup, restore } = useBackupRestoreContext()
+
+    const { backup, restore } = useBackupRestore()
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     /* ===== backup ===== */   
     const handleBackup = async () => {
         backup()
     }
-
 
     /* ===== restore ===== */
     const handleRestoreFile = async (file: File) => {

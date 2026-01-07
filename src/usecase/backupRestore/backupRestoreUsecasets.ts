@@ -13,8 +13,7 @@ export interface BackupRestoreUsecase {
 
 export type BackupData = {
   problems: ProblemRecord // export 形式
-  learningRecords: LearningRecord
-  
+  learningRecords: LearningRecord  
 }
 
 export function createBackupRestoreUsecase(

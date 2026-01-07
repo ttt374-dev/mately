@@ -27,10 +27,10 @@ export default function PlayerScreen() {
         advancePhase, retreatPhase, 
     } = useFsmContext()
     const currentPhase = fsmState.phase
-    const { records } = useProblemRecordsContext()
+    const { problems } = useProblemRecordsContext()
     const currentProblem = useMemo(()=>
-        getCurrentProblem(fsmState, records),
-    [fsmState, records])
+        getCurrentProblem(fsmState, problems),
+    [fsmState, problems])
 
     // replay
     const kifContent = currentProblem?.kifContent ?? createKifContent()

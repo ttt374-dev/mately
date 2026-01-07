@@ -1,17 +1,24 @@
-import React from "react"
+import React from "react";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { Button, IconButton } from "@mui/material";
-import type { ButtonProps, IconButtonProps } from "@mui/material"
+import { Button, IconButton, ListItemButton } from "@mui/material";
+import type { ButtonProps, IconButtonProps, ListItemButtonProps } from "@mui/material";
+
+type ButtonType = "button" | "icon" | "listItem";
 
 type Props = {
-  label?: String;
-  onFileSelected: (files: File[]) => void
-  useIconButton: boolean
-  buttonProps?: ButtonProps;
+  label?: string;
+  onFileSelected: (files: File[]) => void;
+  type?: ButtonType; // 追加
+  buttonProps?: ButtonProps | IconButtonProps | ListItemButtonProps;
 }
+
 export default function MultipleFilesButton({ 
-  label = "Choose File", onFileSelected, useIconButton = false, buttonProps }
-: Props) {
+  label = "Choose File",
+  onFileSelected,
+  type = "button",
+  buttonProps
+}: Props) {
+
   const fileRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
@@ -19,30 +26,39 @@ export default function MultipleFilesButton({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files 
+    const files = e.target.files;
     if (files){
-        onFileSelected(Array.from(files))
+      onFileSelected(Array.from(files));
     }
-    e.target.value = "";  // リセットしないと、再度同じファイルを開いても発火しない
-    //const file = e.target.files?.[0];
-    //if (file) onFileSelected(file);
+    e.target.value = ""; // 同じファイルを再度選択できるようにリセット
+  };
+
+  const renderButton = () => {
+    switch (type) {
+      case "icon":
+        return <IconButton onClick={handleClick} {...(buttonProps as IconButtonProps)}>
+          <UploadFileIcon />
+        </IconButton>;
+
+      case "listItem":
+        return <ListItemButton onClick={handleClick} {...(buttonProps as ListItemButtonProps)}>
+          {label}
+        </ListItemButton>;
+
+      default:
+        return <Button onClick={handleClick} {...(buttonProps as ButtonProps)}>
+          {label}
+        </Button>;
+    }
   };
 
   return (
     <>
-      { useIconButton ?
-      <IconButton onClick={handleClick}>
-        <UploadFileIcon/>
-      </IconButton>
-      :
-        <Button onClick={handleClick} {...buttonProps}>{ label } </Button>
-      }
-
+      {renderButton()}
       <input
         type="file"
         ref={fileRef}
-        multiple={true}
-        //accept="*/*"
+        multiple
         accept="*.kif"
         style={{ display: "none" }}
         onChange={handleChange}

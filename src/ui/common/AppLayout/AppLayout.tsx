@@ -4,6 +4,8 @@ import { AppBar, Box, Drawer, IconButton, List, ListItemButton, ListItemText, To
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import BackupRestoreDialog from "../backupRestore/BackupRestoreDialog";
+import MultipleFilesButton from "@/ui/sharedComponents/MultipleFilesButton";
+import { buildProblem } from "@/domain/problem/factory";
 
 interface Props {
   header?: React.ReactNode;
@@ -18,7 +20,13 @@ export function AppLayout({ header, footer, children }: Props) {
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
+
   const navigate = useNavigate()
+
+  // handlers
+  const handleSelectFiles = async (files: File[]) => {
+   
+  }
   return (
     <div className={styles.container}>
       <AppBar position="static" className={styles.header}>
@@ -42,12 +50,22 @@ export function AppLayout({ header, footer, children }: Props) {
             <ListItemButton onClick={() => navigate("/deck")}>
               <ListItemText primary="デッキに戻る" />
             </ListItemButton>
+            <ListItemButton onClick={() => navigate("/library")}>
+              <ListItemText primary="ライブラリ" />
+            </ListItemButton>
+
+            <MultipleFilesButton
+              onFileSelected={handleSelectFiles}
+              label="インポート"
+              type="listItem"
+              buttonProps={{ fullWidth: true, variant: "outlined" }}
+            />
 
             <ListItemButton onClick={() => {
               setDrawerOpen(false);          // ① Drawer を閉じる
               setBackupDialogOpen(true);     // ② Dialog を開く
             }}>
-              <ListItemText primary="バックアップ" />
+              <ListItemText primary="バックアップ/レストア" />
             </ListItemButton>
 
             <ListItemButton onClick={() => console.log("settings")}>

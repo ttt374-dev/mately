@@ -1,13 +1,9 @@
 import {
     List, ListItem, ListItemButton, ListItemIcon, ListItemText,
-    Box, Stack, Button, Checkbox,
-    Typography,
-    IconButton
-} from '@mui/material';
+    Box, Stack, Checkbox} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import StarIcon from "@mui/icons-material/Star";
-import StarBorderIcon from "@mui/icons-material/StarBorder";import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
 
+import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { QueueItem } from '@/domain/fsm/types';
@@ -21,36 +17,9 @@ import LibraryFooterActions from './components/LibraryFooterActions';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
 import { useFsmContext } from '@/app/providers/FsmProvider';
-import type { LearningEntry } from '@/domain/learning/types';
-import { calcAccuracy } from '@/domain/learning/calcAccuracy';
+import LibraryItem from './components/LibraryItem';
 
-// 二行目部分だけコンポーネントに分ける
-function ProblemSubInfo({ problem, learningEntry }: { problem: Problem, learningEntry?: LearningEntry }) {
-    return (
-        <Box
-            sx={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "space-between",
-                mt: 0.5,
-            }}
-        >
-            <Typography variant="body2" color="text.secondary">
-                登録日: {problem.createdAt}
-            </Typography>
 
-            {learningEntry && <>
-              <Typography variant="body2" color="text.primary">
-                  {(calcAccuracy(learningEntry) * 100).toFixed(1)}%
-              </Typography>
-                <IconButton size="small">
-                {learningEntry.starred ? <StarIcon fontSize="small" color="warning" /> : <StarBorderIcon fontSize="small" />}
-              </IconButton>
-              </>
-            }
-        </Box>
-    );
-}
 export default function LibraryScreen() {
     const { problems, addProblem, removeMany } = useProblemRecordsContext()
     const { sort: { sortState, setSortKey, setSortOrder } } = useSortFilterStateContext()
@@ -82,7 +51,7 @@ export default function LibraryScreen() {
     const handleSelectProblem = (problem: Problem) => {
         const queue: QueueItem[] = [{ problemId: problem.id }]
         //startSession(queue)
-        console.log("library player start", queue)
+        //console.log("library player start", queue)
         fsm.start(queue)
         navigate("/player")
     }
@@ -135,11 +104,7 @@ export default function LibraryScreen() {
                                 </ListItemIcon>
 
                                 <ListItemText>
-                                    {/* 一行目: タイトル */}
-                                    <Typography variant="subtitle1" fontWeight="bold">
-                                        {p.title}
-                                    </Typography>
-                                    <ProblemSubInfo problem={p} learningEntry={learningRecords[p.id]} />
+                                    <LibraryItem problem={p} learningEntry={learningRecords[p.id]} />
                                 </ListItemText>
                             </ListItemButton>
                         </ListItem>

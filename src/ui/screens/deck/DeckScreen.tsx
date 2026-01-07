@@ -14,7 +14,7 @@ import { useFsmContext } from '@/app/providers/FsmProvider';
 export default function DeckScreen(){
     const fsm = useFsmContext()
     //const deckPlaySession = usePlaySessionContext()
-    const { records } = useProblemRecordsContext()
+    const { problems } = useProblemRecordsContext()
     const { learningRecords, clearAll } = useLearningRecordsContext()
     //const learningRecords = {}
     const navigate = useNavigate()
@@ -26,7 +26,7 @@ export default function DeckScreen(){
         key: "nextReviewedAt",
         order: "asc"
     }
-    const queue: QueueItem[] = buildQueue(records, sort, filter, learningRecords)
+    const queue: QueueItem[] = buildQueue(problems, sort, filter, learningRecords)
 
     const handleStart = () => {
         // build queue
