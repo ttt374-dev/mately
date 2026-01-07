@@ -9,7 +9,7 @@ export type LearningEntry = {
   nextReviewedAt: number        // 次に解くべき時刻（ms）
   easeFactor: number          // 習熟度（Anki系）
   
-  starred?: boolean,
+  //starred?: boolean,
 }
 
 export type LearningRecord = Record<string, LearningEntry>

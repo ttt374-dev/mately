@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import type { Problem} from'@/domain/problem/types/Problem'
 import type { ProblemRecord } from '@/domain/problemCatalog/types/ProblemRecord'
 import type { ProblemRepository } from '@/domain/problem/problemRepository';
+import { createProblem } from '@/domain/problem/factory';
 
 export function useProblemRecords (repository: ProblemRepository){
     const [records, setRecords] = useState<ProblemRecord>({})
@@ -45,6 +46,27 @@ export function useProblemRecords (repository: ProblemRepository){
             return next;
         });
     };
+    
+        const update = (problemId: string, updater: (r: Problem) => Problem) => {        
+            //console.log("update", entryId, updater)
+            setRecords(prev => {
+                const current = prev[problemId] ?? createProblem();
+                return {
+                    ...prev,
+                    [problemId]: updater(current),
+                };
+            });
+            //persist()
+            repository.save(records)
+        };
+    const toggleStar = (problemId: string) =>{
+        //console.log("toggleStar in hook", )
+        update(problemId, r => ({
+            ...r,
+            starred: !(r?.starred ?? false),
+        }))
+    }
+
 
     
     const removeAll = () => {
@@ -61,6 +83,7 @@ export function useProblemRecords (repository: ProblemRepository){
         addProblem, 
         removeAll,
         removeMany,
+        toggleStar,
 
         //repository,
     }

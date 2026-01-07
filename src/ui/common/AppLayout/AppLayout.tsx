@@ -7,6 +7,8 @@ import BackupRestoreDialog from "../backupRestore/BackupRestoreDialog";
 import MultipleFilesButton from "@/ui/sharedComponents/MultipleFilesButton";
 import { buildProblem } from "@/domain/problem/factory";
 import ImportFilesButton from "../importFiles/ImportFilesButton";
+import { useProblemRecordsContext } from "@/app/providers/ProblemCollectionProvider";
+import { useLearningRecordsContext } from "@/app/providers/LearningRecordsProvider";
 
 interface Props {
   header?: React.ReactNode;
@@ -17,12 +19,16 @@ interface Props {
 export function AppLayout({ header, footer, children }: Props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [backupDialogOpen, setBackupDialogOpen] = useState(false);
-
+  const navigate = useNavigate()
+  const learningApi = useLearningRecordsContext() // TODO: temp
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
+  const handleClearLearnings = () => {
+    
+    learningApi.clearAll()
+  }
 
-  const navigate = useNavigate()
 
   // handlers
   const handleSelectFiles = async (files: File[]) => {
@@ -62,6 +68,10 @@ export function AppLayout({ header, footer, children }: Props) {
               setBackupDialogOpen(true);     // ② Dialog を開く
             }}>
               <ListItemText primary="バックアップ/レストア" />
+            </ListItemButton>
+
+            <ListItemButton onClick={handleClearLearnings}>
+              <ListItemText primary="学習データをクリア" />
             </ListItemButton>
 
             <ListItemButton onClick={() => console.log("settings")}>

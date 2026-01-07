@@ -61,6 +61,7 @@ export default function DeckScreen(){
 
                 <Button variant="contained"
                     size="large"
+                    fullWidth
                     sx={{
                         //flex: 3,
                         minHeight: 100,

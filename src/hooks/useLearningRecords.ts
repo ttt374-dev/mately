@@ -47,18 +47,20 @@ export function useLearningRecords (repository: LearningRepository){
             lastAnsweredAt: Date.now()
         }))
     } 
+    /*
     const toggleStar = (problemId: string) =>{
         //console.log("toggleStar in hook", )
         update(problemId, r => ({
             ...r,
             starred: !(r?.starred ?? false),
         }))
-    }
+    }*/
     const replaceAll = (records: LearningRecord) => {
         repository.save(records)
         setLearningRecords(records)
     }
     const clearAll = () => {
+        console.log("learning daata cleared")
         repository.save({})
         setLearningRecords({})
     }
@@ -70,7 +72,7 @@ export function useLearningRecords (repository: LearningRepository){
         markAnswer, clearAll,
         markSolved: (id: string, secondsToAnswer?: number) => markAnswer(id, "solved", secondsToAnswer),
         markFailed: (id: string, secondsToAnswer?: number) => markAnswer(id, "failed", secondsToAnswer),
-        toggleStar,
+        //toggleStar,
         replaceAll,
     }
 }

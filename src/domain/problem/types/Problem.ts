@@ -8,6 +8,8 @@ export type Problem = {
 
   kifContent: KifContent,
 
+  starred: boolean,
+
 };
 
 export type ProblemEntry = Problem

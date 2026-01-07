@@ -26,7 +26,7 @@ export default function PlayerScreen() {
         advancePhase, retreatPhase, 
     } = useFsmContext()
     const currentPhase = fsmState.phase
-    const { problemRecords } = useProblemRecordsContext()
+    const { problemRecords, toggleStar } = useProblemRecordsContext()
     const currentProblem = useMemo(()=>
         getCurrentProblem(fsmState, problemRecords),
     [fsmState, problemRecords])
@@ -38,7 +38,7 @@ export default function PlayerScreen() {
         moveToPly, resetPly,
     } = useReplayView(kifContent)
 
-    const { learningRecords, toggleStar,
+    const { learningRecords, //toggleStar,
         markSolved: learningMarkSolved, markFailed: learningMarkFailed,
     } = useLearningRecordsContext()
 
@@ -135,6 +135,7 @@ export default function PlayerScreen() {
                         currentPlyIndex={currentPlyIndex}
                         moveToPly={moveToPly} />
                     <ControlsPanel
+                        isStarred={currentProblem.starred   }
                         learningEntry={learningEntry}
                         fsmState={fsmState}
                         currentPhase={currentPhase}

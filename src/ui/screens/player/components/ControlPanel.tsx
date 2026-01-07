@@ -39,6 +39,7 @@ function formatTime(sec: number) {
 //////////////////////////////////////////////
 // コントロールパネル
 export default function ControlsPanel({
+    isStarred,
     learningEntry,
     onToggleStar,
     currentPhase,
@@ -50,6 +51,7 @@ export default function ControlsPanel({
     fsmState,
 }: {
     learningEntry: { starred?: boolean; solvedCount?: number; failedCount?: number };
+    isStarred: boolean
     onToggleStar: () => void;
     currentPhase: PlayerPhase;
     advancePly: () => void;
@@ -99,7 +101,7 @@ export default function ControlsPanel({
                             '&:focus-visible': { outline: 'none' },
                         }}
                     >
-                        {learningEntry.starred ? <StarIcon /> : <StarBorderIcon />}
+                        {isStarred ? <StarIcon /> : <StarBorderIcon />}
                     </IconButton>
 
                     <Typography variant="body2" fontWeight="bold">

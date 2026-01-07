@@ -7,8 +7,9 @@ import type { LearningEntry } from '@/domain/learning/types';
 import { calcAccuracy } from '@/domain/learning/calcAccuracy';
 import { formatDate } from '@/utils';
 
-
-
+function inDays(date: number): number {
+    return (date - Date.now()) / (60*60*24*100)
+}
 export default function LibraryItem({ problem, learningEntry }: { problem: Problem, learningEntry?: LearningEntry }) {
     return (
         <>
@@ -31,12 +32,12 @@ export default function LibraryItem({ problem, learningEntry }: { problem: Probl
                 {learningEntry && <>
                     <Typography variant="body2" color="text.primary">
                         {(calcAccuracy(learningEntry) * 100).toFixed(1)}%, 
-                        EF:{ learningEntry.easeFactor},
-                        { formatDate(learningEntry.nextReviewedAt, "yyyy/MM/dd")}
+                        EF:{ learningEntry.easeFactor.toFixed(2)},
+                        in {inDays(learningEntry.nextReviewedAt).toFixed(0)} days
                         
                     </Typography>
                     <IconButton size="small">
-                        {learningEntry.starred ? <StarIcon fontSize="small" color="warning" /> : <StarBorderIcon fontSize="small" />}
+                        {problem.starred ? <StarIcon fontSize="small" color="warning" /> : <StarBorderIcon fontSize="small" />}
                     </IconButton>
                 </>
                 }
