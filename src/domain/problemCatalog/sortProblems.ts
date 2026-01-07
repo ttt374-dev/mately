@@ -1,11 +1,10 @@
 // domain/problemRecord/sortProblemRecords.ts
+import { calcAccuracy } from "../learning/calcAccuracy"
 import type { LearningEntry, LearningRecord } from "../learning/types"
 import type { Problem } from "../problem/types/Problem"
 import type { SortState, SortKey, SortOrder } from "./types/Sort"
 
-const calcAccuracy = (learningEntry: LearningEntry): number => {
-  return learningEntry.solvedCount / (learningEntry.solvedCount + learningEntry.failedCount)
-}
+
 export function sortProblems(
   problems: Problem[],
   sort: SortState,

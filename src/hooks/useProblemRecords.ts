@@ -13,7 +13,7 @@ export function useProblemRecords (repository: ProblemRepository){
         repository.load().
             then(setRecords).
             catch(() => setRecords({}))
-    }, [repository]);
+    }, []);
 
     const addProblem = (newProblem: Problem) => {
         setRecords(prev => {
@@ -46,7 +46,8 @@ export function useProblemRecords (repository: ProblemRepository){
     }
 
     return {
-        records,
+        problems: records,
+        setProblems: setRecords,
         addProblem, 
         removeAll,
         removeMany,

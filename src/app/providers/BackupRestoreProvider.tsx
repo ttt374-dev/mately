@@ -6,6 +6,8 @@ import { createBackupRestoreUsecase, type BackupData, type BackupWriter } from "
 import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem"
+import { useLearningRecordsContext } from "./LearningRecordsProvider"
+import { useProblemRecordsContext } from "./ProblemCollectionProvider"
 
 
 const writer: BackupWriter = {
@@ -38,9 +40,14 @@ export const BackupRestoreContext = createContext<BackupRestoreContextValue | nu
 export const BackupRestoreProvider = ({ children }: { children: ReactNode }) => {
     const problemRepo = createProblemRepository()
     const learningRepo = createLearningRepository()
+
+    const problems = useProblemRecordsContext()
+    const learningRecords = useLearningRecordsContext()
     return (
         <BackupRestoreContext.Provider value={
-            createBackupRestoreUsecase(problemRepo, learningRepo, writer)
+            createBackupRestoreUsecase(problemRepo, learningRepo, 
+                problems.setProblems, learningRecords.setLearningRecords,
+                writer)
         }>
             {children}
         </BackupRestoreContext.Provider>

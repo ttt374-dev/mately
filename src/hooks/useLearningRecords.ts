@@ -12,7 +12,7 @@ export function useLearningRecords (repository: LearningRepository){
         repository.load().
             then(setLearningRecords).
             catch(() => setLearningRecords({}))
-    }, [repository]);
+    }, []);
 
     const update = (problemId: string, updater: (r: LearningEntry) => LearningEntry) => {        
         //console.log("update", entryId, updater)
@@ -61,6 +61,7 @@ export function useLearningRecords (repository: LearningRepository){
 
     return {
         learningRecords,
+        setLearningRecords,
         markAnswer, clearAll,
         markSolved: (id: string, secondsToAnswer?: number) => markAnswer(id, "solved", secondsToAnswer),
         markFailed: (id: string, secondsToAnswer?: number) => markAnswer(id, "failed", secondsToAnswer),

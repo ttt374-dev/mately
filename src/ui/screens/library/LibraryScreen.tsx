@@ -1,9 +1,14 @@
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, 
-    Box, Stack, Button, Checkbox } from '@mui/material';
+import {
+    List, ListItem, ListItemButton, ListItemIcon, ListItemText,
+    Box, Stack, Button, Checkbox,
+    Typography,
+    IconButton
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
 
-import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
-import type { Problem} from '@/domain/problem/types/Problem';
+import type { Problem } from '@/domain/problem/types/Problem';
 import { useProblemRecordsContext } from '@/app/providers/ProblemCollectionProvider';
 import type { QueueItem } from '@/domain/fsm/types';
 import { buildLibraryList } from '@/usecase/listBuilder/libraryListBuilder';
@@ -16,18 +21,47 @@ import LibraryFooterActions from './components/LibraryFooterActions';
 import { useLearningRecordsContext } from '@/app/providers/LearningRecordsProvider';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
 import { useFsmContext } from '@/app/providers/FsmProvider';
+import type { LearningEntry } from '@/domain/learning/types';
+import { calcAccuracy } from '@/domain/learning/calcAccuracy';
 
-export default function LibraryScreen() {    
-    const { records, addProblem, removeMany } = useProblemRecordsContext()
-    const { sort: { sortState, setSortKey, setSortOrder }} = useSortFilterStateContext()
+// 二行目部分だけコンポーネントに分ける
+function ProblemSubInfo({ problem, learningEntry }: { problem: Problem, learningEntry?: LearningEntry }) {
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+                mt: 0.5,
+            }}
+        >
+            <Typography variant="body2" color="text.secondary">
+                登録日: {problem.createdAt}
+            </Typography>
+
+            {learningEntry && <>
+              <Typography variant="body2" color="text.primary">
+                  {(calcAccuracy(learningEntry) * 100).toFixed(1)}%
+              </Typography>
+                <IconButton size="small">
+                {learningEntry.starred ? <StarIcon fontSize="small" color="warning" /> : <StarBorderIcon fontSize="small" />}
+              </IconButton>
+              </>
+            }
+        </Box>
+    );
+}
+export default function LibraryScreen() {
+    const { problems, addProblem, removeMany } = useProblemRecordsContext()
+    const { sort: { sortState, setSortKey, setSortOrder } } = useSortFilterStateContext()
     const { learningRecords } = useLearningRecordsContext()
-    const libraryList = buildLibraryList(records, sortState, learningRecords)
+    const libraryList = buildLibraryList(problems, sortState, learningRecords)
     const fsm = useFsmContext()
     const { isChecked, checkedIds,
         toggleChecked, clearChecked, selectAllChecked
-     } = useLibraryChecked(Object.keys(records))
+    } = useLibraryChecked(Object.keys(problems))
     const navigate = useNavigate()
-    const targetProblems = Object.values(records).filter(e => checkedIds.has(e.id))
+    const targetProblems = Object.values(problems).filter(e => checkedIds.has(e.id))
 
     // handlers
     const handleSelectFiles = async (files: File[]) => {
@@ -63,9 +97,9 @@ export default function LibraryScreen() {
         <AppLayout
             header={"Library"}
             footer={
-                <LibraryFooterActions 
-                        onFileSelected={handleSelectFiles}
-                        onBackToDeck={() => navigate("/deck")}
+                <LibraryFooterActions
+                    onFileSelected={handleSelectFiles}
+                    onBackToDeck={() => navigate("/deck")}
                 />
             }
         >
@@ -81,8 +115,8 @@ export default function LibraryScreen() {
                 <Box sx={{ flexGrow: 1 }} />
                 <LibrarySortControl sort={sortState} setSortKey={setSortKey} setSortOrder={setSortOrder} />
             </Stack>
-            
-            <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto"  }}>
+
+            <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
                 <List>
                     {libraryList.map((p) => (
                         <ListItem disablePadding key={p.id}>
@@ -101,7 +135,11 @@ export default function LibraryScreen() {
                                 </ListItemIcon>
 
                                 <ListItemText>
-                                    {p.title}
+                                    {/* 一行目: タイトル */}
+                                    <Typography variant="subtitle1" fontWeight="bold">
+                                        {p.title}
+                                    </Typography>
+                                    <ProblemSubInfo problem={p} learningEntry={learningRecords[p.id]} />
                                 </ListItemText>
                             </ListItemButton>
                         </ListItem>
