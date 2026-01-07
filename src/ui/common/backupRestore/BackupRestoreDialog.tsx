@@ -18,8 +18,8 @@ const useBackupRestore = () => {
     }
     const restore = async (data: BackupData) => {
         await usecase.restore(data)
-        stores.problem.reload()
-        stores.learning.reload()
+        await stores.problem.reload()
+        await stores.learning.reload()
     }
     return {
         backup, restore
@@ -58,8 +58,7 @@ export default function BackupRestoreDialog({ open, onClose }: DialogProps) {
             if (!window.confirm("現在の棋譜・学習履歴はすべて上書きされます。よろしいですか？")) {
                 return
             }
-            const result = await restore(json)
-            
+            const result = await restore(json)           
 
             //toast({ message: `リストア完了しました: problem: ${result.count.problem}件, learing: ${result.count.learning}件` })
 

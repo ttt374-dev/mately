@@ -7,7 +7,7 @@ type ImportResult =
     | { ok: false, message: string }
 
 export function createImportProblemsUsecase(problemRepo: ProblemRepository) {
-    let count = 0
+    
     const importFile = async (file: File): Promise<ImportResult> => {
         console.log("import file", file)
         try {
@@ -15,7 +15,7 @@ export function createImportProblemsUsecase(problemRepo: ProblemRepository) {
             const text = new TextDecoder("shift_jis").decode(buf);
 
             const newProblem = buildProblem(text, file.name)            
-            newProblem && problemRepo.add(newProblem)
+            newProblem && await problemRepo.add(newProblem)
             
             return { ok: true, count: 1}
         } catch (e) {

@@ -56,8 +56,8 @@ export function createBackupRestoreUsecase(
       if (!backupData.problem){
         throw new Error("Invalid Backup Data")
       }
-      problemRepo.save(backupData.problem)
-      learningRepo.save(backupData.learning)          
+      await problemRepo.save(backupData.problem)
+      await learningRepo.save(backupData.learning)          
 
       return {
         count: {

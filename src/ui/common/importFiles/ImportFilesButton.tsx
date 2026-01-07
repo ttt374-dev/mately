@@ -11,10 +11,14 @@ const useImportFiles = () => {
     const repos = useRepositoryContext()
     const usecase = createImportProblemsUsecase(repos.problem)
     const stores = useStoreContext()
-    stores.problem.reload()
+    
     
     return {
-        importFiles: usecase.importFiles
+        importFiles: async (files: File[]) => {
+            const result = await usecase.importFiles(files)
+            await stores.problem.reload()
+            return result
+        }
     }
 }
 
