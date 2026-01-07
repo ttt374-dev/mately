@@ -23,8 +23,8 @@ export function createBackupRestoreUsecase(
   return {
     async backup() {    
       const backupData = {
-        problems: problemRepository.load(),
-        learningRecords: learningRepository.load()
+        problems: await problemRepository.load(),
+        learningRecords: await learningRepository.load()
       }
       const json = JSON.stringify(backupData, null, 2)
       await writer.write(json, "backup-filename.json")
@@ -33,6 +33,7 @@ export function createBackupRestoreUsecase(
     async restore(data: BackupData) {
       await problemRepository.save(data.problems)
       await learningRepository.save(data.learningRecords)
+      
     }
   }
 }

@@ -18,7 +18,7 @@ const writer: BackupWriter = {
                 data: data,
                 encoding: Encoding.UTF8,
             })
-            alert("バックアップを保存しました")
+            //alert("バックアップを保存しました")
         } else {
             // Web
             const blob = new Blob([data], { type: "application/json" })

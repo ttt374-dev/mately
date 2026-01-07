@@ -12,7 +12,7 @@ export function useLearningRecords (repository: LearningRepository){
         repository.load().
             then(setLearningRecords).
             catch(() => setLearningRecords({}))
-    }, []);
+    }, [repository]);
 
     const update = (problemId: string, updater: (r: LearningEntry) => LearningEntry) => {        
         //console.log("update", entryId, updater)
