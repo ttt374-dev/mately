@@ -12,6 +12,6 @@ export type Problem = {
 
 };
 
-export type ProblemEntry = Problem
+//export type ProblemEntry = Problem
 
 

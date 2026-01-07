@@ -12,7 +12,7 @@ export interface BackupRestoreUsecase {
 }
 
 export type BackupData = {
-  problem: ProblemRecord // export 形式
+  problem: Problem[]
   learning: LearningRecord  
 }
 

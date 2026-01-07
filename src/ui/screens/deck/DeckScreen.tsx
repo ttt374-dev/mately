@@ -26,7 +26,7 @@ export default function DeckScreen(){
         key: "nextReviewedAt",
         order: "asc"
     }
-    const queue: QueueItem[] = buildQueue(stores.problem.records, sort, filter, stores.learning.records)
+    const queue: QueueItem[] = buildQueue(stores.problem.problems, sort, filter, stores.learning.records)
 
     const handleStart = () => {
         // build queue

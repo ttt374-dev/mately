@@ -17,9 +17,9 @@ import { StarControl } from './components/StarControl';
 import type { LearningEntry } from '@/domain/learning/types';
 import { useStoreContext } from '@/app/providers/StoreProvider';
 
-const getCurrentProblem = (fsmState: FsmState, records: Record<string, Problem>): Problem | null => {
+const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | null => {
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
-    return records[problemId] ?? null
+    return problems.find((p) => p.id === problemId) ?? null
 }
 export default function PlayerScreen() {
     // fsm
@@ -30,8 +30,8 @@ export default function PlayerScreen() {
     //const { problemRecords, toggleStar } = useProblemRecordsContext()
     const stores = useStoreContext()
     const currentProblem = useMemo(()=>
-        getCurrentProblem(fsmState, stores.problem.records),
-    [fsmState, stores.problem.records])
+        getCurrentProblem(fsmState, stores.problem.problems),
+    [fsmState, stores.problem.problems])
 
     // replay
     const kifContent = currentProblem?.kifContent ?? createKifContent()

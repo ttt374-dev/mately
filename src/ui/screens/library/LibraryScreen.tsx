@@ -20,13 +20,13 @@ export default function LibraryScreen() {
     //const { problemRecords, removeMany, toggleStar } = useProblemRecordsContext()
     const { sort: { sortState, setSortKey, setSortOrder } } = useSortFilterStateContext()
     //const { learningRecords } = useLearningRecordsContext()
-    const libraryList = buildLibraryList(stores.problem.records, sortState, stores.learning.records)
+    const libraryList = buildLibraryList(stores.problem.problems, sortState, stores.learning.records)
     //const fsm = useFsmContext()
     const { isChecked, checkedIds,
         toggleChecked, clearChecked, selectAllChecked
-    } = useLibraryChecked(Object.keys(stores.problem.records))
+    } = useLibraryChecked(stores.problem.problems.map((p) => p.id))
     const navigate = useNavigate()
-    const targetProblems = Object.values(stores.problem.records).filter(e => checkedIds.has(e.id))
+    const targetProblems = stores.problem.problems.filter(e => checkedIds.has(e.id))
 
     const handleSelectProblem = (problem: Problem) => {
         const queue: QueueItem[] = [{ problemId: problem.id }]
@@ -38,8 +38,8 @@ export default function LibraryScreen() {
     }
 
     // 削除
-    const handleDelete = async (problems: Problem[]) => {
-        stores.problem.removeMany(problems)
+    const handleDelete = async (problems: Problem[]) => {        
+        stores.problem.removeMany(problems.map((p) => p.id))
     }
     
     //////////////////////////////////////////////////
@@ -57,7 +57,7 @@ export default function LibraryScreen() {
         >
             <Stack direction="row">
                 <LibrarySelectionControl
-                    isAllChecked={checkedIds.size == Object.keys(stores.problem.records).length}
+                    isAllChecked={checkedIds.size == Object.keys(stores.problem.problems).length}
                     onSelectAll={selectAllChecked}
                     onClearAll={clearChecked}
                 />

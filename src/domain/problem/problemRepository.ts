@@ -6,39 +6,44 @@ import type { ProblemRecord } from '@/domain/problemCatalog/types/ProblemRecord'
 const LIB_FILE = "problem.json";
 
 export interface ProblemRepository {
-    load(): Promise<ProblemRecord>
-    save(collection: ProblemRecord): Promise<void>
+    load(): Promise<Problem[]>
+    save(collection: Problem[]): Promise<void>
     add(problem: Problem): Promise<void>
     remove(problemId: string): Promise<void>
+    removeMany(ids: string[]): Promise<void>
 }
 ///////////////////////////////////////////////
 export const createProblemRepository = (): ProblemRepository => {
-    async function load(): Promise<ProblemRecord> {
-        const result = await Filesystem.readFile({
-            path: LIB_FILE,
-            directory: Directory.Data,
-            encoding: Encoding.UTF8,
-        });
+   async function load(): Promise<Problem[]> {
+    const result = await Filesystem.readFile({
+        path: LIB_FILE,
+        directory: Directory.Data,
+        encoding: Encoding.UTF8,
+    });
 
-        const dataStr =
-            typeof result.data === "string"
-                ? result.data
-                : await result.data.text();
+    const dataStr =
+        typeof result.data === "string"
+            ? result.data
+            : await result.data.text();
 
-        const parsed = JSON.parse(dataStr);
-        // 配列で保存されている場合は record に変換
-        if (Array.isArray(parsed)) {
-            const record: ProblemRecord = {};
-            parsed.forEach((p: Problem) => {
-                record[p.id] = p;
-            });
-            return record;
-        }
-        // すでに record の場合
-        return typeof parsed === "object" && parsed !== null ? parsed : {};
-    };
+    const parsed = JSON.parse(dataStr);
 
-    async function save(collection: ProblemRecord) {
+    // 配列ならそのまま返す
+    if (Array.isArray(parsed)) {
+        return parsed as Problem[];
+    }
+
+    // Record 型で保存されている場合 → 配列に変換
+    if (typeof parsed === "object" && parsed !== null) {
+        return Object.values(parsed) as Problem[];
+    }
+
+    // それ以外は空配列
+    return [];
+}
+
+
+    async function save(collection: Problem[]) {
         await Filesystem.writeFile({
             path: LIB_FILE,
             data: JSON.stringify(collection),
@@ -48,42 +53,28 @@ export const createProblemRepository = (): ProblemRepository => {
     };
     async function add(problem: Problem){
         const records = await load()
-        // 既存IDチェック（必要なら）
-        if (records[problem.id]) {
-            throw new Error(`Problem already exists: ${problem.id}`)
-        }
-        const next: ProblemRecord = {
-            ...records,
-            [problem.id]: problem,
-        }
-
+        const next = [...records, problem]        
         await save(next)
         
     }
-    async function remove(problemId: string): Promise<void> {
-        const records = await load()
+    async function remove(problemId: string) {
+        const problems = await load();
 
-        // 存在しない場合は何もしない（方針）
-        if (!records[problemId]) {
-            return
-        }
+        // filter で該当 id を除外
+        const next = problems.filter(p => p.id !== problemId);
 
-        const { [problemId]: _, ...next } = records
-
-        await save(next)
+        // 永続化
+        await save(next);
     }
-    async function removeMany(problemIds: string[]): Promise<void> {
-        const records = await load();
+    async function removeMany(ids: string[]) {
+        if (!ids || ids.length === 0) return;
 
-        const next = { ...records };
-        for (const id of problemIds) {
-            delete next[id];
-        }
+        const problems = await load();
+
+        // filter で id 配列に含まれるものを除外
+        const next = problems.filter(p => !ids.includes(p.id));
 
         await save(next);
     }
-
-
-
-    return { load, save, add, remove }
+    return { load, save, add, remove, removeMany }
 }

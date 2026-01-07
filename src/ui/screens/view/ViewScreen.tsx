@@ -17,9 +17,9 @@ export default function ViewScreen() {
         return <div>invalid id</div>;
     }
     const stores = useStoreContext()
-    const { records, toggleStar } = stores.problem
+    const { problems, toggleStar } = stores.problem
 
-    const currentProblem = records[id] ?? createProblem()
+    const currentProblem = problems.find((p) => p.id === id) ?? createProblem()
 
     const noop = () => { }
     const { board, hands, moves, currentPlyIndex,
