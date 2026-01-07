@@ -42,6 +42,7 @@ export default function DeckScreen(){
     return (
         <AppLayout 
             header={"Deck"}
+            /*
             footer={
                 <Stack direction="row" spacing={1}>
 
@@ -51,7 +52,7 @@ export default function DeckScreen(){
                     </Button>
                     
                 </Stack>
-            }
+            }*/
         >
             <Stack p={1} spacing={2}>
                 <DeckFilterControl filter={filter} setFilter={setFilter}/>

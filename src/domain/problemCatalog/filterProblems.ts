@@ -43,10 +43,9 @@ export const filterProblems = (
         }
         // スターつきのみ
         if (filter.starredOnly &&
-            !record?.starred){
+            !problem.starred){
             return false
         }
-
         
         // text
         if (!matchesText(problem, filter.text)) {

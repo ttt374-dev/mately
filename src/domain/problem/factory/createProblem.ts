@@ -8,6 +8,7 @@ export function createProblem( partial?: Partial<Problem>): Problem {
     title: 'untitled',
     kifContent: createKifContent(),
     createdAt: Date.now(),
+    starred: false,
     ...partial,
   };
 }

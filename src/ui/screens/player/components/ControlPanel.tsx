@@ -1,13 +1,10 @@
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import PauseIcon from "@mui/icons-material/Pause";
-
 import type { FsmState, } from "@/domain/fsm/types";
 import type { PlayerPhase } from "../../../../domain/fsm/types/PlayerPhase";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { Stack, Typography, Divider, Card, Box, Button, IconButton, toggleButtonClasses } from '@mui/material';
-import { ImageAspectRatio } from "@mui/icons-material";
-import { formatPercent } from "@/utils";
+import { PlyControl } from "./PlyControl";
+import { StarControl } from "./StarControl";
 
 function Stat({ label, value }: { label: string; value: number }) {
     
@@ -36,6 +33,52 @@ function formatTime(sec: number) {
 }
 
 
+
+export const ResultSummary = ({solvedCount, failedCount}: {
+    solvedCount: number,
+    failedCount: number,    
+}) => {
+    return (
+        <Stack direction = "row" alignItems = "center" justifyContent = "space-between" >
+            < Stack direction = "row" spacing = { 1} >
+                    <Stat label="正" value={solvedCount} />
+                    <Stat label="誤" value={failedCount} />
+                    <Typography
+                        variant="body2"
+                        fontWeight="bold"
+                        color="success.main"
+                        textAlign="right"
+                    >
+                        {calcRate(solvedCount, failedCount) } %
+                        
+                    </Typography> 
+                </Stack>
+        </Stack>
+    )
+}
+////
+
+export const TimerControl = ({isTimerRunning, elaspedSec, onToggleTimer}: {
+    onToggleTimer: () => void
+    isTimerRunning: boolean
+    elaspedSec: number
+}) => {    
+    return (<Typography variant="body2" fontWeight="bold" sx={{ cursor: "pointer" }}
+        onClick={onToggleTimer}
+    >
+        {isTimerRunning ? "II" : "▶"} {formatTime(elaspedSec)}
+    </Typography>)
+}
+export const FsmStatus = ({index, length}: {
+    index: number,
+    length: number
+}) => {
+    return (
+        <Typography variant="body2" fontWeight="bold">            
+            { `${index} / ${length}` }
+        </Typography>
+    )
+}
 //////////////////////////////////////////////
 // コントロールパネル
 export default function ControlsPanel({
@@ -71,80 +114,26 @@ export default function ControlsPanel({
             p={1}
             spacing={1}
         >
-
             {/* ===== 上段：操作・進行 ===== */}
             <Stack spacing={0.5}>
-
-                {/* 解答操作 */}
-                {currentPhase === "solution" && (
-                    <>
-                    <Stack spacing={0.5}>
-                        <Button size="small" variant="outlined" onClick={retreatPly}>
-                            ↑ 前の手
-                        </Button>
-                        <Button size="small" variant="contained" onClick={advancePly}>
-                            ↓ 次の手
-                        </Button>
-                    </Stack>
-                    <Divider />
-                    </>
-                )}
+                { currentPhase === "solution" &&
+                    <PlyControl advancePly={advancePly} retreatPly={retreatPly}/>}
 
                 {/* スター + インデックス */}
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
-                    <IconButton
-                        size="small"
-                        onClick={onToggleStar}
-                        disableRipple
-                        sx={{
-                            '&:focus': { outline: 'none' },
-                            '&:focus-visible': { outline: 'none' },
-                        }}
-                    >
-                        {isStarred ? <StarIcon /> : <StarBorderIcon />}
-                    </IconButton>
-
-                    <Typography variant="body2" fontWeight="bold">
-                        {fsmState
-                            ? `${fsmState.currentIndex + 1} / ${fsmState.queue.length}`
-                            : '-'}
-                    </Typography>
-
-                    {/* タイマー */}
-                    <Typography variant="body2" fontWeight="bold" sx={{ cursor: "pointer" }}
-                        onClick={toggleTimer}
-                    >
-
-                        {isTimerRunning ? "II" : "▶"} {formatTime(elaspedSec)}
-
-                    </Typography>
+                    <StarControl isStarred={isStarred} onToggleStar={onToggleStar}/>
+                    <FsmStatus index={fsmState.currentIndex} length={fsmState.queue.length}/>                    
+                    <TimerControl isTimerRunning={isTimerRunning} 
+                        elaspedSec={elaspedSec}
+                        onToggleTimer={toggleTimer}/>
                 </Stack>
             </Stack>
 
             <Divider />
 
-            {/* ===== 下段：結果サマリー ===== */}
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-
-                {/* 正答・誤答 */}
-                <Stack direction="row" spacing={1}>
-                    <Stat label="正" value={learningEntry.solvedCount ?? 0} />
-                    <Stat label="誤" value={learningEntry.failedCount ?? 0} />
-                    <Typography
-                        variant="body2"
-                        fontWeight="bold"
-                        color="success.main"
-                        textAlign="right"
-                    >
-                        {calcRate(
-                            learningEntry.solvedCount,
-                            learningEntry.failedCount
-                        ) } %
-                        
-                    </Typography> 
-                    </Stack>
-            </Stack>
+            <ResultSummary solvedCount={learningEntry.solvedCount ?? 0} 
+                failedCount={learningEntry.failedCount ?? 0}/>
+            
         </Stack>
-
     );
 }

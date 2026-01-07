@@ -21,46 +21,31 @@ import LibraryItem from './components/LibraryItem';
 
 
 export default function LibraryScreen() {
-    const { problemRecords, removeMany } = useProblemRecordsContext()
+    const { problemRecords, removeMany, toggleStar } = useProblemRecordsContext()
     const { sort: { sortState, setSortKey, setSortOrder } } = useSortFilterStateContext()
     const { learningRecords } = useLearningRecordsContext()
     const libraryList = buildLibraryList(problemRecords, sortState, learningRecords)
-    const fsm = useFsmContext()
+    //const fsm = useFsmContext()
     const { isChecked, checkedIds,
         toggleChecked, clearChecked, selectAllChecked
     } = useLibraryChecked(Object.keys(problemRecords))
     const navigate = useNavigate()
     const targetProblems = Object.values(problemRecords).filter(e => checkedIds.has(e.id))
 
-    // handlers
-    const handleSelectFiles = async (files: File[]) => {
-        for (const file of files) {
-            try {
-                const buf = await file.arrayBuffer();
-                const text = new TextDecoder("shift_jis").decode(buf);
-
-                const newProblem = buildProblem(text, file.name)
-                console.log("new problem", newProblem)
-                //newProblem && addProblem(newProblem) // TODO
-            } catch (e) {
-                console.error(`Failed to import file ${file.name}:`, e);
-            }
-        }
-    }
-
     const handleSelectProblem = (problem: Problem) => {
         const queue: QueueItem[] = [{ problemId: problem.id }]
         //startSession(queue)
         //console.log("library player start", queue)
-        fsm.start(queue)
-        navigate("/player")
+        //fsm.start(queue)
+        //navigate("/player")
+        navigate(`/view/${problem.id}`)
     }
 
     // 削除
     const handleDelete = async (problems: Problem[]) => {
         removeMany(problems)
     }
-
+    
     //////////////////////////////////////////////////
     return (
         <AppLayout
@@ -76,6 +61,7 @@ export default function LibraryScreen() {
         >
             <Stack direction="row">
                 <LibrarySelectionControl
+                    isAllChecked={checkedIds.size == Object.keys(problemRecords).length}
                     onSelectAll={selectAllChecked}
                     onClearAll={clearChecked}
                 />
@@ -90,7 +76,10 @@ export default function LibraryScreen() {
             <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
                 <List>
                     {libraryList.map((p) => (
-                        <ListItem disablePadding key={p.id}>
+                        <ListItem disablePadding key={p.id} sx={{
+                            borderBottom: 1,
+                            borderColor: "divider",
+                        }}>
                             <ListItemButton onClick={() => handleSelectProblem(p)}>
                                 <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>
                                     <Checkbox
@@ -106,7 +95,10 @@ export default function LibraryScreen() {
                                 </ListItemIcon>
 
                                 <ListItemText>
-                                    <LibraryItem problem={p} learningEntry={learningRecords[p.id]} />
+                                    <LibraryItem 
+                                        problem={p} learningEntry={learningRecords[p.id]}
+                                        onToggleStar={toggleStar}
+                                    />
                                 </ListItemText>
                             </ListItemButton>
                         </ListItem>

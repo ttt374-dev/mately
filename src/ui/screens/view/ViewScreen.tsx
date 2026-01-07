@@ -12,34 +12,27 @@ import { createProblem } from '@/domain/problem/factory';
 import { BoardPanel } from '../player/components/BoardPanel';
 import MovesPanel from '../player/components/MovesPanel';
 import ControlsPanel from '../player/components/ControlPanel';
+import { PlyControl } from '../player/components/PlyControl';
+import { StarControl } from '../player/components/StarControl';
 
 export default function ViewScreen() {
-     const { id } = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string }>();
 
     if (!id) {
         return <div>invalid id</div>;
     }
-    const { records } = useProblemRecordsContext()
+    const { records, toggleStar } = useProblemRecordsContext()
 
     const currentProblem = records[id] ?? createProblem()
 
-    const noop = () => {}
+    const noop = () => { }
     const { board, hands, moves, currentPlyIndex,
-        advancePly, retreatPly,
-        moveToPly, resetPly,
+        advancePly, retreatPly, moveToPly, 
     } = useReplayView(currentProblem.kifContent)
 
-    const learningEntry = {
-        problemId: "",
-        solvedCount: 0,
-        failedCount: 0,
-        intervalDays: 0,
-        nextReviewedAt: 0,
-        easeFactor: 0,
-    }
     return (
         <AppLayout
-            header={`${currentProblem.title}`}            
+            header={`${currentProblem.title}`}
         >
 
             <Stack direction="column" sx={{ minHeight: 0, height: "100%" }} spacing={1}>
@@ -54,7 +47,7 @@ export default function ViewScreen() {
                     advanceQueue={noop}
                     retreatQueue={noop}
                 />
-                
+
                 <Stack direction="row" pb={1}
                     sx={{ minHeight: 0, flexGrow: 1 }} spacing={1} >
 
@@ -63,7 +56,18 @@ export default function ViewScreen() {
                         currentPhase={"solution"}
                         currentPlyIndex={currentPlyIndex}
                         moveToPly={moveToPly} />
-        
+
+                    <Stack
+                        border={1}
+                        borderColor="divider"
+                        sx={{ width: 150 }}
+                        p={1}
+                        spacing={1}>
+                        <PlyControl advancePly={advancePly} retreatPly={retreatPly}/>
+                        <StarControl isStarred={currentProblem.starred} 
+                            onToggleStar={() => { toggleStar(currentProblem.id)}}/>
+                    </Stack>
+
                 </Stack>
             </Stack>
         </AppLayout>

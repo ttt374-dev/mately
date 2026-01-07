@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton } from '@mui/material';
+import { Box, Stack, Typography, IconButton } from '@mui/material';
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder"; import { AppLayout } from "@/ui/common/AppLayout/AppLayout"
 
@@ -10,39 +10,47 @@ import { formatDate } from '@/utils';
 function inDays(date: number): number {
     return (date - Date.now()) / (60*60*24*100)
 }
-export default function LibraryItem({ problem, learningEntry }: { problem: Problem, learningEntry?: LearningEntry }) {
+
+type Props = {
+    problem: Problem 
+    learningEntry?: LearningEntry
+    onToggleStar: (id: string) => void
+}
+
+export default function LibraryItem({ problem, learningEntry, onToggleStar }: Props) {
+    
     return (
-        <>
+        <Box>
             {/* 一行目: タイトル */}
-            <Typography variant="subtitle1" fontWeight="bold">
-                {problem.title}
-            </Typography>
-            <Box
-                sx={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "space-between",
-                    mt: 0.5,
-                }}
-            >
+            <Stack direction="row" justifyContent="space-between">
+                <Typography variant="subtitle1" fontWeight="bold">
+                    {problem.title}
+                </Typography>
+                <IconButton size="small" 
+                    onClick={(e) => { e.stopPropagation(); onToggleStar(problem.id)}}>
+                    {problem.starred ? <StarIcon fontSize="small" color="warning" /> : 
+                    <StarBorderIcon fontSize="small" />}
+                </IconButton>
+            </Stack>
+
+            <Stack direction="row" justifyContent={"space-between"}>               
+            
                 <Typography variant="body2" color="text.secondary">
-                    登録日: {formatDate(problem.createdAt)}
+                    {formatDate(problem.createdAt)}
                 </Typography>
 
                 {learningEntry && <>
                     <Typography variant="body2" color="text.primary">
-                        {(calcAccuracy(learningEntry) * 100).toFixed(1)}%, 
-                        EF:{ learningEntry.easeFactor.toFixed(2)},
-                        in {inDays(learningEntry.nextReviewedAt).toFixed(0)} days
+                        {(calcAccuracy(learningEntry) * 100).toFixed(1)}%/
+                        ef:{ learningEntry.easeFactor.toFixed(2)}/
+                        {inDays(learningEntry.nextReviewedAt).toFixed(0)}d
                         
                     </Typography>
-                    <IconButton size="small">
-                        {problem.starred ? <StarIcon fontSize="small" color="warning" /> : <StarBorderIcon fontSize="small" />}
-                    </IconButton>
+                    
                 </>
                 }
-            </Box>
-        </>
+            </Stack>
+        </Box>
 
     );
 }
