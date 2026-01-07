@@ -12,15 +12,20 @@ export interface BackupRestoreUsecase {
 }
 
 export type BackupData = {
-  problems: ProblemRecord // export 形式
-  learningRecords: LearningRecord  
+  problem: ProblemRecord // export 形式
+  learning: LearningRecord  
 }
 
 export function createBackupRestoreUsecase(
-  problemRepository: ProblemRepository,
-  learningRepository: LearningRepository,
-  setProblems: (problems: ProblemRecord) => void,
-  setLearningRecords: (LearningRecords: LearningRecord) => void,
+  problem: {
+    records: ProblemRecord,
+    replaceAll: (problemRecords: ProblemRecord) => void,
+  },
+  learning: {
+    records: LearningRecord,
+    replaceAll: (LearningRecord: LearningRecord) => void,  
+  }
+  ,
   writer: BackupWriter,
 ): BackupRestoreUsecase {
 
@@ -28,20 +33,16 @@ export function createBackupRestoreUsecase(
   return {
     async backup() {    
       const backupData = {
-        problems: await problemRepository.load(),
-        learningRecords: await learningRepository.load()
+        problem: problem.records,
+        learning: learning.records,
       }
       const json = JSON.stringify(backupData, null, 2)
       await writer.write(json, "backup-filename.json")
     },
 
     async restore(data: BackupData) {
-      await problemRepository.save(data.problems)
-      setProblems(data.problems)
-
-      await learningRepository.save(data.learningRecords)
-      setLearningRecords(data.learningRecords)      
-      
+      problem.replaceAll(data.problem)
+      learning.replaceAll(data.learning)
     }
   }
 }

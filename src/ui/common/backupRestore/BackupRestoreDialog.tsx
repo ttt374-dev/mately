@@ -5,6 +5,7 @@ import { createProblemRepository } from "@/domain/problem/problemRepository"
 import { createBackupRestoreUsecase, type BackupWriter } from "@/usecase/backupRestore/backupRestoreUsecasets"
 import { Capacitor } from "@capacitor/core"
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
+import { LeakRemove } from "@mui/icons-material"
 import {
     Dialog, DialogTitle, DialogContent, DialogActions,
     Button, Box, Typography, Divider
@@ -41,14 +42,20 @@ const writer: BackupWriter = {
     }
 }
 const useBackupRestore = () => {
-    const problemRepo = createProblemRepository()
-    const learningRepo = createLearningRepository()
-
-    const problems = useProblemRecordsContext()
-    const learningRecords = useLearningRecordsContext()
-    return createBackupRestoreUsecase(problemRepo, learningRepo,
-        problems.setProblems, learningRecords.setLearningRecords,
+    const problemApi = useProblemRecordsContext()
+    const learningApi = useLearningRecordsContext()
+    return createBackupRestoreUsecase(
+        {
+            records: problemApi.records,
+            replaceAll: problemApi.replaceAll
+        }, 
+        {
+            records: learningApi.records,
+            replaceAll: learningApi.replaceAll
+        },
+        
         writer
+
     )
 }
 

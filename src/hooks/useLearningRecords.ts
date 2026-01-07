@@ -54,17 +54,23 @@ export function useLearningRecords (repository: LearningRepository){
             starred: !(r?.starred ?? false),
         }))
     }
+    const replaceAll = (records: LearningRecord) => {
+        repository.save(records)
+        setLearningRecords(records)
+    }
     const clearAll = () => {
         repository.save({})
         setLearningRecords({})
     }
 
     return {
+        records: learningRecords,
         learningRecords,
         setLearningRecords,
         markAnswer, clearAll,
         markSolved: (id: string, secondsToAnswer?: number) => markAnswer(id, "solved", secondsToAnswer),
         markFailed: (id: string, secondsToAnswer?: number) => markAnswer(id, "failed", secondsToAnswer),
         toggleStar,
+        replaceAll,
     }
 }

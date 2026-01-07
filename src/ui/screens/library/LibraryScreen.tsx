@@ -21,16 +21,16 @@ import LibraryItem from './components/LibraryItem';
 
 
 export default function LibraryScreen() {
-    const { problems, addProblem, removeMany } = useProblemRecordsContext()
+    const { problemRecords, removeMany } = useProblemRecordsContext()
     const { sort: { sortState, setSortKey, setSortOrder } } = useSortFilterStateContext()
     const { learningRecords } = useLearningRecordsContext()
-    const libraryList = buildLibraryList(problems, sortState, learningRecords)
+    const libraryList = buildLibraryList(problemRecords, sortState, learningRecords)
     const fsm = useFsmContext()
     const { isChecked, checkedIds,
         toggleChecked, clearChecked, selectAllChecked
-    } = useLibraryChecked(Object.keys(problems))
+    } = useLibraryChecked(Object.keys(problemRecords))
     const navigate = useNavigate()
-    const targetProblems = Object.values(problems).filter(e => checkedIds.has(e.id))
+    const targetProblems = Object.values(problemRecords).filter(e => checkedIds.has(e.id))
 
     // handlers
     const handleSelectFiles = async (files: File[]) => {
@@ -41,7 +41,7 @@ export default function LibraryScreen() {
 
                 const newProblem = buildProblem(text, file.name)
                 console.log("new problem", newProblem)
-                newProblem && addProblem(newProblem)
+                //newProblem && addProblem(newProblem) // TODO
             } catch (e) {
                 console.error(`Failed to import file ${file.name}:`, e);
             }
@@ -65,12 +65,13 @@ export default function LibraryScreen() {
     return (
         <AppLayout
             header={"Library"}
-            footer={
+            
+            footer={ 
                 <LibraryFooterActions
                     onFileSelected={handleSelectFiles}
                     onBackToDeck={() => navigate("/deck")}
-                />
-            }
+                />}
+            
         >
             <Stack direction="row">
                 <LibrarySelectionControl
