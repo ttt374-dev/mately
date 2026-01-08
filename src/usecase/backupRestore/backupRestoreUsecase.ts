@@ -39,7 +39,9 @@ export function createBackupRestoreUsecase(
       try {
         await writer.write(json, filename)
       } catch (e) {
-        throw new Error(`Backup failed to save: ${filename}`)
+        const message = e  instanceof Error ? e.message : `Backup failed to save: ${filename}`
+        throw new Error(message)
+        console.error(message)
       }
 
       return {
