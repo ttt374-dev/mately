@@ -1,13 +1,13 @@
 // domain/problemRecord/sortProblemRecords.ts
-import { calcAccuracy } from "../learning/calcAccuracy"
-import type { LearningEntry, LearningRecord } from "../learning/types"
-import type { Problem } from "../problem/types/Problem"
-import type { SortState, SortKey, SortOrder } from "./types/Sort"
+import { calcAccuracy } from "../../learning/calcAccuracy"
+import type { LearningEntry, LearningRecord } from "../../learning/types"
+import type { Problem } from "../types/Problem"
+import type { ProblemSort, SortKey, SortOrder } from "./types/Sort"
 
 
-export function sortProblems(
+export function applySort(
   problems: Problem[],
-  sort: SortState,
+  sort: ProblemSort,
   learningRecords?: LearningRecord
 ): Problem[] {    
     const sorted = [...problems]

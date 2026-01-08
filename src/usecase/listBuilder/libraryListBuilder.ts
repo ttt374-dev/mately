@@ -1,13 +1,13 @@
-import type { SortState } from "@/domain/problemCatalog/types/Sort"
-import { sortProblems } from "@/domain/problemCatalog/sortProblems"
+import type { ProblemSort } from "@/domain/problem/query/types/Sort"
+import { applySort } from "@/domain/problem/query/applySort"
 import type { LearningRecord } from '@/domain/learning/types'
 import type { Problem } from '@/domain/problem/types/Problem'
 
 
 export const buildLibraryList = (
     problems: Problem[], 
-    sort: SortState,
+    sort: ProblemSort,
     learningRecords: LearningRecord,
 ) => {
-    return sortProblems(problems, sort, learningRecords)    
+    return applySort(problems, sort, learningRecords)    
 }

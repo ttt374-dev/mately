@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppLayout } from "../../common/AppLayout"
 import type { QueueItem } from '@/domain/fsm/types';
 import { buildQueue } from '@/usecase/listBuilder/queueBuilder';
-import type { SortState, SortKey, SortOrder } from '@/domain/problemCatalog/types/Sort';
+import type { ProblemSort, SortKey, SortOrder } from '@/domain/problem/query/types/Sort';
 import DeckFilterControl from './components/DeckFilterControl';
 import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
 import { useFsmContext } from '@/app/providers/FsmProvider';
@@ -89,7 +89,7 @@ export default function DeckScreen(){
     const { filter: { filter, setFilter }} = useSortFilterStateContext()
 
 
-    const sort: SortState = {
+    const sort: ProblemSort = {
         key: "nextReviewedAt",
         order: "asc"
     }

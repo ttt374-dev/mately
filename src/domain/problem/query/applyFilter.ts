@@ -1,6 +1,6 @@
-import type { LearningRecord } from "../learning/types";
-import type { Problem } from "../problem/types/Problem"
-import type { Filter } from "./types/Filter";
+import type { LearningRecord } from "../../learning/types";
+import type { Problem } from "../types/Problem"
+import type { ProblemFilter } from "./types/Filter";
 
 function isUnansweredRecord(
     record: { solvedCount: number; failedCount: number } | null
@@ -15,9 +15,10 @@ function matchesText(problem: Problem, text?: string): boolean {
         problem.title?.toLowerCase().includes(t)        
     );
 }
-export const filterProblems = (
+//////////////////////////////////
+export const applyFilter = (
     problems: Problem[],
-    filter: Filter,
+    filter: ProblemFilter,
     learningRecords: LearningRecord,
 ): Problem[] => {
     const now = Date.now();
