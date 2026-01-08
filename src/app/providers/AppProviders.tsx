@@ -1,6 +1,6 @@
 import { FsmProvider } from "./FsmProvider";
 import { RepositoryProvider } from "./RepositoryProvider";
-import { SortFilterStateProvider } from "./SortFilterStateProvider";
+import { QueryProvider } from "./QueryProvider";
 import { StoreProvider } from "./StoreProvider";
 import { ToastProvider } from "./ToastProvider";
 
@@ -8,14 +8,12 @@ import { ToastProvider } from "./ToastProvider";
 export const AppProvsiders: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <ToastProvider>
     <RepositoryProvider>
-      <StoreProvider>
-        
+      <StoreProvider>        
           <FsmProvider>
-            <SortFilterStateProvider>
+            <QueryProvider>
               {children}
-            </SortFilterStateProvider>
-          </FsmProvider>
-        
+            </QueryProvider>
+          </FsmProvider>        
       </StoreProvider>
     </RepositoryProvider>
   </ToastProvider>

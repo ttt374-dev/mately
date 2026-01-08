@@ -8,7 +8,7 @@ import LibrarySortControl from './components/LibrarySortControl';
 import { useLibraryChecked } from './hooks/useLibraryChecked';
 import LibraryDeleteControl from './components/LibraryDeleteControl';
 import LibrarySelectionControl from './components/LibrarySelectionControl';
-import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
+import { useQueryContext } from '@/app/providers/QueryProvider';
 import { useStoreContext } from '@/app/providers/StoreProvider';
 import { useState } from 'react';
 import BackupRestoreDialog from '@/ui/common/BackupRestoreDialog';
@@ -20,7 +20,7 @@ export default function LibraryScreen() {
     const [selectionMode, setSelectionMode] = useState(false)
     
     const stores = useStoreContext()    
-    const { sort: { sortState, setSortKey, setSortOrder } } = useSortFilterStateContext()
+    const { sort: { sortState, setSortKey, setSortOrder } } = useQueryContext()
     const libraryList = buildLibraryList(stores.problem.problems, sortState, stores.learning.records)
     const { isChecked, checkedIds,
         toggleChecked, clearChecked, selectAllChecked

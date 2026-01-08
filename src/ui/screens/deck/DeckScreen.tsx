@@ -6,7 +6,7 @@ import type { QueueItem } from '@/domain/fsm/types';
 import { buildQueue } from '@/usecase/listBuilder/queueBuilder';
 import type { ProblemSort, SortKey, SortOrder } from '@/domain/problem/query/types/Sort';
 import DeckFilterControl from './components/DeckFilterControl';
-import { useSortFilterStateContext } from '@/app/providers/SortFilterStateProvider';
+import { useQueryContext } from '@/app/providers/QueryProvider';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 import { useStoreContext } from '@/app/providers/StoreProvider';
 import type { LearningEntry, LearningRecord } from '@/domain/learning/types';
@@ -86,7 +86,7 @@ export default function DeckScreen(){
     //const learningRecords = {}
     const navigate = useNavigate()
     //const [filter, setFilter] = useState<Filter>(createDefaultFilter())
-    const { filter: { filter, setFilter }} = useSortFilterStateContext()
+    const { filter: { filter, setFilter }} = useQueryContext()
 
 
     const sort: ProblemSort = {
