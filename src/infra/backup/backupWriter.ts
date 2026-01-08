@@ -1,19 +1,40 @@
 import { Capacitor } from "@capacitor/core"
+import { Share } from '@capacitor/share';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import type { BackupWriter } from "@/usecase/backupRestore/backupRestoreUsecase"
 
 
 
-export const fileBackupWriter: BackupWriter = {   
+export const fileBackupWriter: BackupWriter = {
     write: async (data: string, filename: string) => {
         if (Capacitor.isNativePlatform()) {
             // Android / iOS
-            await Filesystem.writeFile({
-                path: `Download/${filename}`,
+            const folder = 'Download';
+            // フォルダ作成（存在してもエラーにならないように recursive:true）
+            /*
+            await Filesystem.mkdir({
+                path: folder,
                 directory: Directory.External,
-                data: data,
+                recursive: true
+            });
+*/
+            const file = await Filesystem.writeFile({
+                path: filename,
+                directory: Directory.External,
+                data,
                 encoding: Encoding.UTF8,
-            })
+            });
+            const fileUri = `file://${file.uri}`;
+
+            
+
+            await Share.share({
+                title: 'バックアップファイル',
+                text: 'バックアップデータです',
+                //url: `data:application/json;base64,${file.data}`,
+                url: fileUri,
+                dialogTitle: 'バックアップを保存'
+            });
         } else {
             // Web
             const blob = new Blob([data], { type: "application/json" })
