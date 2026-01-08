@@ -21,7 +21,7 @@ export const createDeleteProblemUsecase = (
 
     const executeMany = async (ids: string[]) => {
         await problemRepo.removeMany(ids)
-        //await learningRepo.deleteByProblemId()
+        await learningRepo.removeMany(ids)
     }
 
     return { execute, executeMany}

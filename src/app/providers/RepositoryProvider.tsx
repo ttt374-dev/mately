@@ -1,9 +1,10 @@
 import type { ReactNode, } from "react"
 import { createContext, useContext, useState, useRef } from "react"
 
-import { createLearningRepository, type LearningRepository } from "@/domain/learning/LearningRepository"
-import { createProblemRepository, type ProblemRepository } from "@/domain/problem/problemRepository"
-
+import type { LearningRepository } from "@/domain/learning/LearningRepository"
+import type { ProblemRepository } from "@/domain/problem/problemRepository"
+import { FileProblemRepository } from "@/infra/Repository/problem/FileProblemRepository"
+import { FileLearningRepository } from "@/infra/Repository/learning/FileLearningRepository"
 
 type RepositoryContextValue = {
     readonly problem: ProblemRepository
@@ -16,10 +17,10 @@ export const RepositoryProvider = ({ children }: { children: ReactNode }) => {
     const learningRepoRef = useRef<LearningRepository|null>(null)
 
     if (!problemRepoRef.current) {
-        problemRepoRef.current = createProblemRepository()
+        problemRepoRef.current = new FileProblemRepository()
     }
     if (!learningRepoRef.current) {
-        learningRepoRef.current = createLearningRepository()
+        learningRepoRef.current = new FileLearningRepository()
     }
     return (
         <RepositoryContext.Provider value={{
@@ -30,7 +31,6 @@ export const RepositoryProvider = ({ children }: { children: ReactNode }) => {
         </RepositoryContext.Provider>
     )
 }
-
 export function useRepositoryContext() {
     const ctx = useContext(RepositoryContext)
     if (!ctx) throw new Error("context provider error");
