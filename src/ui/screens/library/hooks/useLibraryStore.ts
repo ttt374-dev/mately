@@ -8,9 +8,9 @@ export function useLibraryStore(){
     const { sort: { sortState } } = useQueryContext()
     const libraryList = buildLibraryList(stores.problem.problems, sortState, stores.learning.records)
     
-    const removeMany = (ids: string[]) => {
-        stores.problem.removeMany(ids)
-        stores.learning.removeMany(ids)   
+    const removeMany = async (ids: string[]) => {
+        await stores.problem.removeMany(ids)
+        await stores.learning.removeMany(ids)   
     }
     
     return {

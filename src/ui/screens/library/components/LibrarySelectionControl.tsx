@@ -1,19 +1,15 @@
 import { Box, IconButton, Tooltip, Button } from "@mui/material";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import type { LibraryCheckboxApi, useLibraryCheckbox } from "../hooks/useLibraryCheckbox";
 
 type Props = {
-    isAllChecked: boolean,
-    onSelectAll: () => void;
-    onClearAll: () => void;
+    checkboxApi: LibraryCheckboxApi
 };
 
 
-export default function LibrarySelectionControl({            
-    isAllChecked,
-    onSelectAll,
-    onClearAll,    
-}: Props) {
+export default function LibrarySelectionControl({checkboxApi}: Props) {
+    const { isAllChecked, selectAll, clearAll } = checkboxApi
     return (
         <Box sx={{ display: "flex", flexShrink: 0  } } alignItems="center">
             
@@ -23,7 +19,7 @@ export default function LibrarySelectionControl({
                 <Tooltip title="全選択">
                     <IconButton
                         //onClick={() => setCheckedIds(new Set(library.map((e) => e.id)))}
-                        onClick={onSelectAll}
+                        onClick={selectAll}
                         color="primary"
                     >
                         <CheckBoxIcon />
@@ -35,7 +31,7 @@ export default function LibrarySelectionControl({
                 (<Tooltip title="全解除">
                     <IconButton
                         //onClick={() => setCheckedIds(new Set())}
-                        onClick={onClearAll}
+                        onClick={clearAll}
                         color="primary"
                     >
                         <CheckBoxOutlineBlankIcon />

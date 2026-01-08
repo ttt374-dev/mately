@@ -3,44 +3,38 @@ import { useNavigate } from 'react-router-dom';
 
 import { AppLayout } from "@/ui/common/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
-import LibrarySortControl from './components/LibrarySortControl';
-import { useLibraryChecked } from './hooks/useLibraryChecked';
-import LibraryDeleteControl from './components/LibraryDeleteControl';
-import LibrarySelectionControl from './components/LibrarySelectionControl';
 import { useQueryContext } from '@/app/providers/QueryProvider';
 import { useState } from 'react';
 import BackupRestoreDialog from '@/ui/common/BackupRestoreDialog';
 import { ListMenu } from './components/ListMenu';
 import LibraryListItem from './components/LibraryItem';
 import { useLibraryStore } from './hooks/useLibraryStore';
+import { LibraryControls } from './components/LibraryControls';
+import { useLibraryCheckbox } from './hooks/useLibraryCheckbox';
 
 ///////////////////////////////////////////////
 export default function LibraryScreen() {
     const { learningRecords, libraryList,
         removeMany, clearAllLearnings, toggleStar,        
     } = useLibraryStore()
-    const [backupDialogOpen, setBackupDialogOpen] = useState(false);
+    const [backupDialogOpen, setBackupDialogOpen] = useState(false)
     const [selectionMode, setSelectionMode] = useState(false)
     
-    const { sort: { sortState, setSortKey, setSortOrder } } = useQueryContext()
-    //const libraryList = buildLibraryList(problems, sortState, learningRecords)
-    const { isChecked, checkedIds,
-        toggleChecked, clearChecked, selectAllChecked
-    } = useLibraryChecked(libraryList.map((p) => p.id))
-    const navigate = useNavigate()
-    const targetProblems = libraryList.filter(e => checkedIds.has(e.id))
+    const { checkedIds, api: checkboxApi } = useLibraryCheckbox(libraryList.map((p) => p.id))
+    const { toggleChecked, isChecked, clearAll: clearAllCheckbox } = checkboxApi
+        const { sort: sortApi }= useQueryContext()
+        const navigate = useNavigate()
 
     // ハンドラー
-    const handleSelectProblem = (problem: Problem) => {
+    const handleSelectProblem = (problem: Problem) => {        
         if (selectionMode) {
             toggleChecked(problem.id)
         } else {
             navigate(`/view/${problem.id}`)
         }
     }
-    const handleDelete = async (problems: Problem[]) => {        
-        const ids = problems.map((p) => p.id)
-        removeMany(ids)
+    const handleDelete = async (ids: string[]) => {                
+        await removeMany(ids)
     }
     //////////////////////////////////////////////////
     return (
@@ -50,21 +44,15 @@ export default function LibraryScreen() {
             <ListMenu onClearAllLearnings={clearAllLearnings}
                 onBackupDialogOpen={()=>setBackupDialogOpen(true)}
             />}            
-        >
-            <Stack direction="row">
-                { selectionMode && <>
-                <LibrarySelectionControl
-                    isAllChecked={checkedIds.size == Object.keys(libraryList).length}
-                    onSelectAll={selectAllChecked}
-                    onClearAll={clearChecked}
-                />
-                <LibraryDeleteControl
-                    targetProblems={targetProblems}
-                    onDelete={handleDelete}
-                /></>}
-                <Box sx={{ flexGrow: 1 }} />
-                <LibrarySortControl sort={sortState} setSortKey={setSortKey} setSortOrder={setSortOrder} />
-            </Stack>
+        >            
+            <LibraryControls
+                selectionMode={selectionMode}
+                onExitSelectionMode={(v: boolean) => { setSelectionMode(v); clearAllCheckbox()}}
+                checkedIds={checkedIds}
+                checkboxApi={checkboxApi}                
+                onDelete={handleDelete}
+                sortApi={sortApi}
+            />            
 
             <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
                 <List>
