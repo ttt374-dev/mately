@@ -1,4 +1,4 @@
-import { FormControlLabel, FormGroup, FormLabel } from "@mui/material";
+import { Card, FormControlLabel, FormGroup, FormLabel, Paper } from "@mui/material";
 import { FormControl, TextField, Checkbox } from "@mui/material";
 
 import type { Filter } from "@/domain/problemCatalog/types/Filter";
@@ -10,6 +10,7 @@ type Props = {
 
 export default function DeckFilterControl({ filter, setFilter }: Props) {
     return (
+        <Paper elevation={1}>
         <FormControl>
             <FormLabel>
                 抽出条件
@@ -66,5 +67,6 @@ export default function DeckFilterControl({ filter, setFilter }: Props) {
                 />
             </FormGroup>
         </FormControl>
+    </Paper>
     )
 }

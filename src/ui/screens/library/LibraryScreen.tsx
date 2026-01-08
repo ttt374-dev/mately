@@ -21,8 +21,28 @@ import { useToast } from '@/app/providers/ToastProvider';
 import ImportFilesButton from '@/ui/common/ImportFilesButton';
 import BackupRestoreDialog from '@/ui/common/BackupRestoreDialog';
 import { ListMenu } from './components/ListMenu';
+import { createDeleteProblemUsecase } from '@/usecase/deleteProblem/deleteProblemUsecase';
+import { useRepositoryContext } from '@/app/providers/RepositoryProvider';
 
-
+function useDeleteProblem(){
+    const repos = useRepositoryContext()
+    const stores = useStoreContext()
+    const usecase = createDeleteProblemUsecase(repos.problem, repos.learning)
+    
+    const deleteProblem = async (problemId: string) => {
+        await usecase.execute(problemId)
+        await stores.problem.reload()
+        await stores.learning.reload()
+    }
+    const deleteProblems = async(ids: string[]) => {
+        await usecase.executeMany(ids)
+        await stores.problem.reload()
+        await stores.learning.reload()
+    }
+    return {
+        deleteProblem, deleteProblems
+    }
+}
 export default function LibraryScreen() {
     const [backupDialogOpen, setBackupDialogOpen] = useState(false);
     const [selectionMode, setSelectionMode] = useState(false)
@@ -42,17 +62,17 @@ export default function LibraryScreen() {
 
     const handleSelectProblem = (problem: Problem) => {
         if (selectionMode){                       
-            
-            
-            toggleChecked(problem.id)
-        } else {
+            } else {
             navigate(`/view/${problem.id}`)
         }
     }
 
     // 削除
+    const { deleteProblems } = useDeleteProblem()
     const handleDelete = async (problems: Problem[]) => {        
-        stores.problem.removeMany(problems.map((p) => p.id))
+        const ids = problems.map((p) => p.id)
+        deleteProblems(ids)
+        //stores.problem.removeMany(problems.map((p) => p.id))
     }
     // 長押し
     // 長押しで edit mode / view mode 切り替え

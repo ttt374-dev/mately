@@ -1,5 +1,5 @@
 import type { FsmState, } from "@/domain/fsm/types";
-import { Stack, Typography, Divider, } from '@mui/material';
+import { Stack, Typography, Divider, Paper, } from '@mui/material';
 import { PlyControl } from "./PlyControl";
 import type { LearningEntry } from "@/domain/learning/types";
 import { FsmStatus } from "../FsmStat";
@@ -37,17 +37,11 @@ export default function ControlsPanel({
 }) {
     
     return (
-        <Stack
-            border={1}
-            borderColor="divider"
-            sx={{ width: 150 }}
-            p={1}
-            spacing={1}
-        >
+        <Paper sx={{ width: 150 }}>
             {/* ===== 上段：操作・進行 ===== */}
             <Stack spacing={0.5}>
-                { showMoves &&
-                    <PlyControl advancePly={advancePly} retreatPly={retreatPly}/>}
+                { true &&
+                    <PlyControl disabled={!showMoves} advancePly={advancePly} retreatPly={retreatPly}/>}
 
                 <Stack direction="row" alignItems="center" justifyContent="space-between">                    
                     <FsmStatus index={fsmState.currentIndex} length={fsmState.queue.length}/>                    
@@ -61,6 +55,6 @@ export default function ControlsPanel({
 
             { learningEntry && <ResultSummary learningEntry={learningEntry}/>}
             
-        </Stack>
+        </Paper>
     );
 }

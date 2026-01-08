@@ -7,7 +7,8 @@ const LIB_FILE = "learning.json";
 export interface LearningRepository {
     load(): Promise<LearningRecord>
     save(learningrecord: LearningRecord): Promise<void>
-    deleteByProblemId(problemId: string): Promise<void>
+    remove(problemId: string): Promise<void>
+    removeMany(ids: string[]): Promise<void>
 }
 
 export const createLearningRepository = (): LearningRepository => {
@@ -37,7 +38,7 @@ export const createLearningRepository = (): LearningRepository => {
             encoding: Encoding.UTF8,
         });
     };
-     async function deleteByProblemId(problemId: string) {
+     async function remove(problemId: string) {
         const records = await load();
 
         // problemId が存在しなければ何もしない
@@ -49,6 +50,26 @@ export const createLearningRepository = (): LearningRepository => {
         // 永続化
         await save(next);
     }
+    async function removeMany(ids: string[]){
+        const records = await load()
 
-    return { load, save, deleteByProblemId }
+        let changed = false;
+
+        const next = { ...records };
+
+        for (const id of ids) {
+            if (id in next) {
+                delete next[id];
+                changed = true;
+            }
+        }
+
+        // 実際に変更があった場合のみ保存
+        if (changed) {
+            await save(next);
+        }
+    
+    }
+
+    return { load, save, remove, removeMany }
 }

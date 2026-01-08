@@ -24,4 +24,5 @@
   overflow: hidden; /* main全体はスクロールさせない */
   padding-top: 16px;
 
+  padding-bottom: env(safe-area-inset-bottom);
 }

@@ -12,5 +12,6 @@ export const buildQueue = (problems: Problem[],
 ): QueueItem[] => {   
     
     const processed = sortProblems(filterProblems(problems, filter, learningRecords, ), sort)
-    return Object.values(processed).map((p) => ({problemId: p.id}))
+    return processed.map((p) => ({problemId: p.id}))
+    //return Object.values(processed).map((p) => ({problemId: p.id}))
 }
