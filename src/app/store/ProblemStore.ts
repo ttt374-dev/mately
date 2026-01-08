@@ -1,101 +1,97 @@
-// UI hook
+import { useState, useEffect } from "react";
+import type { Problem } from "@/domain/problem/types/Problem";
+import type { ProblemRepository } from "@/domain/problem/problemRepository";
+import { createProblem } from "@/domain/problem/factory";
 
-import { useState, useEffect } from 'react';
+export function createProblemStore(repository: ProblemRepository) {
+    const [problems, setProblems] = useState<Problem[]>([]);
 
-import type { Problem} from'@/domain/problem/types/Problem'
-import type { ProblemRepository } from '@/domain/problem/problemRepository';
-import { createProblem } from '@/domain/problem/factory';
-
-export function createProblemStore (repository: ProblemRepository){
-    const [problems, setProblems] = useState<Problem[]>([])
-
+    // 初期ロード
     useEffect(() => {
-        reload().catch(() => setProblems([]))
+        reload().catch(() => setProblems([]));
     }, []);
 
     const reload = async () => {
         try {
-            const data = await repository.load()
-            setProblems(data)
-            console.log("problems reload", data)
+            const data = await repository.load();
+            setProblems(data);
+            console.log("problems reload", data);
         } catch {
-            setProblems([])
+            setProblems([]);
         }
-    }
+    };
 
-    
-    const addProblem = (newProblem: Problem) => {
-        console.log("add problem", newProblem)
-        setProblems(prev => {
-            const updated = { ...prev, [newProblem.id]: newProblem };
-            repository.save(updated);  // ← prev ではなく updated を保存
-            return updated;
-        });
-    }
+    // -------------------------
+    // 非同期対応メソッド
+    // -------------------------
+
+    const addProblem = async (newProblem: Problem) => {
+        //console.log("add problem", newProblem);    
+        // 現在の state から新しい配列を作る
+        const next = [...problems, newProblem];
+        // state を更新
+        setProblems(next);
+
+        // 永続化
+        await repository.save(next);
+    };
+
     const replaceAll = async (newProblems: Problem[]) => {
-        setProblems(newProblems)
-        await repository.save(newProblems)
-    }
+        setProblems(newProblems);
+        await repository.save(newProblems);
+    };
 
+    const update = async (problemId: string, updater: (p: Problem) => Problem) => {
+        // 現在の state から新しい配列を作る
+        const index = problems.findIndex(p => p.id === problemId);
+        let next: Problem[];
 
-    const update = (problemId: string, updater: (p: Problem) => Problem) => {
-        setProblems(prev => {
-            // 該当問題を探す
-            const index = prev.findIndex(p => p.id === problemId);
+        if (index >= 0) {
+            // 既存問題を更新
+            next = problems.map((p, i) => (i === index ? updater(p) : p));
+        } else {
+            // 新規作成
+            next = [...problems, updater(createProblem())];
+        }
 
-            let next: Problem[];
-            if (index >= 0) {
-                // 既存があれば更新
-                next = prev.map((p, i) => (i === index ? updater(p) : p));
-            } else {
-                // 新規作成
-                next = [...prev, updater(createProblem())];
-            }
-            // 永続化
-            repository.save(next);
-            return next;
-        });
+        // state を更新
+        setProblems(next);
+
+        // 永続化
+        await repository.save(next);
     };
 
 
-    const toggleStar = (problemId: string) =>{
-        //console.log("toggleStar in hook", )
-        update(problemId, r => ({
-            ...r,
-            starred: !(r?.starred ?? false),
-        }))
-    }
+    const toggleStar = async (problemId: string) => {
+        await update(problemId, (p) => ({ ...p, starred: !(p?.starred ?? false) }));
+    };
 
-    const removeMany = (ids: string[]) => {
+    const removeMany = async (ids: string[]) => {
         if (!ids || ids.length === 0) return;
 
-        setProblems(prev => {
-            // 指定された id を除外
-            const next = prev.filter(p => !ids.includes(p.id));
+        // まず最新の state から新しい配列を作る
+        const next = problems.filter(p => !ids.includes(p.id));
 
-            // 永続化
-            repository.save(next);
+        // state を更新
+        setProblems(next);
 
-            return next;
-        });
+        // 永続化
+        await repository.save(next);
     };
 
-    const removeAll = () => {
-        setProblems([])
-        repository.save([])
-    }
+    const removeAll = async () => {
+        setProblems([]);
+        await repository.save([]);
+    };
 
     return {
-        problems,        
-        reload,        
-        //getAll: records,
+        problems,
+        reload,
+        addProblem,
         replaceAll,
-        //setRecords,
-        addProblem, 
-        removeAll,
-        removeMany,
+        update,
         toggleStar,
-
-        //repository,
-    }
+        removeMany,
+        removeAll,
+    };
 }

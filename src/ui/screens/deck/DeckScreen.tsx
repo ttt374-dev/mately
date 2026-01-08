@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { AppLayout } from "../../common/AppLayout"
 import type { QueueItem } from '@/domain/fsm/types';
-import { buildQueue } from '@/usecase/listBuilder/queueBuilder';
+import { buildQueue } from '@/domain/problem/builder/queueBuilder';
 import type { ProblemSort, SortKey, SortOrder } from '@/domain/problem/query/types/Sort';
 import DeckFilterControl from './components/DeckFilterControl';
 import { useQueryContext } from '@/app/providers/QueryProvider';
