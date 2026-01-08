@@ -14,28 +14,25 @@ import { useLibraryCheckbox } from './hooks/useLibraryCheckbox';
 
 ///////////////////////////////////////////////
 export default function LibraryScreen() {
+    const [backupDialogOpen, setBackupDialogOpen] = useState(false)
+    const [selectionMode, setSelectionMode] = useState(false)
+
     const { learningRecords, libraryList,
         removeMany, clearAllLearnings, toggleStar,        
     } = useLibraryStore()
-    const [backupDialogOpen, setBackupDialogOpen] = useState(false)
-    const [selectionMode, setSelectionMode] = useState(false)
-    
+       
     const { checkedIds, api: checkboxApi } = useLibraryCheckbox(libraryList.map((p) => p.id))
-    const { toggleChecked, isChecked, clearAll: clearAllCheckbox } = checkboxApi
-        const { sort: sortApi }= useQueryContext()
-        const navigate = useNavigate()
+    const { sortState, api: sortApi } = useQueryContext().sort
+    const navigate = useNavigate()
 
     // ハンドラー
     const handleSelectProblem = (problem: Problem) => {        
         if (selectionMode) {
-            toggleChecked(problem.id)
+            checkboxApi.toggleChecked(problem.id)
         } else {
             navigate(`/view/${problem.id}`)
         }
-    }
-    const handleDelete = async (ids: string[]) => {                
-        await removeMany(ids)
-    }
+    }    
     //////////////////////////////////////////////////
     return (
         <AppLayout
@@ -47,10 +44,13 @@ export default function LibraryScreen() {
         >            
             <LibraryControls
                 selectionMode={selectionMode}
-                onExitSelectionMode={(v: boolean) => { setSelectionMode(v); clearAllCheckbox()}}
+                onExitSelectionMode={(v: boolean) => { 
+                    setSelectionMode(v); checkboxApi.clearAll()}
+                }
                 checkedIds={checkedIds}
                 checkboxApi={checkboxApi}                
-                onDelete={handleDelete}
+                onDelete={removeMany}
+                sortState={sortState}
                 sortApi={sortApi}
             />            
 
@@ -61,8 +61,8 @@ export default function LibraryScreen() {
                             key={p.id}
                             problem={p}
                             selectionMode={selectionMode}
-                            isChecked={isChecked(p.id)}
-                            onToggleChecked={toggleChecked}
+                            isChecked={checkboxApi.isChecked(p.id)}
+                            onToggleChecked={checkboxApi.toggleChecked}
                             onSelect={handleSelectProblem}
                             onEnterSelectionMode={() => setSelectionMode(true)}
                             learningEntry={learningRecords[p.id]}

@@ -9,8 +9,16 @@ const DefaultSort: ProblemSort = {
 
 }
 
+export interface ProblemSortApi {
+  setSortKey: (key: SortKey) => void
+  setSortOrder: (order: SortOrder) => void
+}
 
-export function useLibrarySort() {
+
+export function useLibrarySort(): {
+  sortState: ProblemSort,
+  api: ProblemSortApi
+} {
   const [sortState, setSortState] = useState<ProblemSort>(DefaultSort)
 
   const setSortKey = useCallback((key: SortKey) => {
@@ -39,7 +47,10 @@ export function useLibrarySort() {
 
   return {
     sortState,          // { key, order }
-    setSortKey,    // UI用
-    setSortOrder,  // UI用（必要なら）
+
+    api: {
+      setSortKey,    // UI用
+      setSortOrder,  // UI用（必要なら）
+    }
   }
 }

@@ -8,12 +8,10 @@ export interface LibraryCheckboxApi {
     selectAll: () => void    
 }
 
-type Props = {
+export function useLibraryCheckbox(problemIds: string[]): {
     checkedIds: Set<string>
     api: LibraryCheckboxApi
-}
-
-export function useLibraryCheckbox(problemIds: string[]): Props {
+} {
     const [ checkedIds, setCheckedIds] = useState<Set<string>>(()=>new Set())
 
     const isAllChecked = checkedIds.size === Object.keys(problemIds).length
