@@ -1,56 +1,72 @@
-import { Box, Stack, Typography, IconButton } from '@mui/material';
-import StarIcon from "@mui/icons-material/Star";
-import StarBorderIcon from "@mui/icons-material/StarBorder"; 
-
-import type { Problem } from '@/domain/problem/types/Problem';
-import type { LearningEntry } from '@/domain/learning/types';
-import { calcAccuracy } from '@/domain/learning/calcAccuracy';
-import { formatDate } from '@/utils';
-
-export function inDays(date: number): number {
-    return (date - Date.now()) / (60*60*24*100)
-}
+import { Checkbox, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import LibraryItemText from "./LibraryItemText";
+import type { Problem } from "@/domain/problem/types/Problem";
+import type { LearningEntry } from "@/domain/learning/types";
+import { useLongPress } from "../hooks/useLongPress";
 
 type Props = {
-    problem: Problem 
-    learningEntry?: LearningEntry
+    problem: Problem,
+    learningEntry: LearningEntry,
+
+    selectionMode: boolean
+    isChecked: boolean
+    onToggleChecked: (id: string) => void
+    onSelect: (problem: Problem) => void
+    onEnterSelectionMode: () => void
     onToggleStar: (id: string) => void
 }
+export default function LibraryListItem({
+    problem,
+    selectionMode,
+    isChecked,
+    onToggleChecked,
+    onSelect,
+    onEnterSelectionMode,
+    learningEntry,
+    onToggleStar,
+}: Props) {
 
-export default function LibraryItem({ problem, learningEntry, onToggleStar }: Props) {
-    
+    const { bind, isLongPressedRef } = useLongPress({
+        onLongPress: () => {
+            onToggleChecked(problem.id)
+            onEnterSelectionMode()
+        }
+    })
+
     return (
-        <Box>
-            {/* 一行目: タイトル */}
-            <Stack direction="row" justifyContent="space-between">
-                <Typography variant="subtitle1" fontWeight="bold">
-                    {problem.title}
-                </Typography>
-                <IconButton size="small" 
-                    onClick={(e) => { e.stopPropagation(); onToggleStar(problem.id)}}>
-                    {problem.starred ? <StarIcon fontSize="small" color="warning" /> : 
-                    <StarBorderIcon fontSize="small" />}
-                </IconButton>
-            </Stack>
+        <ListItem
+            disablePadding
+            {...bind}
+            sx={{ borderBottom: 1, borderColor: "divider" }}
+        >
+            <ListItemButton
+                onClick={() => {
+                    if (isLongPressedRef.current) return
+                    onSelect(problem)
+                }}
+            >
+                <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>
+                    {selectionMode && (
+                        <Checkbox
+                            size="small"
+                            edge="start"
+                            checked={isChecked}
+                            onChange={(e) => {
+                                e.stopPropagation()
+                                onToggleChecked(problem.id)
+                            }}
+                        />
+                    )}
+                </ListItemIcon>
 
-            <Stack direction="row" justifyContent={"space-between"}>               
-            
-                <Typography variant="body2" color="text.secondary">
-                    {formatDate(problem.createdAt)}
-                </Typography>
-
-                {learningEntry && <>
-                    <Typography variant="body2" color="text.primary">
-                        {(calcAccuracy(learningEntry) * 100).toFixed(1)}%/
-                        ef:{ learningEntry.easeFactor.toFixed(2)}/
-                        {inDays(learningEntry.nextReviewedAt).toFixed(0)}d
-                        
-                    </Typography>
-                    
-                </>
-                }
-            </Stack>
-        </Box>
-
-    );
+                <ListItemText>
+                    <LibraryItemText
+                        problem={problem}
+                        learningEntry={learningEntry}
+                        onToggleStar={onToggleStar}
+                    />
+                </ListItemText>
+            </ListItemButton>
+        </ListItem>
+    )
 }

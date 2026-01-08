@@ -1,6 +1,6 @@
 
 import type { LearningEntry } from '@/domain/learning/types';
-import { inDays } from '@/ui/screens/library/components/LibraryItem';
+import { inDays } from '@/ui/screens/library/components/LibraryItemText';
 import { Stack, Typography, Divider, } from '@mui/material';
 
 

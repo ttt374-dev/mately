@@ -62,14 +62,36 @@ export function createLearningStore (repository: LearningRepository){
             starred: !(r?.starred ?? false),
         }))
     }*/
-   
 
-    const replaceAll = (records: LearningRecord) => {
-        repository.save(records)
+    async function removeMany(problemIds: string[]) {
+        if (problemIds.length === 0) return
+
+        const records = await repository.load()
+
+        let changed = false
+        const next: LearningRecord = { ...records }
+
+        for (const id of problemIds) {
+            if (id in next) {
+                delete next[id]
+                changed = true
+            }
+        }
+
+        // 実際に変更があったときだけ永続化
+        if (changed) {
+            await repository.save(next)
+            setRecords(next)
+        }
+    }
+
+
+    const replaceAll = async (records: LearningRecord) => {
+        await repository.save(records)
         setRecords(records)
     }
-    const clearAll = () => {
-        console.log("learning daata cleared")
+    const clearAll = async () => {
+        await console.log("learning daata cleared")
         repository.save({})
         setRecords({})
     }
@@ -79,7 +101,7 @@ export function createLearningStore (repository: LearningRepository){
         learningRecords: records,
         setLearningRecords: setRecords,
         
-        reload,
+        reload, removeMany,
         
         markAnswer, clearAll,
         markSolved: (id: string, secondsToAnswer?: number) => markAnswer(id, "solved", secondsToAnswer),
