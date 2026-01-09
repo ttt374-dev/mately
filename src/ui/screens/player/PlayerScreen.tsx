@@ -26,7 +26,6 @@ const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | n
     return problems.find((p) => p.id === problemId) ?? null
 }
 
-
 export default function PlayerScreen() {
     const [detailDialogOpen, setDetailDialogOpen] = useState(false)
     // fsm
@@ -76,14 +75,14 @@ export default function PlayerScreen() {
         timer.reset()
         timer.start()
         resetPly()
-    }, [fsmState.currentIndex])
+    }, [fsmState.currentIndex])   
 
     if (!fsmState || !currentProblem) {
         return (
             <AppLayout>
                 <Box>NO SESSION / NO PROBLEM</Box>
 
-                <Button onClick={() => navigate("/deck")}>戻る</Button>
+                <Button onClick={() => navigate("/dashboard")}>戻る</Button>
             </AppLayout>)
     }
 

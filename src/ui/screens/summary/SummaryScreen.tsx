@@ -58,7 +58,7 @@ export default function SummaryScreen() {
 
     useEffect(() => {
         if (!fsmState) {
-            navigate("/deck");
+            navigate("/dashboard");
         }
     }, [fsmState, navigate]);
 
@@ -70,7 +70,7 @@ export default function SummaryScreen() {
         <AppLayout
             header={"Summary"}
             footer={
-                <Button fullWidth sx={{py: 2}} variant="outlined" onClick={() => navigate("/deck")}>
+                <Button fullWidth sx={{py: 2}} variant="outlined" onClick={() => navigate("/dashboard")}>
                     デッキに戻る
                 </Button>
             }

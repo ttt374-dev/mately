@@ -1,12 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from "react"
-import { TextField, IconButton, Typography, keyframes } from '@mui/material';
-import {
-    Dialog, DialogTitle, DialogContent, DialogActions,
-    Box, Button
-} from "@mui/material"
+import { TextField, IconButton, Typography } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Box, Button} from "@mui/material"
 import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
-
 import EditIcon from '@mui/icons-material/Edit';
 
 import { useNavigate } from "react-router-dom"
@@ -33,7 +29,6 @@ export default function ProblemDetailDialog({
     const [title, setTitle] = useState("")
     const [editing, setEditing] = useState(false);
     const [draft, setDraft] = useState(title);
-    //const entries = useKif().kifEntryController.entries
 
     const stores = useStoreContext()
     const problems = stores.problem.problems
@@ -85,7 +80,7 @@ export default function ProblemDetailDialog({
         problem && onUpdateTitle(title.trim())
     }
     const handleEdit = () => {
-        setDraft(title); // 現在のタイトルで初期化
+        //setDraft(title); // 現在のタイトルで初期化
         setEditing(true);
     };
     const handleEditFinish = () => {

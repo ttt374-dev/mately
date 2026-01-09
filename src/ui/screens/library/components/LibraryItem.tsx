@@ -30,7 +30,8 @@ export default function LibraryListItem({
         onLongPress: () => {
             onToggleChecked(problem.id)
             onEnterSelectionMode()
-        }
+        },
+        
     })
 
     return (

@@ -27,8 +27,11 @@ export const applyFilter = (
 
         // 未回答のみ
         ////if (filter.unansweredOnly && record && totalCount(record) > 0) {
-        //console.log("*** FILTER", problem, record)
-        if (filter.unansweredOnly && record && (record.solvedCount + record.failedCount > 0)){
+        const flag = filter.unansweredOnly && record && (record.solvedCount + record.failedCount > 0)
+        //console.log("*** FILTER", problem, record, flag)
+        
+
+        if (filter.unansweredOnly && record !== undefined && (record.solvedCount + record.failedCount > 0)){
             
             //const flag = record && (record.solvedCount + record.failedCount > 0)
             //console.log("ansered flag", problem.id, flag)
@@ -40,7 +43,7 @@ export const applyFilter = (
         }
         
         // ミッション対象
-        console.log("=== isMissionTarget", record)
+        //console.log("=== isMissionTarget", record)
         if (filter.isMissionTarget &&
             record?.nextReviewedAt !== undefined &&
             record.nextReviewedAt > now

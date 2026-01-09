@@ -1,44 +1,53 @@
 
-import { Box, List, ListItem, Button, Stack, Paper, Typography, Grid, Card, CardHeader  } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import type { LearningRecord } from '@/domain/learning/types';
+import type { Problem } from '@/domain/problem/types/Problem';
+import { Box, List, ListItem, Button, Stack, Paper, Typography, Grid, Card, CardHeader } from '@mui/material';
+import { calcStats } from '../utils/calcStats';
+
 
 
 type StatItem = {
-  label: string;
-  value: number | string;
+    label: string;
+    value: number | string;
 };
 
 type Props = {
-  items: StatItem[];
-  title: string;
-  width?: number | string; // optional, Paper の幅
-  spacing?: number;        // optional, 行間
-  selected: boolean,
+    problems: Problem[]
+    title: string;
+    learningRecords: LearningRecord
 };
 
-export const DeckCard = ({ items, title, spacing = 1, selected }: Props) => {
-  return (
-    <Card elevation={1} sx={{ p: 2, backgroundColor: selected ? "rgba(30,144,255,0.1)" : "white" }}>
-        <CardHeader title={
-            <Typography variant="subtitle2" fontSize="0.9rem" fontWeight={500}>
-                {title}
-          </Typography>
-        }/>
-      {items.map((item) => (
-        <Box
-          key={item.label}
-          display="flex"
-          justifyContent="space-between"
-          mb={spacing}
-        >
-          <Typography variant="body2" color="textSecondary">
-            {item.label}
-          </Typography>
-          <Typography variant="body1" fontWeight="bold">
-            {item.value}
-          </Typography>
-        </Box>
-      ))}
-    </Card>
-  );
-};
+export function DeckCard({ problems, title, learningRecords }: Props) {
+    const stats = calcStats(problems, learningRecords)
+
+    const statsItems: StatItem[] = [
+        { label: "問題数", value: stats.totalCount },
+        { label: "未回答問題数", value: stats.unansweredProblemCount },
+        { label: "回答数", value: stats.totalCount },
+        { label: "正答数", value: stats.solvedCount },
+        { label: "正答率", value: (stats.accuracy * 100).toFixed(1) + "%" },
+    ];
+
+    return (
+        
+        <Card>
+            <Box p={2}>
+            <CardHeader title={
+                <Typography variant='subtitle1'>{title}</Typography>} />
+            
+                { statsItems.map((item) => (                    
+                    <Stack justifyContent="space-between" direction="row" p={0}>
+                        <Typography variant='body2' color="textSecondary">
+                            {item.label}
+                        </Typography>
+                        <Typography variant="body1" fontWeight="bold">
+                            { item.value }
+                        </Typography>
+                        </Stack>
+                    
+                ))}
+                
+            </Box>
+        </Card>
+    )
+}

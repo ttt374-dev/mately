@@ -2,7 +2,7 @@ import './App.css'
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LibraryScreen from '@/ui/screens/library/LibraryScreen';
-import DashboardScreen from '@/ui/screens/dashboard/DeckScreen';
+import DashboardScreen from '@/ui/screens/dashboard/DashboardScreen';
 import PlayerScreen from '@/ui/screens/player/PlayerScreen';
 import SummaryScreen from '@/ui/screens/summary/SummaryScreen';
 import { AppProvsiders } from './providers/AppProviders';
@@ -35,9 +35,9 @@ export default function App() {
                 <Routes>
                     <Route path="/library" element={<LibraryScreen />} />
                     <Route path="/summary" element={<SummaryScreen />} />
-                    <Route path="/deck" element={<DashboardScreen />} />
+                    <Route path="/dashboard" element={<DashboardScreen />} />
                     <Route path="/view/:id" element={<ViewScreen />} />
-                    <Route path="/" element={<Navigate to="/deck" />} />
+                    <Route path="/" element={<Navigate to="/dashboard" />} />
                     <Route path="/player" element={<PlayerScreen />} />
                 </Routes>
             </BrowserRouter>

@@ -5,6 +5,7 @@ import type { FilterState } from "@/domain/problem/query/types/Filter";
 
 type Props = {
     filter: FilterState,
+    //onUpdateFilter: (partial: Partial<FilterState>),
     setFilter:  React.Dispatch<React.SetStateAction<FilterState>>
 }
 

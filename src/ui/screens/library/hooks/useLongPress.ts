@@ -24,14 +24,30 @@ export function useLongPress({ threshold = 500, onLongPress }: UseLongPressOptio
             timerRef.current = null;
         }
     };
+     const clear = () => {
+          if (timerRef.current) {
+              clearTimeout(timerRef.current)
+              timerRef.current = null
+          }
+      }
 
     return {
         bind: {
             onMouseDown: onPressStart,
-            onMouseUp: onPressEnd,
-            onMouseLeave: onPressEnd,
+            //onMouseUp: onPressEnd,
+            //onMouseLeave: onPressEnd,
             onTouchStart: onPressStart,
-            onTouchEnd: onPressEnd,
+            //onTouchEnd: onPressEnd,
+
+            onMouseUp: clear,
+            onMouseLeave: clear,
+
+            //onTouchStart: onPressStart,
+            onTouchEnd: clear,
+            onTouchMove: clear, // ← これ重要
+
+      onPointerMove: clear, // pointer 対応環境
+    
         },
         isLongPressedRef: longPressedRef,
     };
