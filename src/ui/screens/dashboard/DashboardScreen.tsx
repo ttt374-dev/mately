@@ -19,8 +19,10 @@ export default function DashboardScreen(){
     const navigate = useNavigate()
 
     const problems = stores.problem.problems
+    const learningRecords = stores.learning.records
     const queriedProblems = useMemo(()=> {
-        return applyFilter(problems, filter)
+        console.log("reload query problems", problems, filter)
+        return applyFilter(problems, filter, learningRecords)
     }, [problems, filter])
 
     const startMission = () => {
@@ -43,11 +45,11 @@ export default function DashboardScreen(){
                 
                 <Grid container spacing={2}>
                     <Grid size={6}>
-                        <DeckCard title="deck" problems={queriedProblems} learningRecords={stores.learning.records}/>
+                        <DeckCard title="Mission" problems={queriedProblems} learningRecords={learningRecords}/>
                     </Grid>
                     <Grid size={6}>
-                        <DeckCard title="All" problems={queriedProblems} learningRecords={stores.learning.records}/>
-                    </Grid>
+                        <DeckCard title="All" problems={problems} learningRecords={learningRecords}/>
+                    </Grid>           
                     <Grid size={12}>
                     <DashboardFilterControl filter={filter} setFilter={setFilter}/>
                     </Grid>
