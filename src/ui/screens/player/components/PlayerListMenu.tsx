@@ -5,20 +5,23 @@ import { GenericListMenu } from '@/ui/sharedComponents/GenericListMenu';
 
 type Props = {
     onDeleteProblem: () => void
+    onDetailDialogOpen: () => void
 }
-export default function PlayerListMenu({ 
-    onDeleteProblem
-  }: Props
+export default function PlayerListMenu({
+    onDeleteProblem, onDetailDialogOpen
+}: Props
 ) {
     const toast = useToast()
 
     return (
         <GenericListMenu
             menuItems={[
-                <MenuItem onClick={onDeleteProblem}>
-                    この棋譜を削除
-                </MenuItem>
-    
+                <>
+
+                    <MenuItem onClick={onDetailDialogOpen}>
+                        詳細
+                    </MenuItem>
+                </>
             ]}
         />
 

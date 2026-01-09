@@ -21,13 +21,15 @@ export default function DashboardScreen(){
     const stores = useStoreContext()
     const navigate = useNavigate()
     const { filter: { filter, setFilter }} = useQueryContext()
-
-    useEffect(() => { console.log("selected", selected) }, [selected])
+    
+    //useEffect(() => { console.log("selected", selected) }, [selected])
     const sort: SortState = {
         key: "nextReviewedAt",
         order: "asc"
     }
-    const queriedProblems = useMemo(()=> {
+    const queriedProblems = useMemo(()=> {     
+        //setFilter(f => ({...f, isMissionOnly: true}))
+        
         return applyQuery(stores.problem.problems, sort, filter, stores.learning.records)
     }, [stores.learning.records, sort, filter ])
 

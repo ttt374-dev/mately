@@ -61,7 +61,9 @@ export function createProblemStore(repository: ProblemRepository) {
         await repository.save(next);
     };
 
-
+    const updateTitle = async (problemId: string, title: string) => {
+        await update(problemId, (p) => ({...p, title: title}))
+    }
     const toggleStar = async (problemId: string) => {
         await update(problemId, (p) => ({ ...p, starred: !(p?.starred ?? false) }));
     };
@@ -90,6 +92,7 @@ export function createProblemStore(repository: ProblemRepository) {
         addProblem,
         replaceAll,
         update,
+        updateTitle,
         toggleStar,
         removeMany,
         removeAll,

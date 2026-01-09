@@ -4,7 +4,7 @@ import { Stack, Button, Box } from '@mui/material';
 import { AppLayout } from "@/ui/common/AppLayout"
 import type { Problem } from '@/domain/problem/types/Problem';
 import type { FsmState } from '@/domain/fsm/types';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';
 import PlayerFooterActions from './components/PlayerFooterActions';
 import MovesPanel from './components/MovesPanel';
@@ -18,9 +18,8 @@ import { useStoreContext } from '@/app/providers/StoreProvider';
 import { SwipeWrapper } from './components/SwipeWrapper';
 import BoardView from './components/BoardView';
 import PlayerListMenu from './components/PlayerListMenu';
-import { WindowSharp } from '@mui/icons-material';
-import { usePlayerStore } from './hooks/usePlayerStore';
 import { useToast } from '@/app/providers/ToastProvider';
+import ProblemDetailDialog from './components/ProblemDetailDialog';
 
 const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | null => {
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
@@ -29,8 +28,7 @@ const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | n
 
 
 export default function PlayerScreen() {
-    // UI hook
-    const { deleteProblem } = usePlayerStore()
+    const [detailDialogOpen, setDetailDialogOpen] = useState(false)
     // fsm
     const { state: fsmState, next, prev, solve, fail,
         advancePhase, retreatPhase, 
@@ -126,12 +124,17 @@ export default function PlayerScreen() {
         }
     }
     const handleDeleteProblem = () => {
-        if (!window.confirm("削除してよいですか")) return
+        //if (!window.confirm("削除してよいですか")) return
         const title = currentProblem.title
-        deleteProblem(currentProblem.id)
+        //deleteProblem(currentProblem.id)
+        stores.problem.removeMany([currentProblem.id])
+        stores.learning.removeMany([currentProblem.id])
+
         toast({message: `削除しました: ${title}`})
         next()
-
+    }
+    const handleUpdateTitle = (title: string) => {
+        stores.problem.updateTitle(currentProblem.id, title)
     }
     return (
         <AppLayout
@@ -148,6 +151,7 @@ export default function PlayerScreen() {
                     <StarControl isStarred={currentProblem.starred} onToggleStar={handleStar}/>
                     <PlayerListMenu
                         onDeleteProblem={handleDeleteProblem}
+                        onDetailDialogOpen={() => setDetailDialogOpen(true)}
                     />
                 </>
         }
@@ -179,6 +183,15 @@ export default function PlayerScreen() {
                         />
                 </Stack>
             </Stack>
+
+            <ProblemDetailDialog 
+                open={detailDialogOpen}
+                problemId={currentProblem.id}
+                onUpdateTitle={handleUpdateTitle}
+                onConfirm={alert}
+                onClose={() => setDetailDialogOpen(false)}
+                onDelete={handleDeleteProblem}
+            />
         </AppLayout>
     )
 }

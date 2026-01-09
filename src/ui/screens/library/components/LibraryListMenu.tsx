@@ -25,6 +25,7 @@ export function LibraryListMenu({ onClearAllLearnings, onBackupDialogOpen }: {
                 }}>
                     学習データをクリア
                 </MenuItem>,
+
             ]}
         />
 

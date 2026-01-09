@@ -13,9 +13,10 @@ import { LibraryControls } from './components/LibraryControls';
 import { useLibraryCheckbox } from './hooks/useLibraryCheckbox';
 
 ///////////////////////////////////////////////
-export default function LibraryScreen() {
-    const [backupDialogOpen, setBackupDialogOpen] = useState(false)
+export default function LibraryScreen() {    
     const [selectionMode, setSelectionMode] = useState(false)
+    const [backupDialogOpen, setBackupDialogOpen] = useState(false)
+    
 
     const { learningRecords, libraryList,
         removeMany, clearAllLearnings, toggleStar,        
@@ -38,8 +39,9 @@ export default function LibraryScreen() {
         <AppLayout
             header={"Library"}
             rightActions={
-            <LibraryListMenu onClearAllLearnings={clearAllLearnings}
-                onBackupDialogOpen={()=>setBackupDialogOpen(true)}
+            <LibraryListMenu 
+                onClearAllLearnings={clearAllLearnings}
+                onBackupDialogOpen={()=>setBackupDialogOpen(true)}                
             />}            
         >            
             <LibraryControls
@@ -71,8 +73,11 @@ export default function LibraryScreen() {
                     ))}
                 </List>
             </Box>
-            { <BackupRestoreDialog open={backupDialogOpen} 
-                onClose={()=>setBackupDialogOpen(false)}/>}
+            { /* Dialogs */ }
+            <BackupRestoreDialog open={backupDialogOpen} 
+                onClose={()=>setBackupDialogOpen(false)}/>
+
+            
         </AppLayout>
     )
 }
