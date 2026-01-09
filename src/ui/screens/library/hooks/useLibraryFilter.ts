@@ -5,7 +5,18 @@ import { DefaultFilterState, type FilterState, type SortState } from "@/domain/p
 
 export function useLibraryFilter(){
   const [ filter, setFilter] = useState<FilterState>(DefaultFilterState)
+
+   const update = <K extends keyof FilterState>(
+        key: K,
+        value: FilterState[K]
+    ) => {
+        setFilter(f => ({
+            ...f,
+            [key]: value,
+        }));
+    };
+    
   return {
-    filter, setFilter
+    filter, setFilter, update
   }
 }

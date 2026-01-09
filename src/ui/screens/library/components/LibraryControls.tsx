@@ -2,7 +2,7 @@ import { Box, Stack } from "@mui/material"
 import LibraryDeleteControl from "./LibraryDeleteControl"
 import LibrarySelectionControl from "./LibrarySelectionControl"
 import LibrarySortControl from "./LibrarySortControl"
-import type { ProblemSortApi, useLibrarySort } from "../hooks/useLibrarySort"
+import type { SortApi, useLibrarySort } from "../hooks/useLibrarySort"
 import type { LibraryCheckboxApi, useLibraryCheckbox } from "../hooks/useLibraryCheckbox"
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -15,7 +15,7 @@ type Props = {
     checkboxApi: LibraryCheckboxApi
     onDelete: (problemIds: string[]) => Promise<void>
     sortState: SortState
-    sortApi: ProblemSortApi
+    sortApi: SortApi
 }
 
 export function LibraryControls({

@@ -33,20 +33,25 @@ export function useLongPress({ threshold = 500, onLongPress }: UseLongPressOptio
 
     return {
         bind: {
+            onPointerDown: onPressStart,
+            onPointerUp: clear,
+            onPointerLeave: clear,
+            onPointerCancel: clear,
+            /*
             onMouseDown: onPressStart,
-            //onMouseUp: onPressEnd,
-            //onMouseLeave: onPressEnd,
+            onMouseUp: onPressEnd,
+            onMouseLeave: onPressEnd,
             onTouchStart: onPressStart,
-            //onTouchEnd: onPressEnd,
-
-            onMouseUp: clear,
-            onMouseLeave: clear,
+            onTouchEnd: onPressEnd,
+*/
+            //onMouseUp: clear,
+            //onMouseLeave: clear,
 
             //onTouchStart: onPressStart,
-            onTouchEnd: clear,
-            onTouchMove: clear, // ← これ重要
+            //onTouchEnd: clear,
+            //onTouchMove: clear, // ← これ重要
 
-      onPointerMove: clear, // pointer 対応環境
+      //onPointerMove: clear, // pointer 対応環境
     
         },
         isLongPressedRef: longPressedRef,

@@ -23,17 +23,16 @@ export default function DashboardScreen(){
     const problems = stores.problem.problems
     const learningRecords = stores.learning.records
     const queriedProblems = useMemo(()=> {
-        console.log("reload query problems", problems, filter)
+        //console.log("reload query problems", problems, filter)
         const sort: SortState = {
             key: "nextReviewedAt",
             order: "asc",
         }
         return applyQuery(problems, sort, filter, learningRecords)
-    }, [problems, filter])
+    }, [problems, filter, learningRecords])
 
-    const startMission = () => {
-        const queue = buildQueue(queriedProblems)
-        fsm.start(queue)
+    const startMission = () => {        
+        fsm.start(buildQueue(queriedProblems))
         navigate("/player")        
     }
     ///
@@ -57,7 +56,7 @@ export default function DashboardScreen(){
                         <DeckCard title="All" problems={problems} learningRecords={learningRecords}/>
                     </Grid>           
                     <Grid size={12}>
-                    <DashboardFilterControl filter={filter} setFilter={setFilter}/>
+                    <DashboardFilterControl/>
                     </Grid>
                 </Grid>
                 

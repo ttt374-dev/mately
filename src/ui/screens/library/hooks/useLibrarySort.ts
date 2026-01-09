@@ -5,7 +5,7 @@ import { type SortState, type SortKey, type SortOrder, DefaultSortState } from "
 
 
 
-export interface ProblemSortApi {
+export interface SortApi {
   setSortKey: (key: SortKey) => void
   setSortOrder: (order: SortOrder) => void
 }
@@ -13,7 +13,7 @@ export interface ProblemSortApi {
 
 export function useLibrarySort(): {
   sortState: SortState,
-  api: ProblemSortApi
+  api: SortApi
 } {
   const [sortState, setSortState] = useState<SortState>(DefaultSortState)
 
