@@ -28,7 +28,7 @@ export default function MovesPanel({
             }}
         >
             {currentPhase === "problem" && 
-                <Typography p={2} variant="body2">
+                <Typography p={2} variant="body1">
                     {moves.length}手詰め
                 </Typography>
             }

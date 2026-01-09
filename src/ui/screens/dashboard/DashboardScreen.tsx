@@ -10,6 +10,8 @@ import { useStoreContext } from '@/app/providers/StoreProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { DeckCard } from './components/DeckCard';
 import { applyFilter } from '@/domain/problem/query/applyFilter';
+import type { SortState } from '@/domain/problem/query/types';
+import { applyQuery } from '@/domain/problem/query/applyQuery';
 
 
 export default function DashboardScreen(){
@@ -22,7 +24,11 @@ export default function DashboardScreen(){
     const learningRecords = stores.learning.records
     const queriedProblems = useMemo(()=> {
         console.log("reload query problems", problems, filter)
-        return applyFilter(problems, filter, learningRecords)
+        const sort: SortState = {
+            key: "nextReviewedAt",
+            order: "asc",
+        }
+        return applyQuery(problems, sort, filter, learningRecords)
     }, [problems, filter])
 
     const startMission = () => {
@@ -37,7 +43,7 @@ export default function DashboardScreen(){
             header={ <>Dashboard</>}
             footer={
                 <Button variant="contained" fullWidth onClick={startMission}>
-                    開始
+                    ミッション開始
                 </Button>
             }
         >

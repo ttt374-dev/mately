@@ -164,7 +164,7 @@ export default function PlayerScreen() {
                     </BoardView>                
                 </SwipeWrapper>
 
-                <Stack direction="row" pb={1}
+                <Stack direction="row" p={1}
                     sx={{ minHeight: 0, flexGrow: 1 }} spacing={1} >
 
                     <MovesPanel
