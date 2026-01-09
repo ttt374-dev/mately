@@ -1,14 +1,14 @@
 import type { ReactNode, } from "react"
 import { createContext, useContext, } from "react"
-import { createProblemStore } from "../store/ProblemStore"
-import { createLearningStore } from "../store/LearningStore"
+import { useProblemStore } from "@/application/store/useProblemStore"
+import { useLearningStore } from "@/application/store/useLearningStore"
 import { useRepositoryContext } from "./RepositoryProvider"
 
 
 
 type StoreContextValue = {
-    readonly problem: ReturnType<typeof createProblemStore>
-    readonly learning: ReturnType<typeof createLearningStore>
+    readonly problem: ReturnType<typeof useProblemStore>
+    readonly learning: ReturnType<typeof useLearningStore>
 }
 export const StoreContext = createContext<StoreContextValue | null>(null)
 
@@ -16,8 +16,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     const repos = useRepositoryContext()
     return (
         <StoreContext.Provider value={{
-            problem: createProblemStore(repos.problem),
-            learning: createLearningStore(repos.learning)
+            problem: useProblemStore(repos.problem),
+            learning: useLearningStore(repos.learning)
         }}>
             {children}
         </StoreContext.Provider>
