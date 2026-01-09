@@ -11,7 +11,7 @@ export interface SortApi {
 }
 
 
-export function useLibrarySort(): {
+export function useSort(): {
   sortState: SortState,
   api: SortApi
 } {

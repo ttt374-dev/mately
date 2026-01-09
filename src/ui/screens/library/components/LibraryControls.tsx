@@ -2,7 +2,7 @@ import { Box, Stack } from "@mui/material"
 import LibraryDeleteControl from "./LibraryDeleteControl"
 import LibrarySelectionControl from "./LibrarySelectionControl"
 import LibrarySortControl from "./LibrarySortControl"
-import type { SortApi, useLibrarySort } from "../hooks/useLibrarySort"
+import type { SortApi, useSort } from "../../../../application/useSort"
 import type { LibraryCheckboxApi, useLibraryCheckbox } from "../hooks/useLibraryCheckbox"
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';

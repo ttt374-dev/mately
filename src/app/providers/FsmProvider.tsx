@@ -1,4 +1,4 @@
-import { useFsm } from "@/hooks/useFsm"
+import { useFsm } from "@/application/useFsm"
 import type { ReactNode } from "react"
 import { createContext, useContext } from "react"
 

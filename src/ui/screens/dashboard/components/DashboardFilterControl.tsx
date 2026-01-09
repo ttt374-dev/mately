@@ -12,7 +12,7 @@ type Props = {
 
 
 export default function DashboardFilterControl() {
-    const { filter: { filter, update: updateFilter } } = useQueryContext()    
+    const { filter: { filter, api: { update: updateFilter} } } = useQueryContext()    
 
     return (
         <Paper elevation={1}>

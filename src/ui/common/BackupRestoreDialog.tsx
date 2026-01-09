@@ -7,25 +7,9 @@ import { createBackupRestoreUsecase, type BackupData } from "@/usecase/backupRes
 import { fileBackupWriter } from "@/infra/backup/backupWriter"
 import { useRepositoryContext } from "@/app/providers/RepositoryProvider"
 import { useStoreContext } from "@/app/providers/StoreProvider"
+import { useBackupRestore } from "@/application/useBackupRestore"
 
-const useBackupRestore = () => {
-    const repos = useRepositoryContext()
-    const stores = useStoreContext()
 
-    const usecase = createBackupRestoreUsecase(repos.problem, repos.learning, fileBackupWriter)
-    const backup = async () => {
-        await usecase.backup()        
-    }
-    const restore = async (data: BackupData) => {
-        await usecase.restore(data)
-        await stores.problem.reload()
-        await stores.learning.reload()
-    }
-    return {
-        backup, restore
-    }
-    
-}
 type DialogProps = {
     open: boolean
     onClose: () => void

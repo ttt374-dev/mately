@@ -15,7 +15,7 @@ import { applyQuery } from '@/domain/problem/query/applyQuery';
 
 
 export default function DashboardScreen(){
-    const { filter: { filter, setFilter}} = useQueryContext()
+    const { filter: { filter, api: { setFilter} }} = useQueryContext()
     const fsm = useFsmContext()
     const stores = useStoreContext()
     const navigate = useNavigate()
