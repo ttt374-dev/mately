@@ -1,13 +1,8 @@
-import type { LearningRecord } from "../../learning/types";
+import { LeakRemove } from "@mui/icons-material";
+import type { LearningEntry, LearningRecord } from "../../learning/types";
 import type { Problem } from "../types/Problem"
-import type { ProblemFilter } from "./types/Filter";
+import type { FilterState } from "./types/Filter";
 
-function isUnansweredRecord(
-    record: { solvedCount: number; failedCount: number } | null
-): boolean {
-    if (!record) return true;
-    return record.solvedCount + record.failedCount === 0;
-}
 function matchesText(problem: Problem, text?: string): boolean {
     if (!text) return true;
     const t = text.toLowerCase();
@@ -18,24 +13,26 @@ function matchesText(problem: Problem, text?: string): boolean {
 //////////////////////////////////
 export const applyFilter = (
     problems: Problem[],
-    filter: ProblemFilter,
+    filter: FilterState,
     learningRecords: LearningRecord,
 ): Problem[] => {
     const now = Date.now();
     //console.log("filter problems", filter, learningRecords)
     return problems.filter(problem => {
-        const record = learningRecords[problem.id]
+        const record = learningRecords[problem.id] 
+        console.warn("filter: no learning record") /// TODO
         //if (!record) return true
 
         //console.log("learning record", learningRecords, record, learningRecords)
 
         // 未回答のみ
-        if (filter.unansweredOnly && !isUnansweredRecord(record)) {
+        //if (filter.unansweredOnly && record && totalCount(record) > 0) {
+        if (filter.unansweredOnly && record && (record.solvedCount + record.failedCount > 0)) {
         //if (filter.unansweredOnly && record.solvedCount > 0) {
             return false;
         }
 
-        // 次回レビュー対象のみ
+        // 次回レビュー対象のみならず
         if (!filter.includeNotDue &&
             record?.nextReviewedAt !== undefined &&
             record.nextReviewedAt > now

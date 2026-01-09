@@ -2,12 +2,12 @@
 import { calcAccuracy } from "../../learning/calcAccuracy"
 import type { LearningEntry, LearningRecord } from "../../learning/types"
 import type { Problem } from "../types/Problem"
-import type { ProblemSort, SortKey, SortOrder } from "./types/Sort"
+import type { SortState, SortKey, SortOrder } from "./types/Sort"
 
 
 export function applySort(
   problems: Problem[],
-  sort: ProblemSort,
+  sort: SortState,
   learningRecords?: LearningRecord
 ): Problem[] {    
     const sorted = [...problems]

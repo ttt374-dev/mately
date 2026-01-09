@@ -2,9 +2,9 @@ import type { FsmState, } from "@/domain/fsm/types";
 import { Stack, Typography, Divider, Paper, } from '@mui/material';
 import { PlyControl } from "./PlyControl";
 import type { LearningEntry } from "@/domain/learning/types";
-import { FsmStatus } from "../FsmStat";
 import { TimerControl } from "./TImerControl";
 import { ResultSummary } from "./ResultSummary";
+import { FsmStatus } from "./FsmStat";
 
 
 

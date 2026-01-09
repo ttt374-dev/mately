@@ -81,7 +81,7 @@ export function AppLayout({ header, footer, children, rightActions  }: Props) {
         <Box width={250} mt={3} role="presentation"  className={styles.header}>
           <List>
             <ListItemButton onClick={() => navigate("/deck")}>
-              <ListItemText primary="デッキ" />
+              <ListItemText primary="ダッシュボード" />
             </ListItemButton>
             <ListItemButton onClick={() => navigate("/library")}>
               <ListItemText primary="ライブラリ" />

@@ -1,13 +1,13 @@
-import { DefaultFilter, type ProblemFilter } from "./Filter"
-import { DefaultSort, type ProblemSort } from "./Sort"
+import { DefaultFilterState, type FilterState } from "./Filter"
+import { DefaultSortState, type SortState } from "./Sort"
 
-export type ProblemQuery = {
-    sort: ProblemSort,
-    filter: ProblemFilter,
+export type QueryState = {
+    sort: SortState,
+    filter: FilterState,
 }
 
-export const DefaultQUery = {
-    sort: DefaultSort,
-    filter: DefaultFilter,
+export const DefaultQUeryState = {
+    sort: DefaultSortState,
+    filter: DefaultFilterState,
 }
 

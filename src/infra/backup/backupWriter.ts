@@ -9,15 +9,6 @@ export const fileBackupWriter: BackupWriter = {
     write: async (data: string, filename: string) => {
         if (Capacitor.isNativePlatform()) {
             // Android / iOS
-            const folder = 'Download';
-            // フォルダ作成（存在してもエラーにならないように recursive:true）
-            /*
-            await Filesystem.mkdir({
-                path: folder,
-                directory: Directory.External,
-                recursive: true
-            });
-*/
             const file = await Filesystem.writeFile({
                 path: filename,
                 directory: Directory.External,
@@ -25,8 +16,6 @@ export const fileBackupWriter: BackupWriter = {
                 encoding: Encoding.UTF8,
             });
             const fileUri = `file://${file.uri}`;
-
-            
 
             await Share.share({
                 title: 'バックアップファイル',

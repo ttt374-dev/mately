@@ -2,10 +2,10 @@ import { Box, IconButton, Tooltip, Button } from "@mui/material";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-import type { ProblemSort, SortKey, SortOrder } from "@/domain/problem/query/types/Sort";
+import type { SortState, SortKey, SortOrder } from "@/domain/problem/query/types/Sort";
 
 export default function LibrarySortControl({ sort, setSortKey, setSortOrder }: {
-    sort: ProblemSort,
+    sort: SortState,
     setSortKey: (order: SortKey) => void
     setSortOrder: (order: SortOrder) => void,
 }) {

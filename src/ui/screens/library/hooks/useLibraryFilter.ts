@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react"
 
-import type { ProblemFilter, ProblemSort } from "@/domain/problem/query/types"
+import type { FilterState, SortState } from "@/domain/problem/query/types"
 
 const DefaultFilter = {
     unansweredOnly: false,
@@ -9,7 +9,7 @@ const DefaultFilter = {
 };
 
 export function useLibraryFilter(){
-  const [ filter, setFilter] = useState<ProblemFilter>(DefaultFilter)
+  const [ filter, setFilter] = useState<FilterState>(DefaultFilter)
   return {
     filter, setFilter
   }

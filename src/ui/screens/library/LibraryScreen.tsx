@@ -6,7 +6,7 @@ import type { Problem } from '@/domain/problem/types/Problem';
 import { useQueryContext } from '@/app/providers/QueryProvider';
 import { useState } from 'react';
 import BackupRestoreDialog from '@/ui/common/BackupRestoreDialog';
-import { ListMenu } from './components/ListMenu';
+import { LibraryListMenu } from './components/LibraryListMenu';
 import LibraryListItem from './components/LibraryItem';
 import { useLibraryStore } from './hooks/useLibraryStore';
 import { LibraryControls } from './components/LibraryControls';
@@ -38,7 +38,7 @@ export default function LibraryScreen() {
         <AppLayout
             header={"Library"}
             rightActions={
-            <ListMenu onClearAllLearnings={clearAllLearnings}
+            <LibraryListMenu onClearAllLearnings={clearAllLearnings}
                 onBackupDialogOpen={()=>setBackupDialogOpen(true)}
             />}            
         >            

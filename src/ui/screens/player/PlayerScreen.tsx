@@ -17,16 +17,25 @@ import type { LearningEntry } from '@/domain/learning/types';
 import { useStoreContext } from '@/app/providers/StoreProvider';
 import { SwipeWrapper } from './components/SwipeWrapper';
 import BoardView from './components/BoardView';
+import PlayerListMenu from './components/PlayerListMenu';
+import { WindowSharp } from '@mui/icons-material';
+import { usePlayerStore } from './hooks/usePlayerStore';
+import { useToast } from '@/app/providers/ToastProvider';
 
 const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | null => {
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
     return problems.find((p) => p.id === problemId) ?? null
 }
+
+
 export default function PlayerScreen() {
+    // UI hook
+    const { deleteProblem } = usePlayerStore()
     // fsm
     const { state: fsmState, next, prev, solve, fail,
         advancePhase, retreatPhase, 
     } = useFsmContext()
+
     const currentPhase = fsmState.phase
     const stores = useStoreContext()
     const currentProblem = useMemo(()=>
@@ -46,6 +55,7 @@ export default function PlayerScreen() {
 
     // use tools
     const timer = useTimer()
+    const toast = useToast()
     const navigate = useNavigate()
 
     // answer から次へ自動遷移
@@ -115,6 +125,14 @@ export default function PlayerScreen() {
             retreatPly()
         }
     }
+    const handleDeleteProblem = () => {
+        if (!window.confirm("削除してよいですか")) return
+        const title = currentProblem.title
+        deleteProblem(currentProblem.id)
+        toast({message: `削除しました: ${title}`})
+        next()
+
+    }
     return (
         <AppLayout
             header={currentProblem.title}
@@ -125,7 +143,14 @@ export default function PlayerScreen() {
                 onFail={handleFail}
                 onBack={handleBack}
             />}
-            rightActions={<StarControl isStarred={currentProblem.starred} onToggleStar={handleStar}/>}
+            rightActions={
+                <>
+                    <StarControl isStarred={currentProblem.starred} onToggleStar={handleStar}/>
+                    <PlayerListMenu
+                        onDeleteProblem={handleDeleteProblem}
+                    />
+                </>
+        }
         >
 
             <Stack direction="column" sx={{ minHeight: 0, height: "100%" }} spacing={1}>

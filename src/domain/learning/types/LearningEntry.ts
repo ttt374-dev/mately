@@ -12,4 +12,4 @@ export type LearningEntry = {
   //starred?: boolean,
 }
 
-export type LearningRecord = Record<string, LearningEntry>
+export type LearningRecord = Record<string, LearningEntry | undefined>

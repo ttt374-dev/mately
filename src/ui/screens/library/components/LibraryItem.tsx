@@ -6,7 +6,7 @@ import { useLongPress } from "../hooks/useLongPress";
 
 type Props = {
     problem: Problem,
-    learningEntry: LearningEntry,
+    learningEntry?: LearningEntry,
 
     selectionMode: boolean
     isChecked: boolean

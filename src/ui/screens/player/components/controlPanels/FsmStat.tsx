@@ -9,7 +9,7 @@ export const FsmStatus = ({index, length}: {
 }) => {
     return (
         <Typography variant="body2" fontWeight="bold">            
-            { `${index} / ${length}` }
+            { `${index+1} / ${length}` }
         </Typography>
     )
 }

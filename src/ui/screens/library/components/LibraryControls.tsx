@@ -6,7 +6,7 @@ import type { ProblemSortApi, useLibrarySort } from "../hooks/useLibrarySort"
 import type { LibraryCheckboxApi, useLibraryCheckbox } from "../hooks/useLibraryCheckbox"
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import type { ProblemSort } from "@/domain/problem/query/types"
+import type { SortState } from "@/domain/problem/query/types"
 
 type Props = {
     selectionMode: boolean
@@ -14,7 +14,7 @@ type Props = {
     checkedIds: Set<string>
     checkboxApi: LibraryCheckboxApi
     onDelete: (problemIds: string[]) => Promise<void>
-    sortState: ProblemSort
+    sortState: SortState
     sortApi: ProblemSortApi
 }
 

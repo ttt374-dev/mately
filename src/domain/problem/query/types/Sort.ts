@@ -1,10 +1,10 @@
 
-export type ProblemSort = {
+export type SortState = {
   key: SortKey
   order: SortOrder
 }
 
-export const DefaultSort = {
+export const DefaultSortState = {
   key: 'title',
   order: 'asc'
 }

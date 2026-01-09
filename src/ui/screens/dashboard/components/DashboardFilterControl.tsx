@@ -1,14 +1,14 @@
 import { Card, FormControlLabel, FormGroup, FormLabel, Paper } from "@mui/material";
 import { FormControl, TextField, Checkbox } from "@mui/material";
 
-import type { ProblemFilter } from "@/domain/problem/query/types/Filter";
+import type { FilterState } from "@/domain/problem/query/types/Filter";
 
 type Props = {
-    filter: ProblemFilter,
-    setFilter:  React.Dispatch<React.SetStateAction<ProblemFilter>>
+    filter: FilterState,
+    setFilter:  React.Dispatch<React.SetStateAction<FilterState>>
 }
 
-export default function DeckFilterControl({ filter, setFilter }: Props) {
+export default function DashboardFilterControl({ filter, setFilter }: Props) {
     return (
         <Paper elevation={1}>
         <FormControl>
