@@ -1,13 +1,9 @@
 // features/kif/hooks/useLibrarySort.ts
 import { useState, useCallback } from "react"
 
-import type { SortState, SortKey, SortOrder } from "@/domain/problem/query/types/Sort";
+import { type SortState, type SortKey, type SortOrder, DefaultSortState } from "@/domain/problem/query/types/Sort";
 
-const DefaultSort: SortState = {
-  key: "title",
-  order: "asc",
 
-}
 
 export interface ProblemSortApi {
   setSortKey: (key: SortKey) => void
@@ -19,11 +15,11 @@ export function useLibrarySort(): {
   sortState: SortState,
   api: ProblemSortApi
 } {
-  const [sortState, setSortState] = useState<SortState>(DefaultSort)
+  const [sortState, setSortState] = useState<SortState>(DefaultSortState)
 
   const setSortKey = useCallback((key: SortKey) => {
     //alert("setsortkey")
-    console.log("sort key", key)
+    //console.log("sort key", key)
     setSortState(prev => {
       // 同じキーを押したら order を反転
       if (prev.key === key) {
@@ -41,7 +37,7 @@ export function useLibrarySort(): {
   }, [])
 
   const setSortOrder = useCallback((order: SortOrder) => {
-    console.log("sort order", order)
+    //console.log("sort order", order)
     setSortState(prev => ({ ...prev, order }))
   }, [])
 

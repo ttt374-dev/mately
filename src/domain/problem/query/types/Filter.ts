@@ -1,7 +1,8 @@
 export type FilterState = {
   text?: string; 
   unansweredOnly: boolean;
-  includeNotDue: boolean,
+  //includeNotDue: boolean,
+  isMissionTarget: boolean,
   starredOnly: boolean,
   
 };
@@ -9,6 +10,7 @@ export type FilterState = {
 export const DefaultFilterState = {
   text: undefined,
   unansweredOnly: false,
-  includeNotDue: false,
+  isMissionTarget: false,
+  //includeNotDue: false,
   starredOnly: false,
 }

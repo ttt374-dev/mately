@@ -14,31 +14,51 @@ function matchesText(problem: Problem, text?: string): boolean {
 export const applyFilter = (
     problems: Problem[],
     filter: FilterState,
-    learningRecords: LearningRecord,
+    learningRecords?: LearningRecord,
 ): Problem[] => {
     const now = Date.now();
     //console.log("filter problems", filter, learningRecords)
     return problems.filter(problem => {
-        const record = learningRecords[problem.id] 
-        console.warn("filter: no learning record") /// TODO
+        const record = learningRecords?.[problem.id] 
+        //console.warn("filter: no learning record") /// TODO
         //if (!record) return true
 
         //console.log("learning record", learningRecords, record, learningRecords)
 
         // 未回答のみ
-        //if (filter.unansweredOnly && record && totalCount(record) > 0) {
-        if (filter.unansweredOnly && record && (record.solvedCount + record.failedCount > 0)) {
-        //if (filter.unansweredOnly && record.solvedCount > 0) {
-            return false;
+        ////if (filter.unansweredOnly && record && totalCount(record) > 0) {
+        //console.log("*** FILTER", problem, record)
+        if (filter.unansweredOnly && record && (record.solvedCount + record.failedCount > 0)){
+            
+            //const flag = record && (record.solvedCount + record.failedCount > 0)
+            //console.log("ansered flag", problem.id, flag)
+            //if (record && (record.solvedCount + record.failedCount > 0)) {
+                //console.log("=== returning FALSE", problem.id)
+                return false
+            
+            
+        }
+        
+        // ミッション対象
+        console.log("=== isMissionTarget", record)
+        if (filter.isMissionTarget &&
+            record?.nextReviewedAt !== undefined &&
+            record.nextReviewedAt > now
+        ){
+            //console.log("returning false")
+            return false
         }
 
+                /*
         // 次回レビュー対象のみならず
         if (!filter.includeNotDue &&
             record?.nextReviewedAt !== undefined &&
             record.nextReviewedAt > now
         ) {
+            console.log("-- filter: review")
             return false;
         }
+            */
         // スターつきのみ
         if (filter.starredOnly &&
             !problem.starred){
@@ -47,8 +67,10 @@ export const applyFilter = (
         
         // text
         if (!matchesText(problem, filter.text)) {
+            //console.log("-- filter: text")
             return false;
         }
+        //console.log("=== returning TRUE", problem.id)
         return true;
     });
 }

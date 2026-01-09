@@ -4,7 +4,7 @@ export type SortState = {
   order: SortOrder
 }
 
-export const DefaultSortState = {
+export const DefaultSortState: SortState = {
   key: 'title',
   order: 'asc'
 }

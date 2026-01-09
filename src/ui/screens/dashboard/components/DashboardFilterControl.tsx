@@ -40,16 +40,16 @@ export default function DashboardFilterControl({ filter, setFilter }: Props) {
                 <FormControlLabel
                     control={
                         <Checkbox
-                            checked={filter.includeNotDue}
+                            checked={filter.isMissionTarget}
                             onChange={e =>
                                 setFilter(f => ({
                                     ...f,
-                                    includeNotDue: e.target.checked,
+                                    isMissionTarget: e.target.checked,
                                 }))
                             }
                         />
                     }
-                    label="レビュー対象外も含む"
+                    label="ミッション対象のみ"
                 />
                 <FormControlLabel
                     control={

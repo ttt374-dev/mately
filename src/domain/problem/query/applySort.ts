@@ -17,6 +17,9 @@ export function applySort(
       let vA: any
       let vB: any
 
+      let rA = learningRecords?.[a.id]
+      let rB = learningRecords?.[b.id]
+
       switch (sort.key) {
         case "title":
           vA = a.title ?? ""
@@ -28,27 +31,30 @@ export function applySort(
           vB = b.createdAt
           break
 
+        case "random":
+          vA = Math.random();
+          vB = Math.random();
+          break;
+
         case "accuracy":
-          if (!learningRecords) return 0
-          const aAcc = calcAccuracy(learningRecords[a.id]) ?? 0
-          const bAcc = calcAccuracy(learningRecords[b.id]) ?? 0
+          if (!learningRecords) return 0                    
+          const aAcc = calcAccuracy(rA) 
+          const bAcc = calcAccuracy(rB) 
           return sort.order === "asc" ? aAcc - bAcc : bAcc - aAcc
           break
         case "easeFactor":
           if (!learningRecords) return 0
-          vA = learningRecords[a.id]?.easeFactor
-          vB = learningRecords[b.id]?.easeFactor
+          vA = rA?.easeFactor
+          vB = rB?.easeFactor
           break
 
         case "nextReviewedAt":
           if (!learningRecords) return 0
-          vA = learningRecords[a.id]?.nextReviewedAt
-          vB = learningRecords[b.id]?.nextReviewedAt
+          vA = rA?.nextReviewedAt
+          vB = rB?.nextReviewedAt
           break;
 
-        case "random":
-          vA = Math.random();
-          vB = Math.random();
+
           //console.log("random", vA, vB)
           break;
 
