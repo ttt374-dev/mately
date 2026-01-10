@@ -5,7 +5,8 @@ import { buildLibraryList } from "@/domain/problem/builder"
 export function useLibraryStore(){
     const stores = useStoreContext()    
 
-    const { sort: { sortState } } = useQueryContext()
+    const { state } = useQueryContext()
+    const sortState = state.sortState
     const libraryList = buildLibraryList(stores.problem.problems, sortState, stores.learning.records)
     
     const removeMany = async (ids: string[]) => {

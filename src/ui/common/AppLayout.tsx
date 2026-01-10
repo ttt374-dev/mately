@@ -9,12 +9,38 @@ import BackupRestoreDialog from "./BackupRestoreDialog";
 import ImportFilesButton from "./ImportFilesButton";
 import { useStoreContext } from "@/app/providers/StoreProvider";
 
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const footerButtonTheme = createTheme({
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          minHeight: 64,
+        },
+      },
+    },
+  },
+});
+
+
+function AppLayoutFooter({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider theme={footerButtonTheme}>
+      {children}
+    </ThemeProvider>
+  );
+}
+
+
 interface Props {
   header?: React.ReactNode;
   footer?: React.ReactNode;
   children: React.ReactNode;
   rightActions?: React.ReactNode;
 }
+
+
 
 export function AppLayout({ header, footer, children, rightActions  }: Props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -94,8 +120,14 @@ export function AppLayout({ header, footer, children, rightActions  }: Props) {
         </Box>
       </Drawer>
       
+      
       <div className={styles.main}>{children}</div>
-      {footer && <div className={styles.footer}>{footer}</div>}
+      {footer && 
+        <AppLayoutFooter>
+          <div className={styles.footer}>{footer}</div>
+        </AppLayoutFooter>
+      }
+     
 
 
       { <BackupRestoreDialog open={backupDialogOpen} 

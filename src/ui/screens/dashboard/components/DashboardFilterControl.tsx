@@ -4,55 +4,112 @@ import { FormControl, TextField, Checkbox } from "@mui/material";
 import type { FilterState } from "@/domain/problem/query/types/Filter";
 import { useQueryContext } from "@/app/providers/QueryProvider";
 
+
+const checkboxFilters: {
+  key: keyof FilterState
+  label: string
+}[] = [
+  { key: "unansweredOnly", label: "未回答のみ" },
+  { key: "isMissionTarget", label: "ミッション対象のみ" },
+  { key: "starredOnly", label: "スター付きのみ" },
+]
+
+type BaseFilterDef<K extends keyof FilterState> = {
+  key: K
+  label: string
+}
+
+type TextFilterDef<K extends keyof FilterState> =
+  BaseFilterDef<K> & {
+    type: "text"
+    placeholder?: string
+  }
+
+type BooleanFilterDef<K extends keyof FilterState> =
+  BaseFilterDef<K> & {
+    type: "boolean"
+  }
+
+export type FilterDef =
+  | TextFilterDef<keyof FilterState>
+  | BooleanFilterDef<keyof FilterState>
+
+  
+export const filterDefs: FilterDef[] = [
+  {
+    key: "text",
+    label: "タイトル",
+    type: "text",
+    placeholder: "タイトル"
+  },
+  {
+    key: "unansweredOnly",
+    label: "未回答のみ",
+    type: "boolean"
+  },
+  {
+    key: "isMissionTarget",
+    label: "ミッション対象のみ",
+    type: "boolean"
+  },
+  {
+    key: "starredOnly",
+    label: "スター付きのみ",
+    type: "boolean"
+  }
+]
+/////////////////////////////////////////////////////////////////////////////
 type Props = {
     filter: FilterState,
     //onUpdateFilter: (partial: Partial<FilterState>),
     setFilter:  React.Dispatch<React.SetStateAction<FilterState>>
 }
 
-
 export default function DashboardFilterControl() {
-    const { filter: { filter, api: { update: updateFilter} } } = useQueryContext()    
+  const { state, setFilter } = useQueryContext()
+  const filter = state.filterState
 
-    return (
-        <Paper elevation={1}>
-        <FormControl>
-            <FormLabel>
-                抽出条件
-            </FormLabel>
-            <FormGroup>
-                <TextField size="small" fullWidth placeholder="タイトル"
-                    onChange={e => updateFilter("text", e.target.value)}
-                >
-                </TextField>
+  return (
+    <Paper elevation={1}>
+      <FormControl>
+        <FormLabel>抽出条件</FormLabel>
 
-                <FormControlLabel control={
-                    <Checkbox
-                        checked={filter.unansweredOnly}
-                        onChange={e => updateFilter("unansweredOnly", e.target.checked)} />}
-                    label="未回答のみ" />
-
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={filter.isMissionTarget}
-                            onChange={e => updateFilter("isMissionTarget", e.target.checked)}
-                        />
+        <FormGroup>
+          {filterDefs.map(def => {
+            switch (def.type) {
+              case "text":
+                return (
+                  <TextField
+                    key={def.key}
+                    size="small"
+                    fullWidth
+                    placeholder={def.placeholder}
+                    value={filter[def.key] ?? ""}
+                    onChange={e =>
+                      setFilter({ [def.key]: e.target.value })
                     }
-                    label="ミッション対象のみ"
-                />
-                <FormControlLabel
+                  />
+                )
+
+              case "boolean":
+                return (
+                  <FormControlLabel
+                    key={def.key}
+                    label={def.label}
                     control={
-                        <Checkbox
-                            checked={filter.starredOnly}
-                            onChange={e => updateFilter("starredOnly", e.target.checked)}
-                            
-                        />
+                      <Checkbox
+                        checked={!!filter[def.key]}
+                        onChange={e =>
+                          setFilter({ [def.key]: e.target.checked })
+                        }
+                      />
                     }
-                    label="スター付きのみ"
-                />
-            </FormGroup>
-        </FormControl>
+                  />
+                )
+            }
+          })}
+        </FormGroup>
+      </FormControl>
     </Paper>
-    )
+  )
 }

@@ -42,7 +42,8 @@ export default function DashboardScreen(){
         <AppLayout
             header={ <>Dashboard</>}
             footer={
-                <Button variant="contained" fullWidth onClick={startMission}>
+                <Button variant="contained" fullWidth 
+                onClick={startMission}>
                     ミッション開始
                 </Button>
             }

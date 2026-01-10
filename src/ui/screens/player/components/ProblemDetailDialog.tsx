@@ -16,6 +16,7 @@ type Props = {
     onConfirm: (problem: Problem) => void;
     onClose: () => void
     onDelete: () => void
+    onAfterDelete?: () => void
 }
 
 export default function ProblemDetailDialog({
@@ -25,6 +26,7 @@ export default function ProblemDetailDialog({
     onConfirm,
     onClose,
     onDelete,
+    onAfterDelete,
 }: Props) {
     const [title, setTitle] = useState("")
     const [editing, setEditing] = useState(false);
@@ -56,6 +58,7 @@ export default function ProblemDetailDialog({
         if (problem && window.confirm("本当に削除しますか？")) {
             //deleteProblem(problem)      
             onDelete()
+            onAfterDelete?.()
             onClose()
         }
 

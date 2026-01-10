@@ -11,7 +11,7 @@ type Props = {
     selectionMode: boolean
     isChecked: boolean
     onToggleChecked: (id: string) => void
-    onSelect: (problem: Problem) => void
+    onSelect: () => void
     onEnterSelectionMode: () => void
     onToggleStar: (id: string) => void
 }
@@ -43,7 +43,7 @@ export default function LibraryListItem({
             <ListItemButton
                 onClick={() => {
                     if (isLongPressedRef.current) return
-                    onSelect(problem)
+                    onSelect()
                 }}
             >
                 <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>

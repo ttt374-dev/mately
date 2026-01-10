@@ -11,13 +11,15 @@ import LibraryListItem from './components/LibraryItem';
 import { useLibraryStore } from './hooks/useLibraryStore';
 import { LibraryControls } from './components/LibraryControls';
 import { useLibraryCheckbox } from './hooks/useLibraryCheckbox';
+import { useFsmContext } from '@/app/providers/FsmProvider';
+import { buildQueue } from '@/domain/problem/builder';
 
 ///////////////////////////////////////////////
 export default function LibraryScreen() {    
     const [selectionMode, setSelectionMode] = useState(false)
     const [backupDialogOpen, setBackupDialogOpen] = useState(false)
     
-
+    const fsm = useFsmContext()
     const { learningRecords, libraryList,
         removeMany, clearAllLearnings, toggleStar,        
     } = useLibraryStore()
@@ -29,11 +31,13 @@ export default function LibraryScreen() {
     const navigate = useNavigate()
 
     // ハンドラー
-    const handleSelectProblem = (problem: Problem) => {        
+    const handleSelectProblem = (problem: Problem, index: number) => {        
         if (selectionMode) {
             checkboxApi.toggleChecked(problem.id)
         } else {
-            navigate(`/view/${problem.id}`)
+            //navigate(`/view/${problem.id}`)
+            fsm.start(buildQueue(libraryList), index)
+            navigate("/player")
         }
     }    
     //////////////////////////////////////////////////
@@ -60,14 +64,14 @@ export default function LibraryScreen() {
 
             <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
                 <List>
-                    {libraryList.map((p) => (                        
+                    {libraryList.map((p, i) => (                        
                         <LibraryListItem
                             key={p.id}
                             problem={p}
                             selectionMode={selectionMode}
                             isChecked={checkboxApi.isChecked(p.id)}
                             onToggleChecked={checkboxApi.toggleChecked}
-                            onSelect={handleSelectProblem}
+                            onSelect={() => handleSelectProblem(p, i)}
                             onEnterSelectionMode={() => setSelectionMode(true)}
                             learningEntry={learningRecords[p.id]}
                             onToggleStar={toggleStar}
@@ -79,7 +83,8 @@ export default function LibraryScreen() {
             <BackupRestoreDialog open={backupDialogOpen} 
                 onClose={()=>setBackupDialogOpen(false)}/>
 
-            
+
+
         </AppLayout>
     )
 }

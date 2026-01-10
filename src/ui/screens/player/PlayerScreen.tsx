@@ -20,6 +20,8 @@ import BoardView from './components/BoardView';
 import PlayerListMenu from './components/PlayerListMenu';
 import { useToast } from '@/app/providers/ToastProvider';
 import ProblemDetailDialog from './components/ProblemDetailDialog';
+import { useProblemDetailDialog } from '@/application/useProblemDialog';
+
 
 const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | null => {
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
@@ -27,7 +29,6 @@ const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | n
 }
 
 export default function PlayerScreen() {
-    const [detailDialogOpen, setDetailDialogOpen] = useState(false)
     // fsm
     const { state: fsmState, next, prev, solve, fail,
         advancePhase, retreatPhase, 
@@ -122,6 +123,18 @@ export default function PlayerScreen() {
             retreatPly()
         }
     }
+    //// Dialog用
+    const {
+        open: detailDialogOpen, setOpen: setDetailDialogOpen,
+        handleDeleteProblem, handleUpdateTitle 
+    } = useProblemDetailDialog(currentProblem.id)
+
+    const handleAfterDelete = () => {
+        
+        toast({message: `削除しました: ${currentProblem.title}`})
+        next()
+    }
+    /*
     const handleDeleteProblem = () => {
         //if (!window.confirm("削除してよいですか")) return
         const title = currentProblem.title
@@ -135,6 +148,7 @@ export default function PlayerScreen() {
     const handleUpdateTitle = (title: string) => {
         stores.problem.updateTitle(currentProblem.id, title)
     }
+        */
     return (
         <AppLayout
             header={currentProblem.title}
@@ -190,6 +204,7 @@ export default function PlayerScreen() {
                 onConfirm={alert}
                 onClose={() => setDetailDialogOpen(false)}
                 onDelete={handleDeleteProblem}
+                onAfterDelete={handleAfterDelete}
             />
         </AppLayout>
     )
