@@ -9,13 +9,13 @@ import { useFsmContext } from '@/app/providers/FsmProvider';
 import { useStoreContext } from '@/app/providers/StoreProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { DeckCard } from './components/DeckCard';
-import { applyFilter } from '@/domain/problem/query/applyFilter';
 import type { SortState } from '@/domain/problem/query/types';
 import { applyQuery } from '@/domain/problem/query/applyQuery';
 
 
 export default function DashboardScreen(){
-    const { filter: { filter, api: { setFilter} }} = useQueryContext()
+    //const { filter: { filter, api: { setFilter} }} = useQueryContext()
+    const { state, setFilter, } = useQueryContext()
     const fsm = useFsmContext()
     const stores = useStoreContext()
     const navigate = useNavigate()
@@ -28,15 +28,16 @@ export default function DashboardScreen(){
             key: "nextReviewedAt",
             order: "asc",
         }
-        return applyQuery(problems, sort, filter, learningRecords)
-    }, [problems, filter, learningRecords])
+        return applyQuery(problems, sort, state.filterState, learningRecords)
+    }, [problems, state.filterState, learningRecords])
 
     const startMission = () => {        
         fsm.start(buildQueue(queriedProblems))
         navigate("/player")        
     }
     ///
-    useEffect(() => { setFilter(f => ({...f, isMissionTarget: true}))}, [])
+    //useEffect(() => { setFilter(f => ({...f, isMissionTarget: true}))}, [])
+    useEffect(() => { setFilter( {isMissionTarget: true})}, [])
     return (
         <AppLayout
             header={ <>Dashboard</>}

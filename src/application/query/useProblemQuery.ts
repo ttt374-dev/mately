@@ -1,6 +1,5 @@
 import { DefaultFilterState, DefaultSortState, type FilterState, type SortState } from "@/domain/problem/query/types";
-import type { ProblemCatalog } from "@/domain/problem/stores/ProglamCatalog";
-import { useReducer, useMemo } from "react";
+import { useReducer } from "react";
 
 type State = {
   sortState: SortState;
@@ -8,7 +7,6 @@ type State = {
 };
 
 type Action =
-  | { type: "SET_CATALOG"; payload: ProblemCatalog }
   | { type: "SET_SORT"; payload: SortState }
   | { type: "SET_FILTER"; payload: FilterState }
   | { type: "RESET_FILTER" };
@@ -39,13 +37,11 @@ export function useProblemQuery() {
         dispatch({ type: "SET_FILTER", payload: { ...state.filterState, ...partial } });
     const resetFilter = () => dispatch({ type: "RESET_FILTER" });
 
-    const setCatalog = (catalog: ProblemCatalog) => dispatch({ type: "SET_CATALOG", payload: catalog });
     return {
         state,
         dispatch,
         setSort,
         setFilter,
         resetFilter,
-        setCatalog,
     };
 }
