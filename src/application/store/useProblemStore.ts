@@ -25,7 +25,7 @@ export function useProblemStore(repository: ProblemRepository) {
   // -------------------------
   // 非同期対応メソッド
   // -------------------------
-  const addProblem = async (newProblem: Problem) => {
+    const addProblem = async (newProblem: Problem) => {
     dispatch({ type: "ADD", payload: newProblem });
     await repository.save([...problems, newProblem]);
   };

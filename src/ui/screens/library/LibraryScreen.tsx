@@ -23,7 +23,9 @@ export default function LibraryScreen() {
     } = useLibraryStore()
        
     const { checkedIds, api: checkboxApi } = useLibraryCheckbox(libraryList.map((p) => p.id))
-    const { sortState, api: sortApi } = useQueryContext().sort
+
+    //const { sortState, api: sortApi } = useQueryContext().sort
+    const { state: { sortState }, setSort } = useQueryContext()
     const navigate = useNavigate()
 
     // ハンドラー
@@ -53,7 +55,7 @@ export default function LibraryScreen() {
                 checkboxApi={checkboxApi}                
                 onDelete={removeMany}
                 sortState={sortState}
-                sortApi={sortApi}
+                setSort={setSort}
             />            
 
             <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>

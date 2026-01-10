@@ -1,27 +1,19 @@
-import { useFilter } from "@/application/query/useFilter"
-import { useSort } from "@/application/query/useSort"
+import { useProblemQuery } from "@/application/query/useProblemQuery"
 import type { ReactNode } from "react"
 import { createContext, useContext, useState } from "react"
+import { useStoreContext } from "./StoreProvider"
 
 // context を作る
-type QueryContextValue = {
-  sort: ReturnType<typeof useSort>,
-  filter: ReturnType<typeof useFilter>
-}
+type QueryContextValue = ReturnType<typeof useProblemQuery>
+
 export const QueryContext = createContext<QueryContextValue | null > (null)
 
 export const QueryProvider = ({children}: { children: ReactNode}) => {
-  const sort = useSort()
-  const filter = useFilter()
-
   return (
-    <QueryContext.Provider value={{
-      sort, filter
-    }}>
+    <QueryContext.Provider value={useProblemQuery()}>
       {children}
     </QueryContext.Provider>
     )
-
 }
 
 // Hook で安全に取得
