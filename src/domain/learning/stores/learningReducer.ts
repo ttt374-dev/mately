@@ -1,4 +1,4 @@
-import type { LearningEntry, LearningRecord } from "@/domain/learning/types";
+import type { LearningEntry, LearningRecord } from "../types";
 
 type Action =
     | { type: 'SET_ALL'; payload: LearningRecord }

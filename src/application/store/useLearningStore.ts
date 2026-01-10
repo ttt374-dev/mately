@@ -4,53 +4,12 @@ import type { LearningRepository } from '@/domain/learning/LearningRepository';
 import type { LearningEntry, LearningRecord } from '@/domain/learning/types/LearningEntry';
 import type { AnswerResult } from '@/domain/learning/types';
 import { judgeAnswerQuality, scheduleNext } from '@/domain/learning/scheduleNext';
+import { learningReducer } from '@/domain/learning/stores/learningReducer';
 
-type Action =
-    | { type: 'SET_ALL'; payload: LearningRecord }
-    | { type: 'UPDATE'; problemId: string; updater: (r: LearningEntry) => LearningEntry }
-    | { type: 'REMOVE_MANY'; problemIds: string[] }
-    | { type: 'CLEAR_ALL' };
-
-export function reducer(state: LearningRecord, action: Action): LearningRecord {
-    switch (action.type) {
-        case 'SET_ALL':
-            return action.payload;
-        case 'UPDATE': {
-            const current = state[action.problemId] ?? {
-                problemId: action.problemId,
-                solvedCount: 0,
-                failedCount: 0,
-                intervalDays: 0,
-                nextReviewedAt: 0,
-                easeFactor: 0,
-            };
-            return {
-                ...state,
-                [action.problemId]: action.updater(current),
-            };
-        }
-        case 'REMOVE_MANY': {
-            const next = { ...state };
-            let changed = false;
-            for (const id of action.problemIds) {
-                if (id in next) {
-                    delete next[id];
-                    changed = true;
-                }
-            }
-            return changed ? next : state;
-        }
-        case 'CLEAR_ALL':
-            return {};
-        default:
-            return state;
-    }
-}
 ////////////////////////////////////
 export function useLearningStore (repository: LearningRepository){
     //const [records, setRecords] = useState<LearningRecord>({})
-    const [records, dispatch] = useReducer(reducer, {});
-
+    const [records, dispatch] = useReducer(learningReducer, {});
 
     useEffect(() => {
         reload().catch(() => reset())
@@ -107,15 +66,14 @@ export function useLearningStore (repository: LearningRepository){
     return {
         records,
         learningRecords: records,
-        //setLearningRecords: setRecords,
-        setLearningRecords: (r: LearningRecord) => dispatch({ type: 'SET_ALL', payload: r }),        
+        //setLearningRecords: (r: LearningRecord) => dispatch({ type: 'SET_ALL', payload: r }),        
+        
         
         reload, removeMany,
         
         markAnswer, clearAll,
         markSolved: (id: string, secondsToAnswer?: number) => markAnswer(id, "solved", secondsToAnswer),
         markFailed: (id: string, secondsToAnswer?: number) => markAnswer(id, "failed", secondsToAnswer),
-        //toggleStar,
         replaceAll,
     }
 }

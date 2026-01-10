@@ -1,56 +1,13 @@
 import { useReducer, useEffect } from "react";
 import type { Problem } from "@/domain/problem/types/Problem";
 import type { ProblemRepository } from "@/domain/problem/problemRepository";
-import { createProblem } from "@/domain/problem/factory";
-
-// -------------------------
-// state / action 定義
-// -------------------------
-type State = Problem[];
-
-type Action =
-  | { type: "SET"; payload: Problem[] }
-  | { type: "ADD"; payload: Problem }
-  | { type: "UPDATE"; payload: { id: string; updater: (p: Problem) => Problem } }
-  | { type: "REMOVE_MANY"; payload: string[] }
-  | { type: "REMOVE_ALL" };
-
-// -------------------------
-// reducer
-// -------------------------
-function reducer(state: State, action: Action): State {
-  switch (action.type) {
-    case "SET":
-      return action.payload;
-
-    case "ADD":
-      return [...state, action.payload];
-
-    case "UPDATE":
-      const index = state.findIndex(p => p.id === action.payload.id);
-      if (index >= 0) {
-        return state.map((p, i) => (i === index ? action.payload.updater(p) : p));
-      } else {
-        // 新規作成
-        return [...state, action.payload.updater(createProblem())];
-      }
-
-    case "REMOVE_MANY":
-      return state.filter(p => !action.payload.includes(p.id));
-
-    case "REMOVE_ALL":
-      return [];
-
-    default:
-      return state;
-  }
-}
+import { problemReducer } from "@/domain/problem/stores/problemReducer";
 
 // -------------------------
 // hook
 // -------------------------
 export function useProblemStore(repository: ProblemRepository) {
-  const [problems, dispatch] = useReducer(reducer, []);
+  const [problems, dispatch] = useReducer(problemReducer, []);
 
   // 初期ロード
   useEffect(() => {
