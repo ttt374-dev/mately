@@ -13,7 +13,7 @@ import { LibraryControls } from './components/LibraryControls';
 import { useLibraryCheckbox } from './hooks/useLibraryCheckbox';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 import { buildQueue } from '@/domain/problem/builder';
-import ProblemDetailDialog from '../player/components/ProblemDetailDialog';
+import ProblemDetailDialog from '../../common/ProblemDetailDialog/ProblemDetailDialog';
 import { useProblemDetailDialog } from '@/application/useProblemDialog';
 import { createProblem } from '@/domain/problem/factory';
 
@@ -116,6 +116,7 @@ export default function LibraryScreen() {
                 onClose={dialog.closeDialog}
                 onDelete={dialog.deleteProblem}       
                 onResetLearning={dialog.resetLearning}         
+                learningEntry={learningRecords[dialog.problem.id]}
             />}
 
 

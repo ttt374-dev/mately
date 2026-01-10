@@ -42,6 +42,7 @@ export function useLearningStore (repository: LearningRepository){
             solvedCount: r.solvedCount + addSolved,
             failedCount: r.failedCount + addFailed,
             lastAnsweredAt: Date.now(),
+            lastResult: answer,
         }));
     };
 

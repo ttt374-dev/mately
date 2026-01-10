@@ -19,7 +19,7 @@ import { SwipeWrapper } from './components/SwipeWrapper';
 import BoardView from './components/BoardView';
 import PlayerListMenu from './components/PlayerListMenu';
 import { useToast } from '@/app/providers/ToastProvider';
-import ProblemDetailDialog from './components/ProblemDetailDialog';
+import ProblemDetailDialog from '../../common/ProblemDetailDialog/ProblemDetailDialog';
 import { useProblemDetailDialog } from '@/application/useProblemDialog';
 
 
@@ -27,7 +27,7 @@ const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | n
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
     return problems.find((p) => p.id === problemId) ?? null
 }
-
+///////////////////////////////////////////////////////////////////
 export default function PlayerScreen() {
     // fsm
     const { state: fsmState, next, prev, solve, fail,
@@ -89,6 +89,7 @@ export default function PlayerScreen() {
 
     // 学習情報
     const learningEntry: LearningEntry | undefined = learningRecords[currentProblem.id]
+
     /////////////////////////////////////
     // ハンドラー
     const handleSolve = () => {
@@ -129,7 +130,7 @@ export default function PlayerScreen() {
         next()          // TODO
     }
     const dialog = useProblemDetailDialog(handleAfterDelete)
-
+    console.log("learning", learningEntry)
     return (
         <AppLayout
             header={currentProblem.title}
@@ -150,7 +151,6 @@ export default function PlayerScreen() {
                 </>
         }
         >
-
             <Stack direction="column" sx={{ minHeight: 0, height: "100%" }} spacing={1}>
                 <SwipeWrapper actions={swipeActions}>
                     <BoardView
@@ -182,6 +182,7 @@ export default function PlayerScreen() {
             <ProblemDetailDialog 
                 open={dialog.open}
                 problem={dialog.problem}
+                learningEntry={learningEntry}
                 onUpdateTitle={dialog.updateTitle}
                 onConfirm={alert}
                 onClose={dialog.closeDialog}
