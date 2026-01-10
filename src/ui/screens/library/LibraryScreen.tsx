@@ -13,9 +13,14 @@ import { LibraryControls } from './components/LibraryControls';
 import { useLibraryCheckbox } from './hooks/useLibraryCheckbox';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 import { buildQueue } from '@/domain/problem/builder';
+import ProblemDetailDialog from '../player/components/ProblemDetailDialog';
+import { useProblemDetailDialog } from '@/application/useProblemDialog';
+import { createProblem } from '@/domain/problem/factory';
 
 ///////////////////////////////////////////////
 export default function LibraryScreen() {    
+    //const [index, setIndex] = useState(0)
+
     const [selectionMode, setSelectionMode] = useState(false)
     const [backupDialogOpen, setBackupDialogOpen] = useState(false)
     
@@ -31,15 +36,34 @@ export default function LibraryScreen() {
     const navigate = useNavigate()
 
     // ハンドラー
+        //// Dialog用
+    const handleAfterDelete = () => {        
+        //toast({message: `削除しました: ${currentProblem.title}`})
+        //next()          // TODO
+    }
+    const dialog = useProblemDetailDialog(handleAfterDelete)
     const handleSelectProblem = (problem: Problem, index: number) => {        
         if (selectionMode) {
             checkboxApi.toggleChecked(problem.id)
         } else {
+            dialog.openDialog(problem)
+            //openDetailDialog(currentProb)
+            
             //navigate(`/view/${problem.id}`)
-            fsm.start(buildQueue(libraryList), index)
-            navigate("/player")
+            //fsm.start(buildQueue(libraryList), index)
+            //navigate("/player")
         }
     }    
+    const handleNavigateToPlayer = (problemId: string) => {
+
+        const index = libraryList.findIndex(p => p.id === problemId)
+        fsm.start(buildQueue(libraryList), index)
+        navigate("/player")
+        //navigate(`/view/${problemId}`)
+    }
+    //// Dialog用
+
+
     //////////////////////////////////////////////////
     return (
         <AppLayout
@@ -83,6 +107,16 @@ export default function LibraryScreen() {
             <BackupRestoreDialog open={backupDialogOpen} 
                 onClose={()=>setBackupDialogOpen(false)}/>
 
+            {dialog.problem && 
+            <ProblemDetailDialog 
+                open={dialog.open}
+                problem={dialog.problem}
+                onUpdateTitle={dialog.updateTitle}
+                onConfirm={handleNavigateToPlayer}
+                onClose={dialog.closeDialog}
+                onDelete={dialog.deleteProblem}       
+                onResetLearning={dialog.resetLearning}         
+            />}
 
 
         </AppLayout>

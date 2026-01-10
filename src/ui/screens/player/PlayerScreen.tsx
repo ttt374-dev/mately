@@ -124,31 +124,12 @@ export default function PlayerScreen() {
         }
     }
     //// Dialog用
-    const {
-        open: detailDialogOpen, setOpen: setDetailDialogOpen,
-        handleDeleteProblem, handleUpdateTitle 
-    } = useProblemDetailDialog(currentProblem.id)
-
-    const handleAfterDelete = () => {
-        
+    const handleAfterDelete = () => {        
         toast({message: `削除しました: ${currentProblem.title}`})
-        next()
+        next()          // TODO
     }
-    /*
-    const handleDeleteProblem = () => {
-        //if (!window.confirm("削除してよいですか")) return
-        const title = currentProblem.title
-        //deleteProblem(currentProblem.id)
-        stores.problem.removeMany([currentProblem.id])
-        stores.learning.removeMany([currentProblem.id])
+    const dialog = useProblemDetailDialog(handleAfterDelete)
 
-        toast({message: `削除しました: ${title}`})
-        next()
-    }
-    const handleUpdateTitle = (title: string) => {
-        stores.problem.updateTitle(currentProblem.id, title)
-    }
-        */
     return (
         <AppLayout
             header={currentProblem.title}
@@ -163,8 +144,8 @@ export default function PlayerScreen() {
                 <>
                     <StarControl isStarred={currentProblem.starred} onToggleStar={handleStar}/>
                     <PlayerListMenu
-                        onDeleteProblem={handleDeleteProblem}
-                        onDetailDialogOpen={() => setDetailDialogOpen(true)}
+                        onDeleteProblem={dialog.deleteProblem}
+                        onDetailDialogOpen={() => dialog.openDialog(currentProblem)}
                     />
                 </>
         }
@@ -197,15 +178,17 @@ export default function PlayerScreen() {
                 </Stack>
             </Stack>
 
+            { dialog.problem && 
             <ProblemDetailDialog 
-                open={detailDialogOpen}
-                problemId={currentProblem.id}
-                onUpdateTitle={handleUpdateTitle}
+                open={dialog.open}
+                problem={dialog.problem}
+                onUpdateTitle={dialog.updateTitle}
                 onConfirm={alert}
-                onClose={() => setDetailDialogOpen(false)}
-                onDelete={handleDeleteProblem}
-                onAfterDelete={handleAfterDelete}
-            />
+                onClose={dialog.closeDialog}
+                onDelete={dialog.deleteProblem}
+                onResetLearning={dialog.resetLearning}
+                
+            />}
         </AppLayout>
     )
 }

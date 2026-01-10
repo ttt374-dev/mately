@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react"
 import { TextField, IconButton, Typography } from '@mui/material';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Box, Button} from "@mui/material"
+import { Dialog, DialogTitle, DialogContent, DialogActions, Box, Button } from "@mui/material"
 import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
 import EditIcon from '@mui/icons-material/Edit';
@@ -11,38 +11,31 @@ import { useStoreContext } from "@/app/providers/StoreProvider";
 
 type Props = {
     open: boolean
-    problemId: string | null,
+    problem: Problem,
     onUpdateTitle: (title: string) => void;
-    onConfirm: (problem: Problem) => void;
+    onConfirm: (problemId: string) => void;
     onClose: () => void
     onDelete: () => void
-    onAfterDelete?: () => void
+    onResetLearning: () => void
 }
 
 export default function ProblemDetailDialog({
     open,
-    problemId,
+    problem,
     onUpdateTitle,
     onConfirm,
     onClose,
     onDelete,
-    onAfterDelete,
+    onResetLearning,
 }: Props) {
     const [title, setTitle] = useState("")
     const [editing, setEditing] = useState(false);
-    const [draft, setDraft] = useState(title);
 
     const stores = useStoreContext()
-    const problems = stores.problem.problems
-    const problem = useMemo(
-        () => problems.find(e => e.id === problemId),
-        [problems, problemId]
-    );
-
     // initialize
     // entry 切り替え時に title を同期
     useEffect(() => {
-        setTitle(problem?.title ?? "untitled")
+        setTitle(problem.title)
     }, [problem])
 
     const inputRef = useRef<HTMLInputElement | null>(null)
@@ -55,32 +48,29 @@ export default function ProblemDetailDialog({
 
     // handlers
     const handleDelete = () => {
-        if (problem && window.confirm("本当に削除しますか？")) {
-            //deleteProblem(problem)      
+        if (window.confirm("本当に削除しますか？")) {
             onDelete()
-            onAfterDelete?.()
             onClose()
         }
 
     }
-    const navigate = useNavigate()
     const handleConfirm = () => {
         onClose()
         setEditing(false);
-        problem && onConfirm(problem);
-        navigate("/player")
+        onConfirm(problem.id);
     }
     const handleCancel = () => {
         setEditing(false);
         onClose()
     }
     const handleResetAccuracy = () => {
-        if (problem && window.confirm("本当に正答データをリセットしますか？")) {
-            //kifLearning.reset(problem.id)
+        if (window.confirm("本当に正答データをリセットしますか？")) {
+            onResetLearning()
+            //kifLearning.reset(problem.id)  // TODO
         }
     }
     const handleSetTitle = () => {
-        problem && onUpdateTitle(title.trim())
+        onUpdateTitle(title.trim())
     }
     const handleEdit = () => {
         //setDraft(title); // 現在のタイトルで初期化
@@ -127,10 +117,10 @@ export default function ProblemDetailDialog({
 
                 </Box>
                 <Box>
-                    登録日：{(problem != null) ? new Date(problem.createdAt).toLocaleString("ja-JP") : "-"}
+                    登録日：{new Date(problem.createdAt).toLocaleString("ja-JP")}
                 </Box>
                 <Box>
-                    UUID: {problemId}
+                    UUID: {problem.id.slice(0, 5)}...
                 </Box>
 
                 { /* 正答誤答*/}
