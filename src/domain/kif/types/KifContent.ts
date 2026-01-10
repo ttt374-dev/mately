@@ -10,4 +10,6 @@ export type KifContent = {
   events: KifEvent[]
   headers: KifHeader
 
+  mateLength?: number
+
 }

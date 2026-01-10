@@ -28,7 +28,8 @@ export default function DashboardScreen(){
             key: "nextReviewedAt",
             order: "asc",
         }
-        return applyQuery(problems, sort, state.filterState, learningRecords)
+        
+        return applyQuery(problems, sort, state.filterState, undefined, learningRecords)
     }, [problems, state.filterState, learningRecords])
 
     const startMission = () => {        

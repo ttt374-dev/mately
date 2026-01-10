@@ -21,7 +21,9 @@ export function parseKif(text: string): ParseResult<KifContent> {
   const board = (givenBoard) ? givenBoard :
     (headers['手合割'] === '平手' ? createDefaultBoard() : createEmptyBoard())
 
-  const kifContent: KifContent = { headers, board, hands, events };
+  const mateLength = events.filter(d=>d.type === "move").length
+
+  const kifContent: KifContent = { headers, board, hands, events, mateLength };
 
   const valid = isValidKif(lines)
   //if (isValidKifData(kifData)){

@@ -19,9 +19,19 @@ export function createLearningStatRow(problem: Problem, learningEntry?: Learning
         },
         {
             label: "Next reviewed at",
+            value: learningEntry?.nextReviewedAt
+                ? new Date(learningEntry.nextReviewedAt).toLocaleString("ja-JP")
+                : "-",
+        },
+        {
+            label: "last reviewed at",
             value: learningEntry?.lastAnsweredAt
                 ? new Date(learningEntry.lastAnsweredAt).toLocaleString("ja-JP")
                 : "-",
+        },
+        {
+            label: "last result",
+            value: learningEntry?.lastResult ?? "-"               
         },
     ]
     return rows

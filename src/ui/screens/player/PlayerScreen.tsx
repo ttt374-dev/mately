@@ -78,14 +78,22 @@ export default function PlayerScreen() {
         resetPly()
     }, [fsmState.currentIndex])   
 
+    //// Dialog用
+    const handleAfterDelete = () => {        
+        toast({message: `削除しました`})
+        next()
+    }
+    const dialog = useProblemDetailDialog(handleAfterDelete)    
+
     if (!fsmState || !currentProblem) {
         return (
             <AppLayout>
-                <Box>NO SESSION / NO PROBLEM</Box>
+                <Box>NO DATA AVAILABLE</Box>
 
                 <Button onClick={() => navigate("/dashboard")}>戻る</Button>
             </AppLayout>)
     }
+    
 
     // 学習情報
     const learningEntry: LearningEntry | undefined = learningRecords[currentProblem.id]
@@ -124,13 +132,7 @@ export default function PlayerScreen() {
             retreatPly()
         }
     }
-    //// Dialog用
-    const handleAfterDelete = () => {        
-        toast({message: `削除しました: ${currentProblem.title}`})
-        next()          // TODO
-    }
-    const dialog = useProblemDetailDialog(handleAfterDelete)
-    console.log("learning", learningEntry)
+    
     return (
         <AppLayout
             header={currentProblem.title}
