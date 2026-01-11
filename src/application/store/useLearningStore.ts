@@ -3,7 +3,7 @@ import { useState, useEffect, useReducer } from 'react';
 import type { LearningRepository } from '@/domain/learning/LearningRepository';
 import type { LearningEntry, LearningRecord } from '@/domain/learning/types/LearningEntry';
 import type { AnswerResult } from '@/domain/learning/types';
-import { judgeAnswerQuality, scheduleNext } from '@/domain/learning/scheduleNext';
+//import { judgeAnswerQuality, scheduleNext } from '@/domain/learning/scheduleNext';
 import { learningReducer } from '@/domain/learning/stores/learningReducer';
 
 ////////////////////////////////////
@@ -35,8 +35,9 @@ export function useLearningStore (repository: LearningRepository){
     const markAnswer = (problemId: string, answer: AnswerResult, secondsToAnswer?: number) => {
         const addSolved = answer === 'solved' ? 1 : 0;
         const addFailed = answer === 'failed' ? 1 : 0;
-        const answerQuality = judgeAnswerQuality(answer, secondsToAnswer ?? 20);
+        //const answerQuality = judgeAnswerQuality(answer, secondsToAnswer ?? 20);
 
+        /*
         update(problemId, r => ({
             ...scheduleNext(r, answerQuality, Date.now()),
             solvedCount: r.solvedCount + addSolved,
@@ -44,6 +45,7 @@ export function useLearningStore (repository: LearningRepository){
             lastAnsweredAt: Date.now(),
             lastResult: answer,
         }));
+        */
     };
 
     const removeMany = async (problemIds: string[]) => {

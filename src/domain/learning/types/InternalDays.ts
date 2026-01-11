@@ -1,7 +1,7 @@
 import type { EaseFactor } from "./EaseFactor"
 
 export class IntervalDays {
-  private constructor(readonly value: number) {}
+  private constructor(readonly daysValue: number) {}
 
   static initial(){ return this.zero() }
   static zero() {
@@ -14,14 +14,16 @@ export class IntervalDays {
   }
 
   isZero() {
-    return this.value === 0
+    return this.daysValue === 0
   }
 
   isOne() {
-    return this.value === 1
+    return this.daysValue === 1
   }
 
   nextWithEase(ease: EaseFactor): IntervalDays {
-    return IntervalDays.of(Math.round(this.value * ease.easeValue))
+    return IntervalDays.of(Math.round(this.daysValue * ease.easeValue))
   }
+
+  value() { return this.daysValue}
 }

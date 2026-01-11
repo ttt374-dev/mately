@@ -1,8 +1,9 @@
 import { formatDate } from "@/utils"
 import { EaseFactor, IntervalDays, ReviewedAt, type AnswerResult, type LearningEntry } from "./types"
 
-export type AnswerQuality = 0 | 1 | 2 | 3
 
+
+/*
 export function judgeAnswerQuality(answer: AnswerResult, sec: number): number {
     if (answer === "failed") return 0
     if (sec < 10) return 3
@@ -42,7 +43,7 @@ export function scheduleNext(
     nextReviewedAt,
   }
 }
-
+*/
 /*
 
 export function scheduleNextOld(

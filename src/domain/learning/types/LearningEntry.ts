@@ -1,9 +1,139 @@
+import type { AnswerQuality } from "../stores/learningReducer";
 import type { AnswerResult } from "./AnswerResult";
-import type { EaseFactor } from "./EaseFactor";
-import type { IntervalDays } from "./InternalDays";
-import type { ReviewedAt } from "./ReviewedAt";
+import { EaseFactor } from "./EaseFactor";
+import { IntervalDays } from "./InternalDays";
+import { ReviewedAt } from "./ReviewedAt";
 
-export type LearningEntry = {
+export type LearningEntryInit = {
+  solvedCount?: number
+  failedCount?: number
+  intervalDays?: IntervalDays
+  easeFactor?: EaseFactor
+  nextReviewedAt?: ReviewedAt
+  lastAnsweredAt?: number
+  lastResult?: AnswerResult
+}
+
+export class LearningEntry {
+    constructor(
+        readonly problemId: string,
+        readonly solvedCount: number,
+        readonly failedCount: number,
+
+        readonly intervalDays: IntervalDays,
+        readonly easeFactor: EaseFactor,
+        readonly nextReviewedAt: ReviewedAt,
+
+        readonly lastAnsweredAt?: number,
+        readonly lastResult?: AnswerResult,
+    ) { }
+    // --- 初期生成 ---
+    static initial(problemId: string, now: number): LearningEntry {
+        return new LearningEntry(
+            problemId,
+            0,
+            0,
+            IntervalDays.initial(),
+            EaseFactor.initial(),
+            ReviewedAt.at(Date.now()), // or ReviewedAt.at(now)
+            now,
+            undefined,
+        )
+    }
+    // --- 再構築（DTO / 永続化から）---
+    static restore(props: {
+        problemId: string
+        solvedCount: number
+        failedCount: number
+        intervalDays: IntervalDays
+        easeFactor: EaseFactor
+        nextReviewedAt: ReviewedAt
+        lastAnsweredAt?: number
+        lastResult?: AnswerResult
+    }): LearningEntry {
+        return new LearningEntry(
+            props.problemId,
+            props.solvedCount,
+            props.failedCount,
+            props.intervalDays,
+            props.easeFactor,
+            props.nextReviewedAt,
+            props.lastAnsweredAt,
+            props.lastResult,
+        )
+    }
+
+    answer(
+        result: AnswerResult,
+        quality: AnswerQuality,
+        now: number,
+    ): LearningEntry {
+        const { intervalDays, easeFactor, nextReviewedAt } =
+            this.calculateNext(quality, now)
+
+        return new LearningEntry(
+            this.problemId,
+            result === "solved" ? this.solvedCount + 1 : this.solvedCount,
+            result === "failed" ? this.failedCount + 1 : this.failedCount,
+            intervalDays,
+            easeFactor,
+            nextReviewedAt,
+            now,
+            result,
+        )
+    }
+
+    private calculateNext(quality: number, now: number) {
+        let interval = this.intervalDays.value()
+        let ef = this.easeFactor.value()
+
+        if (quality < 2) {
+            interval = 1
+        } else {
+            if (interval === 0) interval = 1
+            else if (interval === 1) interval = 3
+            else interval = Math.round(interval * ef)
+        }
+
+        ef = Math.max(
+            1.3,
+            ef + (0.1 - (3 - quality) * (0.08 + (3 - quality) * 0.02))
+        )
+
+        const nextInterval = IntervalDays.of(interval)
+
+        return {
+            intervalDays: nextInterval,
+            easeFactor: EaseFactor.of(ef),
+            nextReviewedAt: ReviewedAt.fromNow(now, nextInterval),
+        }
+    }
+
+
+    toDto(): LearningEntryDto {
+        return {
+            intervalDays: this.intervalDays.value(),
+            easeFactor: this.easeFactor.value(),
+            nextReviewedAt: this.nextReviewedAt.value(),
+        };
+    }
+}
+
+type LearningEntryDto = {
+    //problemId: string
+    //solvedCount: number
+    //failedCount: number
+    intervalDays: number
+    easeFactor: number
+    nextReviewedAt?: number
+    //lastAnsweredAt?: number
+    //lastResult?: AnswerResult
+}
+export type LearningRecord = Record<string, LearningEntry | undefined>
+
+/*
+/////////////////////////////////////
+export type LearningEntryOld = {
     problemId: string;
     solvedCount: number;
     failedCount: number;
@@ -12,13 +142,15 @@ export type LearningEntry = {
     intervalDays: IntervalDays
     easeFactor: EaseFactor
     nextReviewedAt?: ReviewedAt
-//    intervalDays: number        // 次回までの日数
-//    nextReviewedAt: number        // 次に解くべき時刻（ms）
+    //    intervalDays: number        // 次回までの日数
+    //    nextReviewedAt: number        // 次に解くべき時刻（ms）
     //easeFactor: number          // 習熟度（Anki系）
-//    easeFactor: EaseFactor
+    //    easeFactor: EaseFactor
 
     lastAnsweredAt?: number;
     lastResult?: AnswerResult,
 }
 
-export type LearningRecord = Record<string, LearningEntry | undefined>
+
+
+*/
