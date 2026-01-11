@@ -1,16 +1,16 @@
 import { describe, it, expect } from 'vitest'
-import { createProblem } from '../../factory'
 import { createKifContent } from '@/domain/kif/factory'
 import {  matchMateLength } from '../mateFilter'
 import { DefaultFilterState, type FilterState, type MateLengthFilter } from '../types'
 import { applyFilter } from '../applyFilter'
+import { Problem } from '../../Problem'
 
 describe("mate filter test", () => {
-    const p3 = createProblem({ id: "003", kifContent: createKifContent({ mateLength: 3 }) })
-    const p5 = createProblem({ id: "005", kifContent: createKifContent({ mateLength: 5 }) })
-    const p7 = createProblem({ id: "007", kifContent: createKifContent({ mateLength: 7 }) })
-    const p9 = createProblem({ id: "009", kifContent: createKifContent({ mateLength: 9 }) })
-    const p11 = createProblem({ id: "011", kifContent: createKifContent({ mateLength: 11 }) })
+    const p3 = Problem.create({ id: "003", kifContent: createKifContent({ mateLength: 3 }) })
+    const p5 = Problem.create({ id: "005", kifContent: createKifContent({ mateLength: 5 }) })
+    const p7 = Problem.create({ id: "007", kifContent: createKifContent({ mateLength: 7 }) })
+    const p9 = Problem.create({ id: "009", kifContent: createKifContent({ mateLength: 9 }) })
+    const p11 = Problem.create({ id: "011", kifContent: createKifContent({ mateLength: 11 }) })
 
     const problems = [p3, p5, p7, p9, p11]
 

@@ -1,15 +1,15 @@
 import { describe, it, expect } from "vitest";
 import { createBackupRestoreUsecase } from "@/usecase/backupRestore/backupRestoreUsecase";
-import { createProblem } from "@/domain/problem/factory";
 import { MockBackupWriter } from "./MockBackupWriter";
 import { InMemoryProblemRepository } from "@/infra/Repository/problem/InMemoryProblemRepository";
 import { InMemoryLearningRepository } from "@/infra/Repository/learning/InMemoryLearningRepository";
+import { Problem } from "@/domain/problem/Problem";
 
 describe("backupRestoreUsecase - backup", () => {
   it("problem と learning をバックアップできる", async () => {
     // arrange
-    const p1 = createProblem({ title: "foo" });
-    const p2 = createProblem({ title: "bar" });
+    const p1 = Problem.create({ title: "foo" });
+    const p2 = Problem.create({ title: "bar" });
 
     const problemRepo = new InMemoryProblemRepository([p1, p2]);
     const learningRepo = new InMemoryLearningRepository({

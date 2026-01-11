@@ -1,13 +1,12 @@
 import { describe, it, expect, vi } from "vitest";
 import { createImportProblemsUsecase } from "@/usecase/importProblems/importProblemsUsecase";
-import type { Problem } from "@/domain/problem/Problem";
+import { Problem } from "@/domain/problem/Problem";
 
 // buildProblem を mock
 vi.mock("@/domain/problem/factory", () => ({
     buildProblem: vi.fn(),
 }));
 
-import { buildProblem } from "@/domain/problem/factory";
 import { InMemoryProblemRepository } from "@/infra/Repository/problem/InMemoryProblemRepository";
 
 function createTestFile(
@@ -24,7 +23,7 @@ describe("importProblemsUsecase - single", () => {
             title: "test",
         } as any;
 
-        (buildProblem as any).mockReturnValue(problem);
+        (Problem.createFromText as any).mockReturnValue(problem);
 
         const repo = new InMemoryProblemRepository();
         const usecase = createImportProblemsUsecase(repo);
@@ -49,7 +48,7 @@ describe("importProblemsUsecase - single", () => {
 describe("importProblemsUsecase - multiple success", () => {
     it("複数ファイルをまとめてインポートできる", async () => {
         // arrange
-        (buildProblem as any)
+        (Problem.createFromText as any)
             .mockReturnValueOnce({ id: "p1" } as any)
             .mockReturnValueOnce({ id: "p2" } as any);
 

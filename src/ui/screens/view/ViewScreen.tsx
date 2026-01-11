@@ -3,14 +3,13 @@ import { Stack, Button, Box } from '@mui/material';
 
 import { AppLayout } from "@/ui/common/AppLayout"
 import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';
-import { createProblem } from '@/domain/problem/factory';
-import { BoardPanel } from '../player/components/BoardPanel';
 import MovesPanel from '../player/components/MovesPanel';
 import { PlyControl } from '../player/components/controlPanels/PlyControl';
 import { StarControl } from '../player/components/controlPanels/StarControl';
 import { useStoreContext } from '@/app/providers/StoreProvider';
 import BoardView from '../player/components/BoardView';
 import { SwipeWrapper } from '../player/components/SwipeWrapper';
+import { Problem } from '@/domain/problem/Problem';
 
 export default function ViewScreen() {
     const { id } = useParams<{ id: string }>();
@@ -21,7 +20,7 @@ export default function ViewScreen() {
     const stores = useStoreContext()
     const { problems, toggleStar } = stores.problem
 
-    const currentProblem = problems.find((p) => p.id === id) ?? createProblem()
+    const currentProblem = problems.find((p) => p.id === id) ?? Problem.create()
 
     const noop = () => { }
     const { board, hands, moves, currentPlyIndex,

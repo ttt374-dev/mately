@@ -15,7 +15,6 @@ import { useFsmContext } from '@/app/providers/FsmProvider';
 import { buildQueue } from '@/domain/problem/builder';
 import ProblemDetailDialog from '../../common/ProblemDetailDialog/ProblemDetailDialog';
 import { useProblemDetailDialog } from '@/application/useProblemDialog';
-import { createProblem } from '@/domain/problem/factory';
 import { useToast } from '@/app/providers/ToastProvider';
 import { useImportFiles } from '@/application/useImportFiles';
 
