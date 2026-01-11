@@ -1,3 +1,4 @@
+import { createLearningEntry } from "../factory/createLearningEntry";
 import type { LearningEntry, LearningRecord } from "../types";
 
 type Action =
@@ -11,14 +12,7 @@ export function learningReducer(state: LearningRecord, action: Action): Learning
         case 'SET_ALL':
             return action.payload;
         case 'UPDATE': {
-            const current = state[action.problemId] ?? {
-                problemId: action.problemId,
-                solvedCount: 0,
-                failedCount: 0,
-                intervalDays: 0,
-                nextReviewedAt: 0,
-                easeFactor: 0,
-            };
+            const current = state[action.problemId] ?? createLearningEntry(action.problemId)            
             return {
                 ...state,
                 [action.problemId]: action.updater(current),

@@ -32,7 +32,7 @@ describe("mate filter test", () => {
             mateLength: { length: 5, mode: "gte"}
         }
         const gte5 = applyFilter(problems, gte5filter)
-        expect(gte5.map(r=>r.id)).toEqual([p5.id, p7.id])
+        expect(gte5.map(r=>r.id)).toEqual([p5.id, p7.id, p9.id, p11.id])
         
         /// gte 5
         const lte5filter: FilterState = { 

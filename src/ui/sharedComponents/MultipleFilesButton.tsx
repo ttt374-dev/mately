@@ -5,52 +5,52 @@ import type { ButtonProps, IconButtonProps, ListItemButtonProps } from "@mui/mat
 
 
 export type MultipleFilesButtonHandle = {
-  open: () => void;
+    open: () => void;
 };
 
 
 //export type ButtonType = "button" | "icon" | "listItem";
 
 type Props = {
-  label?: string;
-  onFileSelected: (files: File[]) => void;
-  //type?: ButtonType; // 追加
-  buttonProps?: ButtonProps | IconButtonProps | ListItemButtonProps;
+    label?: string;
+    onFileSelected: (files: File[]) => void;
+    //type?: ButtonType; // 追加
+    buttonProps?: ButtonProps | IconButtonProps | ListItemButtonProps;
 }
 
 
 const MultipleFilesButton = React.forwardRef<
-  MultipleFilesButtonHandle,
-  Props
+    MultipleFilesButtonHandle,
+    Props
 >(function MultipleFilesButton(
-  { onFileSelected },
-  ref
+    { onFileSelected },
+    ref
 ) {
-  const fileRef = React.useRef<HTMLInputElement | null>(null);
+    const fileRef = React.useRef<HTMLInputElement | null>(null);
 
-  React.useImperativeHandle(ref, () => ({
-    open() {
-      fileRef.current?.click();
-    },
-  }));
+    React.useImperativeHandle(ref, () => ({
+        open() {
+            fileRef.current?.click();
+        },
+    }));
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      onFileSelected(Array.from(files));
-    }
-    e.target.value = "";
-  };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (files) {
+            onFileSelected(Array.from(files));
+        }
+        e.target.value = "";
+    };
 
-  return (
-    <input
-      type="file"
-      ref={fileRef}
-      multiple
-      accept="*.kif"
-      style={{ display: "none" }}
-      onChange={handleChange}
-    />
-  );
+    return (
+        <input
+            type="file"
+            ref={fileRef}
+            multiple
+            accept="*.kif"
+            style={{ display: "none" }}
+            onChange={handleChange}
+        />
+    );
 });
 export default MultipleFilesButton

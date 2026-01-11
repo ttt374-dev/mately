@@ -32,7 +32,8 @@ export const applyFilter = (
         // ミッション対象
         if (filter.isMissionTarget &&
             record?.nextReviewedAt !== undefined &&
-            record.nextReviewedAt > now
+            //record.nextReviewedAt > now
+            record.nextReviewedAt.isDue()
         ){
             return false
         }

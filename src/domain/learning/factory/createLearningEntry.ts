@@ -1,5 +1,4 @@
-import { v4 } from "uuid";
-import type { LearningEntry } from "../types";
+import { EaseFactor, IntervalDays, ReviewedAt, type LearningEntry } from "../types";
 
 export function createLearningEntry(problemId: string, partial?: Partial<LearningEntry>): LearningEntry {
   return {
@@ -8,9 +7,9 @@ export function createLearningEntry(problemId: string, partial?: Partial<Learnin
     failedCount: 0,
     lastAnsweredAt: Date.now(),
 
-    intervalDays: 0,
-    nextReviewedAt: Date.now(),
-    easeFactor: 2.5,
+    intervalDays: IntervalDays.initial(),
+    nextReviewedAt: ReviewedAt.now(),
+    easeFactor: EaseFactor.initial(),
     ...partial,
   };
 }
