@@ -1,6 +1,3 @@
-import { ListItemButton, ListItemText, IconButton, MenuItem, Menu } from '@mui/material';
-import { useToast } from '@/app/providers/ToastProvider';
-import ImportFilesButton from '@/ui/common/ImportFilesButton';
 import { GenericListMenu } from '@/ui/sharedComponents/GenericListMenu';
 
 type Props = {
@@ -8,23 +5,18 @@ type Props = {
     onDetailDialogOpen: () => void
 }
 export default function PlayerListMenu({
-    onDeleteProblem, onDetailDialogOpen
+    onDetailDialogOpen
 }: Props
 ) {
-    const toast = useToast()
 
-    return (
-        <GenericListMenu
-            menuItems={[
-                <>
-
-                    <MenuItem onClick={onDetailDialogOpen}>
-                        詳細
-                    </MenuItem>
-                </>
-            ]}
-        />
-
-    )
+    const menuItems = [
+        { 
+            key: "detailDialog",
+            label: "詳細・編集",
+            onClick: () => {onDetailDialogOpen()}
+        }
+    ]
+    return (<GenericListMenu menuItems={menuItems}/>)
+    
 
 }

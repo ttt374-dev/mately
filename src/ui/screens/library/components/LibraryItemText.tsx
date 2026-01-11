@@ -8,7 +8,7 @@ import { calcAccuracy } from '@/domain/learning/calcAccuracy';
 import { formatDate } from '@/utils';
 
 export function inDays(date: number): number {
-    return (date - Date.now()) / (60*60*24*100)
+    return (date - Date.now()) / (60*60*24*1000)
 }
 
 type Props = {
@@ -36,12 +36,13 @@ export default function LibraryItemText({ problem, learningEntry, onToggleStar }
             <Stack direction="row" justifyContent={"space-between"}>               
             
                 <Typography variant="body2" color="text.secondary">
-                    {formatDate(problem.createdAt)}
+                    {formatDate(problem.createdAt)},
+                    {problem.kifContent.mateLength}手詰め
                 </Typography>
 
                 {learningEntry && <>
                     <Typography variant="body2" color="text.primary">
-                        {(calcAccuracy(learningEntry) * 100).toFixed(1)}%/
+                        {(calcAccuracy(learningEntry) * 100).toFixed(0)}%/
                         ef:{ learningEntry.easeFactor.toFixed(2)}/
                         {inDays(learningEntry.nextReviewedAt).toFixed(0)}d
                         

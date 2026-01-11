@@ -2,12 +2,24 @@ import { IconButton, Menu, MenuItem, ListItemButton, ListItemText } from "@mui/m
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { type ReactNode, useState } from "react";
 
-type GenericMenuProps = {
-    menuItems: ReactNode[]; // メニューの中身を配列で渡す
+export type GenericMenuItem = {
+    key: string;
+    label: React.ReactNode;
+    onClick: () => void;
 };
+
+type GenericMenuProps = {
+    menuItems: GenericMenuItem[];
+};
+
+
+//type GenericMenuProps = {
+//    menuItems: ReactNode[]; // メニューの中身を配列で渡す
+//};
 
 export function GenericListMenu({ menuItems }: GenericMenuProps) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const closeMenu = () => setAnchorEl(null);
 
     return (
         <>
@@ -18,10 +30,18 @@ export function GenericListMenu({ menuItems }: GenericMenuProps) {
             <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
+                onClose={closeMenu}
             >
-                {menuItems.map((item, idx) => (
-                    <div key={idx}>{item}</div>
+                {menuItems.map(item => (
+                    <MenuItem
+                        key={item.key}
+                        onClick={() => {
+                            closeMenu();
+                            item.onClick();
+                        }}
+                    >
+                        {item.label}
+                    </MenuItem>
                 ))}
             </Menu>
         </>

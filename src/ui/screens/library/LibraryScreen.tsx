@@ -16,10 +16,13 @@ import { buildQueue } from '@/domain/problem/builder';
 import ProblemDetailDialog from '../../common/ProblemDetailDialog/ProblemDetailDialog';
 import { useProblemDetailDialog } from '@/application/useProblemDialog';
 import { createProblem } from '@/domain/problem/factory';
+import { useToast } from '@/app/providers/ToastProvider';
+import { useImportFiles } from '@/application/useImportFiles';
 
 ///////////////////////////////////////////////
 export default function LibraryScreen() {    
     //const [index, setIndex] = useState(0)
+    const toast = useToast()
 
     const [selectionMode, setSelectionMode] = useState(false)
     const [backupDialogOpen, setBackupDialogOpen] = useState(false)
@@ -62,6 +65,19 @@ export default function LibraryScreen() {
         //navigate(`/view/${problemId}`)
     }
     //// Dialog用
+    const handleImportFiles = async (files: File[]) => {        
+        const { importFiles } = useImportFiles()
+
+        const toast = useToast()
+
+        const result = await importFiles(files)
+        if (result.ok) {
+            toast({ message: `${result.count} 件インポートしました`, severity: "info" })
+        } else {
+            toast({ message: result.message, severity: "error" })
+        }
+
+    }
 
 
     //////////////////////////////////////////////////
@@ -71,7 +87,8 @@ export default function LibraryScreen() {
             rightActions={
             <LibraryListMenu 
                 onClearAllLearnings={clearAllLearnings}
-                onBackupDialogOpen={()=>setBackupDialogOpen(true)}                
+                onBackupDialogOpen={()=>setBackupDialogOpen(true)}      
+                onImportFiles={handleImportFiles}          
             />}            
         >            
             <LibraryControls

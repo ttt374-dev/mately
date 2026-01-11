@@ -10,12 +10,16 @@ export function createLearningStatRow(problem: Problem, learningEntry?: Learning
             value: new Date(problem.createdAt).toLocaleString("ja-JP"),
         },
         {
+            label: "詰め手数",
+            value: `${problem.kifContent.mateLength}手`,
+        },
+        {
             label: "UUID",
-            value: `${problem.id.slice(0, 10)}...`,
+            value: `${problem.id.slice(0, 8)}...`,
         },
         {
             label: "EaseFactor",
-            value: learningEntry?.easeFactor ?? "-",
+            value: learningEntry?.easeFactor.toFixed(2) ?? "-",
         },
         {
             label: "Next reviewed at",
@@ -24,7 +28,7 @@ export function createLearningStatRow(problem: Problem, learningEntry?: Learning
                 : "-",
         },
         {
-            label: "last reviewed at",
+            label: "last answered at",
             value: learningEntry?.lastAnsweredAt
                 ? new Date(learningEntry.lastAnsweredAt).toLocaleString("ja-JP")
                 : "-",

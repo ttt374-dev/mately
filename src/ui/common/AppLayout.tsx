@@ -6,7 +6,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert"
 import { useNavigate } from "react-router-dom";
 
 import BackupRestoreDialog from "./BackupRestoreDialog";
-import ImportFilesButton from "./ImportFilesButton";
 import { useStoreContext } from "@/app/providers/StoreProvider";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
