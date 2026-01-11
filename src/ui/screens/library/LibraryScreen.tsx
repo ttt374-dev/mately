@@ -26,7 +26,7 @@ export default function LibraryScreen() {
 
     const [selectionMode, setSelectionMode] = useState(false)
     const [backupDialogOpen, setBackupDialogOpen] = useState(false)
-    
+    const { importFiles } = useImportFiles()
     const fsm = useFsmContext()
     const { learningRecords, libraryList,
         removeMany, clearAllLearnings, toggleStar,        
@@ -66,10 +66,6 @@ export default function LibraryScreen() {
     }
     //// Dialog用
     const handleImportFiles = async (files: File[]) => {        
-        const { importFiles } = useImportFiles()
-
-        const toast = useToast()
-
         const result = await importFiles(files)
         if (result.ok) {
             toast({ message: `${result.count} 件インポートしました`, severity: "info" })
