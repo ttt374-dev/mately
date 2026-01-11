@@ -10,7 +10,7 @@ type Action =
 export function learningReducer(state: LearningRecord, action: Action): LearningRecord {
     switch (action.type) {
         case 'SET_ALL':
-            return action.payload;
+            return action.payload;  
         case 'UPDATE': {
             const current = state[action.problemId] ?? createLearningEntry(action.problemId)            
             return {

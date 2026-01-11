@@ -1,2 +1,5 @@
 export * from './LearningEntry'
 export * from './AnswerResult'
+export * from './EaseFactor'
+export * from './InternalDays'
+export * from './ReviewedAt'
