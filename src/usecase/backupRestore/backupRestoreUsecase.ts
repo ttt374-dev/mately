@@ -3,7 +3,7 @@
 import type { LearningRepository } from "@/domain/learning/LearningRepository"
 import type { LearningRecord } from "@/domain/learning/types"
 import type { ProblemRepository } from "@/domain/problem/problemRepository"
-import type { Problem } from "@/domain/problem/types/Problem"
+import type { Problem } from "@/domain/problem/Problem"
 
 export interface BackupRestoreUsecase {
   backup(): Promise<BackupRestoreResult> // TODO

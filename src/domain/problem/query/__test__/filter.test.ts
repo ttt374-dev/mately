@@ -1,17 +1,17 @@
 import { describe, it, expect } from 'vitest'
 
-import { createProblem } from '../../factory';
 import { DefaultFilterState, type FilterState, type SortState } from '../types';
 import { applySort } from '../applySort';
 import { applyFilter } from '../applyFilter';
 import { IntervalDays, LearningEntry, ReviewedAt } from '@/domain/learning/types';
+import { Problem } from '../../Problem';
 
 describe("filter test", () => {   
 
     it("unanswered", () => {
-        const p1 = createProblem({ id: "001"})
-        const p2 = createProblem({ id: "002"})
-        const p3 = createProblem({ id: "003"})
+        const p1 = Problem.create({ id: "001"})
+        const p2 = Problem.create({ id: "002"})
+        const p3 = Problem.create({ id: "003"})
         const problems = [p1, p2, p3]
 
         const l1 = LearningEntry.create("001", { solvedCount: 1})
@@ -27,9 +27,9 @@ describe("filter test", () => {
     })    
 /*  TODO
     it("ismissiontarget", () => {
-        const p1 = createProblem({ id: "001"})
-        const p2 = createProblem({ id: "002"})
-        const p3 = createProblem({ id: "003"})
+        const p1 = Problem.create({ id: "001"})
+        const p2 = Problem.create({ id: "002"})
+        const p3 = Problem.create({ id: "003"})
         const problems = [p1, p2, p3]
 
         const now = Date.now()

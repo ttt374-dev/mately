@@ -1,5 +1,5 @@
 import type { LearningRecord } from "@/domain/learning/types"
-import type { Problem } from "@/domain/problem/types/Problem"
+import type { Problem } from "@/domain/problem/Problem"
 
 export interface DeckStats {
   problemCount: number

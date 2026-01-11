@@ -11,36 +11,20 @@ type Action =
     | { type: 'REMOVE_MANY'; problemIds: string[] }
     | { type: 'CLEAR_ALL' };
 
-function judgeAnswerQuality(answer: AnswerResult, sec: number): AnswerQuality {
-    if (answer === "failed") return 0
-    if (sec < 10) return 3
-    return 0
-}
-
 export function learningReducer(state: LearningRecord, action: Action): LearningRecord {
     switch (action.type) {
         case 'SET_ALL':
             return action.payload;
         case 'ANSWER': {
-            const current =
-                state[action.problemId] ??
-                LearningEntry.create(action.problemId);
-
-            const quality = judgeAnswerQuality(
-                action.answerResult,
-                action.secondsToAnswer ?? 20
-            );
-
+            const current = state[action.problemId] ?? LearningEntry.create(action.problemId);
+            
             const updated = current.answer(
-                action.answerResult,
-                quality,
+                action.answerResult, 
+                action.secondsToAnswer,
                 action.now
             );
 
-            return {
-                ...state,
-                [action.problemId]: updated,
-            };
+            return {...state, [action.problemId]: updated,};
         }
         /*
         case 'UPDATE': {

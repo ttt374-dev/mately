@@ -1,6 +1,6 @@
 // domain/problemRecord/sortProblemRecords.ts
 import type { LearningEntry, LearningRecord } from "../../learning/types"
-import type { Problem } from "../types/Problem"
+import type { Problem } from "../Problem"
 import type { SortState, SortKey, SortOrder } from "./types/Sort"
 
 

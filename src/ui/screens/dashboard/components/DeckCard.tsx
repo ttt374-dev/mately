@@ -1,6 +1,6 @@
 
 import type { LearningRecord } from '@/domain/learning/types';
-import type { Problem } from '@/domain/problem/types/Problem';
+import type { Problem } from '@/domain/problem/Problem';
 import { Box, List, ListItem, Button, Stack, Paper, Typography, Grid, Card, CardHeader } from '@mui/material'
 import { calcDeckStats } from '../utils/calcDeckStats';
 import type React from 'react';

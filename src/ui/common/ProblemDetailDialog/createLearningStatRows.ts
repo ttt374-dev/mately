@@ -1,5 +1,5 @@
 import type { LearningEntry } from "@/domain/learning/types";
-import type { Problem } from "@/domain/problem/types/Problem";
+import type { Problem } from "@/domain/problem/Problem";
 
 
 export function createLearningStatRow(problem: Problem, learningEntry?: LearningEntry){

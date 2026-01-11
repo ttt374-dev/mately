@@ -1,6 +1,6 @@
 import { Checkbox, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import LibraryItemText from "./LibraryItemText";
-import type { Problem } from "@/domain/problem/types/Problem";
+import type { Problem } from "@/domain/problem/Problem";
 import type { LearningEntry } from "@/domain/learning/types";
 import { useLongPress } from "../hooks/useLongPress";
 

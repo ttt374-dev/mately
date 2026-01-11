@@ -1,5 +1,5 @@
 import type { ProblemRepository } from "@/domain/problem/problemRepository";
-import type { Problem } from "@/domain/problem/types/Problem";
+import type { Problem } from "@/domain/problem/Problem";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
 const LIB_FILE = "problem.json";

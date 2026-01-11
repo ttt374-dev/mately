@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Stack, Button, Box } from '@mui/material';
 
 import { AppLayout } from "@/ui/common/AppLayout"
-import type { Problem } from '@/domain/problem/types/Problem';
+import type { Problem } from '@/domain/problem/Problem';
 import type { FsmState } from '@/domain/fsm/types';
 import { useEffect, useMemo, useState } from 'react';
 import { useReplayView } from '@/ui/screens/player/hooks/useReplayView';

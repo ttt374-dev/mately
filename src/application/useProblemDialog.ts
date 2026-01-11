@@ -1,5 +1,5 @@
 import { useStoreContext } from "@/app/providers/StoreProvider"
-import type { Problem } from "@/domain/problem/types/Problem"
+import type { Problem } from "@/domain/problem/Problem"
 import { useState } from "react"
 
 export function useProblemDetailDialog(

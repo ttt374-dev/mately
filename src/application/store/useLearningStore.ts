@@ -65,7 +65,7 @@ export function useLearningStore (repository: LearningRepository){
 
 
     return {
-        //records,
+        records,
         learningRecords: records,        
         reload, removeMany,
         

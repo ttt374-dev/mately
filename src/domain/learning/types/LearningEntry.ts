@@ -50,9 +50,11 @@ export class LearningEntry {
 
     answer(
         result: AnswerResult,
-        quality: AnswerQuality,
+        //quality: AnswerQuality,
+        secondsToAnswer: number = 20,
         now: number = Date.now(),
     ): LearningEntry {
+        const quality = this.judgeAnswerQuality(result, secondsToAnswer)
         const { intervalDays, easeFactor, nextReviewedAt } =
             this.calculateNext(quality, now)
 
@@ -67,7 +69,11 @@ export class LearningEntry {
             result,
         )
     }
-
+    private judgeAnswerQuality(answer: AnswerResult, sec: number): AnswerQuality {
+        if (answer === "failed") return 0
+        if (sec < 10) return 3
+        return 0
+    }
     private calculateNext(quality: number, now: number) {
         let interval = this.intervalDays.value
         let ef = this.easeFactor.value

@@ -2,7 +2,7 @@ import { List, Box, Stack, } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { AppLayout } from "@/ui/common/AppLayout"
-import type { Problem } from '@/domain/problem/types/Problem';
+import type { Problem } from '@/domain/problem/Problem';
 import { useQueryContext } from '@/app/providers/QueryProvider';
 import { useState } from 'react';
 import BackupRestoreDialog from '@/ui/common/BackupRestoreDialog';

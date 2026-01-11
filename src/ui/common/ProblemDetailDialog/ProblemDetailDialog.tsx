@@ -1,7 +1,7 @@
 import { Divider } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Box, Button } from "@mui/material"
 
-import type { Problem } from "@/domain/problem/types/Problem";
+import type { Problem } from "@/domain/problem/Problem";
 import type { LearningEntry } from "@/domain/learning/types";
 import { LearningStats } from "./LearningStats";
 import { EditableTitle } from "./EditableTitle";

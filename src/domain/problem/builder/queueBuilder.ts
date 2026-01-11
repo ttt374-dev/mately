@@ -1,5 +1,5 @@
 import type { QueueItem } from "@/domain/fsm/types"
-import type { Problem } from '@/domain/problem/types/Problem'
+import type { Problem } from '@/domain/problem/Problem'
 
 
 export const buildQueue = (problems: Problem[]): QueueItem[] => {       

@@ -1,5 +1,5 @@
 import { useReducer, useEffect } from "react";
-import type { Problem } from "@/domain/problem/types/Problem";
+import type { Problem } from "@/domain/problem/Problem";
 import type { ProblemRepository } from "@/domain/problem/problemRepository";
 import { problemReducer } from "@/domain/problem/stores/problemReducer";
 

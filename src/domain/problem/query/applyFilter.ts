@@ -1,6 +1,6 @@
 import { LeakRemove } from "@mui/icons-material";
 import type { LearningEntry, LearningRecord } from "../../learning/types";
-import type { Problem } from "../types/Problem"
+import type { Problem } from "../Problem"
 import type { FilterState } from "./types/Filter";
 import { matchMateBuckets, matchMateLength } from "./mateFilter";
 

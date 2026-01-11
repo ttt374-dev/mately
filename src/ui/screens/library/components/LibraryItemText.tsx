@@ -2,7 +2,7 @@ import { Box, Stack, Typography, IconButton } from '@mui/material';
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder"; 
 
-import type { Problem } from '@/domain/problem/types/Problem';
+import type { Problem } from '@/domain/problem/Problem';
 import type { LearningEntry } from '@/domain/learning/types';
 import { formatDate } from '@/utils';
 
