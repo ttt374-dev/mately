@@ -11,9 +11,11 @@ export type ProblemInit = {
     starred?: boolean
 }
 
+export type ProblemId = string
+
 export class Problem {
     constructor(
-        readonly id: string,
+        readonly id: ProblemId,
         readonly title: string,
         readonly createdAt: number,
         readonly kifContent: KifContent,
@@ -35,6 +37,9 @@ export class Problem {
         if (kifContentResult.ok === false) return null
         return this.create({kifContent: kifContentResult.value, title: title})
         //return new Problem(v4(), title, now,  kifContentResult.value, false)        
+    }
+    toggleStar() {
+        return Problem.create({...this, starred: !this.starred})
     }
 
 }
