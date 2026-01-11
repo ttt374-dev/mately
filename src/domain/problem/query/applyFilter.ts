@@ -33,7 +33,7 @@ export const applyFilter = (
         if (filter.isMissionTarget &&
             record?.nextReviewedAt !== undefined &&
             //record.nextReviewedAt > now
-            record.nextReviewedAt.isDue()
+            record.nextReviewedAt.isDue
         ){
             return false
         }

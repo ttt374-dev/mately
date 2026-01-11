@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 
-import { createLearningEntry } from '@/domain/learning/factory/createLearningEntry';
 import { createProblem } from '../../factory';
 import { applySort } from '../applySort';
 import type { SortState } from '../types';
+import { LearningEntry } from '@/domain/learning/types';
 
 
 describe("sort test", () => {   
@@ -28,9 +28,9 @@ describe("sort test", () => {
         const p3 = createProblem({ id: "003",  })
         const problems = [p1, p2, p3]
 
-        const l1 = createLearningEntry("001", { solvedCount:2, failedCount: 1})
-        const l2 = createLearningEntry("002", { solvedCount:2, failedCount: 0})
-        const l3 = createLearningEntry("003", { solvedCount:0, failedCount: 2})
+        const l1 = LearningEntry.create("001",  { solvedCount:2, failedCount: 1})
+        const l2 = LearningEntry.create("002", { solvedCount:2, failedCount: 0})
+        const l3 = LearningEntry.create("003", { solvedCount:0, failedCount: 2})
         const learningRecords = {
             [l1.problemId]: l1,
             [l2.problemId]: l2,

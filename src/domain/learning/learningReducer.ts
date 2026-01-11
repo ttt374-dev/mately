@@ -1,16 +1,17 @@
-import { createLearningEntry } from "../factory/createLearningEntry";
-import { LearningEntry, type AnswerResult, type LearningRecord } from "../types";
+//import { createLearningEntry } from "../factory/createLearningEntry";
+import { LearningEntry, type AnswerResult, type LearningRecord } from "./types";
+import type { AnswerQuality } from "./types/AnswerQuality";
 
-export type AnswerQuality = 0 | 1 | 2 | 3
+
 type Action =
     | { type: 'SET_ALL'; payload: LearningRecord }
-    | { type: 'ANSWER'; problemId: string, result: AnswerResult, 
+    | { type: 'ANSWER'; problemId: string, answerResult: AnswerResult, 
             secondsToAnswer?: number, now: number}
-    | { type: 'UPDATE'; problemId: string; updater: (r: LearningEntry) => LearningEntry }
+    //| { type: 'UPDATE'; problemId: string; updater: (r: LearningEntry) => LearningEntry }
     | { type: 'REMOVE_MANY'; problemIds: string[] }
     | { type: 'CLEAR_ALL' };
 
-export function judgeAnswerQuality(answer: AnswerResult, sec: number): AnswerQuality {
+function judgeAnswerQuality(answer: AnswerResult, sec: number): AnswerQuality {
     if (answer === "failed") return 0
     if (sec < 10) return 3
     return 0
@@ -23,15 +24,15 @@ export function learningReducer(state: LearningRecord, action: Action): Learning
         case 'ANSWER': {
             const current =
                 state[action.problemId] ??
-                createLearningEntry(action.problemId, action.now);
+                LearningEntry.create(action.problemId);
 
             const quality = judgeAnswerQuality(
-                action.result,
+                action.answerResult,
                 action.secondsToAnswer ?? 20
             );
 
             const updated = current.answer(
-                action.result,
+                action.answerResult,
                 quality,
                 action.now
             );

@@ -42,8 +42,8 @@ export const ResultSummary = ({ learningEntry }: {
                 </Typography>
             </Stack>
             <Stack direction="row">
-                <Typography variant="body2">ef:{`${learningEntry.easeFactor.value().toFixed(2)}`}  /</Typography> 
-                <Typography variant="body2">/ in {inDays(learningEntry.nextReviewedAt?.value() ?? 0).toFixed(0)}d</Typography>
+                <Typography variant="body2">ef:{`${learningEntry.easeFactor.value.toFixed(2)}`}  /</Typography> 
+                <Typography variant="body2">/ in {inDays(learningEntry.nextReviewedAt?.value ?? 0).toFixed(0)}d</Typography>
             </Stack>
         </Stack>
     )

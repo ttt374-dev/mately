@@ -25,5 +25,5 @@ export class IntervalDays {
     return IntervalDays.of(Math.round(this.daysValue * ease.easeValue))
   }
 
-  value() { return this.daysValue}
+  get value() { return this.daysValue}
 }

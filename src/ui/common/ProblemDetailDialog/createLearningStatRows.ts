@@ -19,12 +19,12 @@ export function createLearningStatRow(problem: Problem, learningEntry?: Learning
         },
         {
             label: "EaseFactor",
-            value: learningEntry?.easeFactor.value().toFixed(2) ?? "-",
+            value: learningEntry?.easeFactor.value.toFixed(2) ?? "-",
         },
         {
             label: "Next reviewed at",
             value: learningEntry?.nextReviewedAt
-                ? learningEntry.nextReviewedAt.value().toLocaleString("ja-JP")
+                ? learningEntry.nextReviewedAt.value.toLocaleString("ja-JP")
                 : "-",
         },
         {

@@ -1,11 +1,10 @@
 import { describe, it, expect } from 'vitest'
 
 import { createProblem } from '../../factory';
-import { createLearningEntry } from '@/domain/learning/factory/createLearningEntry';
 import { DefaultFilterState, type FilterState, type SortState } from '../types';
 import { applySort } from '../applySort';
 import { applyFilter } from '../applyFilter';
-import { IntervalDays, ReviewedAt } from '@/domain/learning/types';
+import { IntervalDays, LearningEntry, ReviewedAt } from '@/domain/learning/types';
 
 describe("filter test", () => {   
 
@@ -15,8 +14,8 @@ describe("filter test", () => {
         const p3 = createProblem({ id: "003"})
         const problems = [p1, p2, p3]
 
-        const l1 = createLearningEntry("001", { solvedCount: 1})
-        const l2 = createLearningEntry("002", { solvedCount: 0})
+        const l1 = LearningEntry.create("001", { solvedCount: 1})
+        const l2 = LearningEntry.create("002", { solvedCount: 0})
         const records = {
             [l1.problemId]: l1,
             [l2.problemId]: l2,

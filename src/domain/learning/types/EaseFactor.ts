@@ -14,7 +14,7 @@ export class EaseFactor {
       0.1 - (3 - quality) * (0.08 + (3 - quality) * 0.02)
     return EaseFactor.of(this.easeValue + delta)
   }
-  value() {
+  get value() {
     return this.easeValue
   } 
 }

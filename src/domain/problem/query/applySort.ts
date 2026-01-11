@@ -1,5 +1,4 @@
 // domain/problemRecord/sortProblemRecords.ts
-import { calcAccuracy } from "../../learning/calcAccuracy"
 import type { LearningEntry, LearningRecord } from "../../learning/types"
 import type { Problem } from "../types/Problem"
 import type { SortState, SortKey, SortOrder } from "./types/Sort"
@@ -38,8 +37,8 @@ export function applySort(
 
         case "accuracy":
           if (!learningRecords) return 0                    
-          const aAcc = calcAccuracy(rA) 
-          const bAcc = calcAccuracy(rB) 
+          const aAcc = rA?.accuracy ?? 0
+          const bAcc = rB?.accuracy ?? 0
           return sort.order === "asc" ? aAcc - bAcc : bAcc - aAcc
           break
         case "easeFactor":

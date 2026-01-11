@@ -1,8 +1,9 @@
-import type { AnswerQuality } from "../stores/learningReducer";
+import { NextWeekRounded } from "@mui/icons-material";
 import type { AnswerResult } from "./AnswerResult";
 import { EaseFactor } from "./EaseFactor";
 import { IntervalDays } from "./InternalDays";
 import { ReviewedAt } from "./ReviewedAt";
+import type { AnswerQuality } from "./AnswerQuality";
 
 export type LearningEntryInit = {
   solvedCount?: number
@@ -13,6 +14,7 @@ export type LearningEntryInit = {
   lastAnsweredAt?: number
   lastResult?: AnswerResult
 }
+
 
 export class LearningEntry {
     constructor(
@@ -28,45 +30,28 @@ export class LearningEntry {
         readonly lastResult?: AnswerResult,
     ) { }
     // --- 初期生成 ---
-    static initial(problemId: string, now: number): LearningEntry {
+    static create(problemId: string, partial?: LearningEntryInit): LearningEntry {
+        const now = Date.now()
         return new LearningEntry(
             problemId,
-            0,
-            0,
-            IntervalDays.initial(),
-            EaseFactor.initial(),
-            ReviewedAt.at(Date.now()), // or ReviewedAt.at(now)
-            now,
-            undefined,
+            partial?.solvedCount ?? 0,
+            partial?.failedCount ?? 0,
+            partial?.intervalDays ?? IntervalDays.initial(),
+            partial?.easeFactor ?? EaseFactor.initial(),
+            partial?.nextReviewedAt ?? ReviewedAt.at(now),
+            partial?.lastAnsweredAt ?? now,
+            partial?.lastResult,
         )
     }
-    // --- 再構築（DTO / 永続化から）---
-    static restore(props: {
-        problemId: string
-        solvedCount: number
-        failedCount: number
-        intervalDays: IntervalDays
-        easeFactor: EaseFactor
-        nextReviewedAt: ReviewedAt
-        lastAnsweredAt?: number
-        lastResult?: AnswerResult
-    }): LearningEntry {
-        return new LearningEntry(
-            props.problemId,
-            props.solvedCount,
-            props.failedCount,
-            props.intervalDays,
-            props.easeFactor,
-            props.nextReviewedAt,
-            props.lastAnsweredAt,
-            props.lastResult,
-        )
-    }
+    // getter
+    get totalCount(): number { return this.solvedCount + this.failedCount}
+    get accuracy(): number { return this.totalCount === 0 ? 0 : this.solvedCount / this.totalCount }
+    get isDue(): boolean { return this.nextReviewedAt.isDue }   
 
     answer(
         result: AnswerResult,
         quality: AnswerQuality,
-        now: number,
+        now: number = Date.now(),
     ): LearningEntry {
         const { intervalDays, easeFactor, nextReviewedAt } =
             this.calculateNext(quality, now)
@@ -84,8 +69,8 @@ export class LearningEntry {
     }
 
     private calculateNext(quality: number, now: number) {
-        let interval = this.intervalDays.value()
-        let ef = this.easeFactor.value()
+        let interval = this.intervalDays.value
+        let ef = this.easeFactor.value
 
         if (quality < 2) {
             interval = 1
@@ -109,7 +94,7 @@ export class LearningEntry {
         }
     }
 
-
+/*
     toDto(): LearningEntryDto {
         return {
             intervalDays: this.intervalDays.value(),
@@ -117,8 +102,10 @@ export class LearningEntry {
             nextReviewedAt: this.nextReviewedAt.value(),
         };
     }
+        */
 }
 
+/*
 type LearningEntryDto = {
     //problemId: string
     //solvedCount: number
@@ -129,9 +116,12 @@ type LearningEntryDto = {
     //lastAnsweredAt?: number
     //lastResult?: AnswerResult
 }
+    */
 export type LearningRecord = Record<string, LearningEntry | undefined>
 
 /*
+
+
 /////////////////////////////////////
 export type LearningEntryOld = {
     problemId: string;
@@ -153,4 +143,29 @@ export type LearningEntryOld = {
 
 
 
+*/
+
+    /*
+    // --- 再構築（DTO / 永続化から）---
+    static restore(props: {
+        problemId: string
+        solvedCount: number
+        failedCount: number
+        intervalDays: IntervalDays
+        easeFactor: EaseFactor
+        nextReviewedAt: ReviewedAt
+        lastAnsweredAt?: number
+        lastResult?: AnswerResult
+    }): LearningEntry {
+        return new LearningEntry(
+            props.problemId,
+            props.solvedCount,
+            props.failedCount,
+            props.intervalDays,
+            props.easeFactor,
+            props.nextReviewedAt,
+            props.lastAnsweredAt,
+            props.lastResult,
+        )
+    }
 */

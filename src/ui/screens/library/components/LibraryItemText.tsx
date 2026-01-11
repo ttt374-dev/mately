@@ -4,7 +4,6 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 import type { Problem } from '@/domain/problem/types/Problem';
 import type { LearningEntry } from '@/domain/learning/types';
-import { calcAccuracy } from '@/domain/learning/calcAccuracy';
 import { formatDate } from '@/utils';
 
 export function inDays(date: number): number {
@@ -42,9 +41,9 @@ export default function LibraryItemText({ problem, learningEntry, onToggleStar }
 
                 {learningEntry && <>
                     <Typography variant="body2" color="text.primary">
-                        {(calcAccuracy(learningEntry) * 100).toFixed(0)}%/
-                        ef:{ learningEntry.easeFactor.value().toFixed(2)}/
-                        {inDays(learningEntry.nextReviewedAt?.value() ?? 0).toFixed(0)}d
+                        {(learningEntry.accuracy * 100).toFixed(0)}%/
+                        ef:{ learningEntry.easeFactor.value.toFixed(2)}/
+                        {inDays(learningEntry.nextReviewedAt?.value ?? 0).toFixed(0)}d
                         
                     </Typography>
                     
