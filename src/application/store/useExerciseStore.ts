@@ -38,12 +38,13 @@ export function useExerciseStore(
     // Action helpers
     const reload = async () => {
         const problems = await problemRepo.load();
-        const learnings = await learningRepo.load();
+        const learnings = await learningRepo.load();        
 
-        const exercise: Exercise[] = problems.map(p => ({
-            problem: p,
-            learning: learnings[p.id] ?? LearningEntry.create(p.id),
-        }));
+        const exercise: Exercise[] = problems.map(p => {
+            const learning = learnings[p.id] ?? LearningEntry.create(p.id)
+            return new Exercise(p, learning)
+        })   
+            
         dispatch({ type: 'SET_ALL', payload: exercise });
     }
     const reset = async () => {
@@ -52,13 +53,6 @@ export function useExerciseStore(
     const update = async (problemId: string, updater: (p: Exercise) => Exercise) => {
         // updater は Problem インスタンスのメソッドを呼ぶ形にする
         dispatch({ type: "UPDATE", payload: { id: problemId, updater } });
-
-        const next = state.map(e => {
-            if (e.problem.id === problemId) {
-                updater(e); // Problem クラスのメソッドで更新
-            }
-            return e;
-        });
     };
 
     const remove = async (problemId: string) => dispatch({ type: 'REMOVE', problemId });

@@ -37,7 +37,7 @@ describe("sort test", () => {
         const learnings = [l1, l2, l3]
         
         //const exercises: Exercise[] = [0,1,2].map(i => { return { problem: problems[i], learning: learnings[i]}}) 
-        const exercises: Exercise[] = [0,1,2].map(i => ({ problem: problems[i], learning: learnings[i]})) 
+        const exercises: Exercise[] = [0,1,2].map(i => (new Exercise(problems[i], learnings[i]))) 
 
         const sort: SortState = { key: "accuracy", order: "asc"}
         const sorted = applySort(exercises, sort)

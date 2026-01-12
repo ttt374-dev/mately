@@ -1,3 +1,4 @@
+/*
 import { LearningEntry, type AnswerResult, type LearningRecord } from "./types";
 
 
@@ -24,14 +25,7 @@ export function learningReducer(state: LearningRecord, action: Action): Learning
 
             return {...state, [action.problemId]: updated,};
         }
-        /*
-        case 'UPDATE': {
-            const current = state[action.problemId] ?? createLearningEntry(action.problemId)            
-            return {
-                ...state,
-                [action.problemId]: action.updater(current),
-            };
-        }*/
+
         case 'REMOVE_MANY': {
             const next = { ...state };
             let changed = false;
@@ -49,3 +43,4 @@ export function learningReducer(state: LearningRecord, action: Action): Learning
             return state;
     }
 }
+*/

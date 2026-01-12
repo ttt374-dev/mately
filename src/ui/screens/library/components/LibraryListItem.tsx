@@ -37,6 +37,8 @@ export default function LibraryListItem({
         
     })
 
+    console.log("list item", exercise)
+
     return (
         <ListItem
             disablePadding

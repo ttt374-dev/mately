@@ -1,4 +1,3 @@
-import { NextWeekRounded } from "@mui/icons-material";
 import type { AnswerResult } from "./AnswerResult";
 import { EaseFactor } from "./EaseFactor";
 import { IntervalDays } from "./InternalDays";
@@ -39,7 +38,7 @@ export class LearningEntry {
             partial?.intervalDays ?? IntervalDays.initial(),
             partial?.easeFactor ?? EaseFactor.initial(),
             partial?.nextReviewedAt ?? ReviewedAt.at(now),
-            partial?.lastAnsweredAt ?? now,
+            partial?.lastAnsweredAt,
             partial?.lastResult,
         )
     }

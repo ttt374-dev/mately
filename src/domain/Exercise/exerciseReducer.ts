@@ -1,5 +1,5 @@
 import type { AnswerResult } from "../learning/types";
-import type { Problem, ProblemId } from "../problem/Problem";
+import { Problem, type ProblemId } from "../problem/Problem";
 import { Exercise } from "./Exercise";
 
 type Action =
@@ -27,17 +27,10 @@ export function exerciseReducer(
     case 'ANSWER': {
       return state.map(ex => {
         if (ex.problem.id !== action.problemId) return ex;
-
-        const updatedLearning = ex.learning.answer(
+        return ex.answer(
           action.answerResult,
-          action.secondsToAnswer ?? 20,
-          action.now
-        );
-
-        return {
-          ...ex,
-          learning: updatedLearning,
-        };
+          action.secondsToAnswer,
+          action.now)
       });
     }
 
@@ -47,7 +40,7 @@ export function exerciseReducer(
         return state.map((p, i) => (i === index ? action.payload.updater(p) : p));
       } else {
         // 新規作成
-        return [...state, action.payload.updater(Exercise.create())]
+        return [...state, action.payload.updater(Exercise.create(Problem.create()))]
       }
 
     case 'REMOVE': {

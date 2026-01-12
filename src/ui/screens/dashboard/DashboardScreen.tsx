@@ -21,6 +21,7 @@ export default function DashboardScreen(){
 
     const exercises = useStoreContext().exercises
 
+
     //const problems = stores.problem.problems
     //const learningRecords = stores.learning.records
     const queriedExercises = useMemo(()=> {
@@ -57,7 +58,7 @@ export default function DashboardScreen(){
                         <DeckCard title="Mission" exercises={queriedExercises} />
                     </Grid>
                     <Grid size={6}>
-                        { /* <DeckCard title="All" exercises={problems} />*/ }
+                        <DeckCard title="All" exercises={exercises} />
                     </Grid>           
                     <Grid size={12}>
                     <DashboardFilterControl/>

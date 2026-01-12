@@ -1,3 +1,4 @@
+/*
 import { useState, useEffect, useReducer, useRef } from 'react';
 
 import type { LearningRepository } from '@/domain/learning/LearningRepository';
@@ -5,7 +6,7 @@ import type { LearningEntry, LearningRecord } from '@/domain/learning/types/Lear
 import type { AnswerResult } from '@/domain/learning/types';
 //import { judgeAnswerQuality, scheduleNext } from '@/domain/learning/scheduleNext';
 import { learningReducer } from '@/domain/learning/learningReducer';
-/*
+
 ////////////////////////////////////
 export function useLearningStore (repository: LearningRepository){
     const [records, dispatch] = useReducer(learningReducer, {});
