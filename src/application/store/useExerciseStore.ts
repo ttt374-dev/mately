@@ -6,6 +6,7 @@ import type { ProblemRepository } from "@/domain/problem/problemRepository";
 import { exerciseReducer } from "@/domain/Exercise/exerciseReducer";
 import { LearningEntry, type AnswerResult, type LearningRecord } from "@/domain/learning/types";
 import  { Exercise } from "@/domain/Exercise/Exercise";
+import ProblemDetailDialog from "@/ui/common/ProblemDetailDialog/ProblemDetailDialog";
 
 
 export function useExerciseStore(
@@ -77,6 +78,11 @@ export function useExerciseStore(
     const markAnswer = async (problemId: string, answerResult: AnswerResult, secondsToAnswer?: number) =>
         dispatch({ type: 'ANSWER', problemId, answerResult, secondsToAnswer, now: Date.now() });
 
+    const markSolved = async (problemId: ProblemId, secondsToAnswer?: number) => 
+        markAnswer(problemId, "solved", secondsToAnswer)
+    const markFailed = async (problemId: ProblemId, secondsToAnswer?: number) => 
+        markAnswer(problemId, "failed", secondsToAnswer)
+    
     const toggleStar = async (problemId: string) => {                
         update(problemId, e => {            
             return new Exercise(e.problem.toggleStar(), e.learning)
@@ -98,6 +104,6 @@ export function useExerciseStore(
         addProblem,
         updateTitle, toggleStar,
         
-        markAnswer,
+        markAnswer, markSolved, markFailed
     };
 }

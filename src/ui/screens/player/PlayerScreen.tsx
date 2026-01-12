@@ -21,8 +21,13 @@ import PlayerListMenu from './components/PlayerListMenu';
 import { useToast } from '@/app/providers/ToastProvider';
 import ProblemDetailDialog from '../../common/ProblemDetailDialog/ProblemDetailDialog';
 import { useProblemDetailDialog } from '@/application/useProblemDialog';
+import { useExerciseStore } from '@/application/store/useExerciseStore';
+import type { Exercise } from '@/domain/Exercise/Exercise';
 
-
+const getCurrentExercise = (fsmState: FsmState, exercises: Exercise[]): Exercise | null => {
+    const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
+    return exercises.find((e) => e.problem.id === problemId) ?? null
+}
 const getCurrentProblem = (fsmState: FsmState, problems: Problem[]): Problem | null => {
     const problemId = fsmState.queue[fsmState.currentIndex]?.problemId
     return problems.find((p) => p.id === problemId) ?? null
@@ -36,9 +41,14 @@ export default function PlayerScreen() {
 
     const currentPhase = fsmState.phase
     const stores = useStoreContext()
-    const currentProblem = useMemo(()=>
-        getCurrentProblem(fsmState, stores.problem.problems),
-    [fsmState, stores.problem.problems])
+    const currentExercise = useMemo(()=>
+        getCurrentExercise(fsmState, stores.exercise.exercises),
+    [fsmState, stores.exercise])
+
+    const currentProblem = currentExercise?.problem
+    //const currentProblem = useMemo(()=>
+    //    getCurrentProblem(fsmState, stores.exercise.exercises.map(e=> e.problem)),
+    //fsmState, stores.exercise])
 
     // replay
     const kifContent = currentProblem?.kifContent ?? createKifContent()
@@ -47,9 +57,10 @@ export default function PlayerScreen() {
         moveToPly, resetPly,
     } = useReplayView(kifContent)
 
-    const { learningRecords, //toggleStar,
-        markSolved: learningMarkSolved, markFailed: learningMarkFailed,
-    } = stores.learning //useLearningRecordsContext()
+    const { markAnswer, markSolved, markFailed } = stores.exercise
+        //const { learningRecords, //toggleStar,
+    //    markSolved: learningMarkSolved, markFailed: learningMarkFailed,
+    //} = stores.learning //useLearningRecordsContext()
 
     // use tools
     const timer = useTimer()
@@ -96,16 +107,17 @@ export default function PlayerScreen() {
     
 
     // 学習情報
-    const learningEntry: LearningEntry | undefined = learningRecords[currentProblem.id]
+    ////const learningEntry: LearningEntry | undefined = learningRecords[currentProblem.id]
+    const learningEntry = currentExercise.learning
 
     /////////////////////////////////////
     // ハンドラー
     const handleSolve = () => {
-        learningMarkSolved(currentProblem.id, timer.seconds)
+        markSolved(currentProblem.id, timer.seconds)
         solve()
     }
     const handleFail = () => {
-        learningMarkFailed(currentProblem.id, timer.seconds)
+        markFailed(currentProblem.id, timer.seconds)
         fail()
     }
     const handleBack = () => {
