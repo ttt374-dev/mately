@@ -40,10 +40,10 @@ export default function PlayerScreen() {
     } = useFsmContext()
 
     const currentPhase = fsmState.phase
-    const stores = useStoreContext()
+    const store = useStoreContext()
     const currentExercise = useMemo(()=>
-        getCurrentExercise(fsmState, stores.exercise.exercises),
-    [fsmState, stores.exercise])
+        getCurrentExercise(fsmState, store.exercises),
+    [fsmState, store.exercises])
 
     const currentProblem = currentExercise?.problem
     //const currentProblem = useMemo(()=>
@@ -57,7 +57,7 @@ export default function PlayerScreen() {
         moveToPly, resetPly,
     } = useReplayView(kifContent)
 
-    const { markAnswer, markSolved, markFailed } = stores.exercise
+    const { markAnswer, markSolved, markFailed } = store
         //const { learningRecords, //toggleStar,
     //    markSolved: learningMarkSolved, markFailed: learningMarkFailed,
     //} = stores.learning //useLearningRecordsContext()
@@ -124,7 +124,7 @@ export default function PlayerScreen() {
         navigate(-1)
     }
     const handleStar = () => {
-        stores.exercise.toggleStar(currentProblem.id)
+        store.toggleStar(currentProblem.id)
     }
   
     const timerProps = {

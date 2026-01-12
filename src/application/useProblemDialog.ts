@@ -17,20 +17,20 @@ export function useProblemDetailDialog(
     const closeDialog = () => {
         setExecise(null)
     }
-    const stores = useStoreContext()
+    const store = useStoreContext()
 
     const updateTitle = (title: string) => {
-        exercise && stores.exercise.updateTitle(exercise.problem.id, title)
+        exercise && store.updateTitle(exercise.problem.id, title)
     }
     const deleteProblem = async () => {
         if(exercise){
-            await stores.exercise.remove(exercise.problem.id)
+            await store.remove(exercise.problem.id)
             onAfterDelete?.()
         }
     }
     const resetLearning = async () => {
         exercise && 
-            await stores.exercise.remove(exercise.problem.id)
+            await store.remove(exercise.problem.id)
     }
     return {
         open, openDialog, closeDialog,

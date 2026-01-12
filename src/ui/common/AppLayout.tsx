@@ -46,13 +46,13 @@ export function AppLayout({ header, footer, children, rightActions  }: Props) {
   const [backupDialogOpen, setBackupDialogOpen] = useState(false);
   const navigate = useNavigate()
   //const learningApi = useLearningRecordsContext() // TODO: temp
-  const stores = useStoreContext()
+  const store = useStoreContext()
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
   const handleClearLearnings = () => {
     
-    stores.exercise.clearAll()
+    store.clearAll()
   }
 
   function ListMenu(){

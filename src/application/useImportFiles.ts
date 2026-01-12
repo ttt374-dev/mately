@@ -7,14 +7,14 @@ export const useImportFiles = () => {
     //const addProblem = problemApi.addProblem
     const repos = useRepositoryContext()
     const usecase = createImportProblemsUsecase(repos.problem)
-    const stores = useStoreContext()
+    const store = useStoreContext()
     
     
     return {
         importFiles: async (files: File[]) => {
             console.log("importfiles:", files)
             const result = await usecase.importFiles(files)
-            await stores.exercise.reload()
+            await store.reload()
             return result
         }
     }

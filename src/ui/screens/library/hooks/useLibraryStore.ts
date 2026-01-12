@@ -3,16 +3,16 @@ import { useStoreContext } from "@/app/providers/StoreProvider"
 import { buildLibraryList } from "@/domain/problem/builder"
 
 export function useLibraryStore(){
-    const stores = useStoreContext()    
+    const store = useStoreContext()    
 
     const {  state: { sortState }  } = useQueryContext()
     //const sortState = state.sortState
     const libraryList = buildLibraryList(
-        stores.exercise.exercises, sortState)
+        store.exercises, sortState)
         //stores.problem.problems, sortState, stores.learning.records)
     
     const removeMany = async (ids: string[]) => {
-        await stores.exercise.removeMany(ids)
+        await store.removeMany(ids)
         //await stores.problem.removeMany(ids)
         //await stores.learning.removeMany(ids)   
     }
@@ -25,7 +25,7 @@ export function useLibraryStore(){
         //learningRecords: stores.learning.records,  // TODO
         //clearAllLearnings: stores.learning.clearAll, // TODO
         clearAllLearings,
-        toggleStar: stores.exercise.toggleStar,
+        toggleStar: store.toggleStar,
         removeMany 
     }
 }

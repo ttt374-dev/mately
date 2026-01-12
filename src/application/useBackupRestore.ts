@@ -5,7 +5,7 @@ import { createBackupRestoreUsecase, type BackupData } from "@/usecase/backupRes
 
 export const useBackupRestore = () => {
     const repos = useRepositoryContext()
-    const stores = useStoreContext()
+    const store = useStoreContext()
 
     const usecase = createBackupRestoreUsecase(repos.problem, repos.learning, fileBackupWriter)
     const backup = async () => {
@@ -13,7 +13,7 @@ export const useBackupRestore = () => {
     }
     const restore = async (data: BackupData) => {
         await usecase.restore(data)
-        await stores.exercise.reload()
+        await store.reload()
         
     }
     return {
