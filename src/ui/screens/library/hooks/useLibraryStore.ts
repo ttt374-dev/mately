@@ -17,11 +17,14 @@ export function useLibraryStore(){
         //await stores.learning.removeMany(ids)   
     }
     
+    const clearAllLearings = () => {}
+
     return {
         //problems: stores.problem.problems, 
         libraryList,
-        learningRecords: stores.learning.records,  // TODO
-        clearAllLearnings: stores.learning.clearAll, // TODO
+        //learningRecords: stores.learning.records,  // TODO
+        //clearAllLearnings: stores.learning.clearAll, // TODO
+        clearAllLearings,
         toggleStar: stores.exercise.toggleStar,
         removeMany 
     }

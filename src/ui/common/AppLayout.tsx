@@ -52,7 +52,7 @@ export function AppLayout({ header, footer, children, rightActions  }: Props) {
   };
   const handleClearLearnings = () => {
     
-    stores.learning.clearAll()
+    stores.exercise.clearAll()
   }
 
   function ListMenu(){

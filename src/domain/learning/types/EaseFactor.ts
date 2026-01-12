@@ -15,7 +15,7 @@ export class EaseFactor {
     return EaseFactor.of(this.easeValue + delta)
   }
   get value() {
-    return this.easeValue
+    return this.easeValue ?? 0
   } 
 }
 

@@ -18,6 +18,7 @@ export class ReviewedAt {
     return ReviewedAt.from(now, interval)
   }
   get isDue(): boolean{
+    console.log("reviewe due: ", this.epochMs, Date.now())
     return this.epochMs <= Date.now()
   }
   get value(): number { 

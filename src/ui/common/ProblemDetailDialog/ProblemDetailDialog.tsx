@@ -6,11 +6,13 @@ import type { LearningEntry } from "@/domain/learning/types";
 import { LearningStats } from "./LearningStats";
 import { EditableTitle } from "./EditableTitle";
 import { createLearningStatRow } from "./createLearningStatRows";
+import type { Exercise } from '@/domain/Exercise/Exercise';
 
 type Props = {
     open: boolean
-    problem: Problem,
-    learningEntry?: LearningEntry,
+    exercise: Exercise,
+    //problem: Problem,
+    //learningEntry?: LearningEntry,
     onUpdateTitle: (title: string) => void;
     onConfirm: (problemId: string) => void;
     onClose: () => void
@@ -20,8 +22,9 @@ type Props = {
 
 export default function ProblemDetailDialog({
     open,
-    problem,
-    learningEntry,
+    exercise,
+    //problem,
+    //learningEntry,
     onUpdateTitle,
     onConfirm: onPlayProblem,
     onClose,
@@ -36,7 +39,7 @@ export default function ProblemDetailDialog({
     }
     const handlePlay = () => {
         onClose()
-        onPlayProblem(problem.id);
+        onPlayProblem(exercise.problem.id);
     }
     const handleCancel = () => {      
         onClose()
@@ -54,10 +57,10 @@ export default function ProblemDetailDialog({
             <DialogContent>
                 {/* タイトル編集 */}                
                 <Box display="flex" alignItems="center" gap={2} mt={1}>                    
-                    <EditableTitle initialTitle={problem.title} onUpdateTitle={onUpdateTitle}/>
+                    <EditableTitle initialTitle={exercise.problem.title} onUpdateTitle={onUpdateTitle}/>
                 </Box>
                 <Divider/>
-                <LearningStats rows={createLearningStatRow(problem, learningEntry)}/>
+                <LearningStats rows={createLearningStatRow(exercise)}/>
 
                 { /* 正答誤答*/}
 

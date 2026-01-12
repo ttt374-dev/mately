@@ -6,8 +6,6 @@ import type { ProblemRepository } from "@/domain/problem/problemRepository";
 import { exerciseReducer } from "@/domain/Exercise/exerciseReducer";
 import { LearningEntry, type AnswerResult, type LearningRecord } from "@/domain/learning/types";
 import  { Exercise } from "@/domain/Exercise/Exercise";
-import ProblemDetailDialog from "@/ui/common/ProblemDetailDialog/ProblemDetailDialog";
-
 
 export function useExerciseStore(
     problemRepo: ProblemRepository,
@@ -72,7 +70,7 @@ export function useExerciseStore(
 
     const clearAll = async () => dispatch({ type: 'CLEAR_ALL' });
     const addProblem = async (newProblem: Problem) => {
-        const exercise = new Exercise(newProblem)
+        const exercise = Exercise.create(newProblem)
         dispatch({ type: "ADD", payload: exercise });        
     };
     const markAnswer = async (problemId: string, answerResult: AnswerResult, secondsToAnswer?: number) =>
@@ -98,6 +96,7 @@ export function useExerciseStore(
 
     return {
         exercises: state,        
+        reload,
         remove, removeMany,
         clearAll,
 

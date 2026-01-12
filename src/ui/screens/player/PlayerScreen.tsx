@@ -124,7 +124,7 @@ export default function PlayerScreen() {
         navigate(-1)
     }
     const handleStar = () => {
-        stores.problem.toggleStar(currentProblem.id)
+        stores.exercise.toggleStar(currentProblem.id)
     }
   
     const timerProps = {
@@ -160,7 +160,7 @@ export default function PlayerScreen() {
                     <StarControl isStarred={currentProblem.starred} onToggleStar={handleStar}/>
                     <PlayerListMenu
                         onDeleteProblem={dialog.deleteProblem}
-                        onDetailDialogOpen={() => dialog.openDialog(currentProblem)}
+                        onDetailDialogOpen={() => dialog.openDialog(currentExercise)}
                     />
                 </>
         }
@@ -192,11 +192,10 @@ export default function PlayerScreen() {
                 </Stack>
             </Stack>
 
-            { dialog.problem && 
+            { dialog.exercise && 
             <ProblemDetailDialog 
                 open={dialog.open}
-                problem={dialog.problem}
-                learningEntry={learningEntry}
+                exercise={dialog.exercise}
                 onUpdateTitle={dialog.updateTitle}
                 onConfirm={alert}
                 onClose={dialog.closeDialog}

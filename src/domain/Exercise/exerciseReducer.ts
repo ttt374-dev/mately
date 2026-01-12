@@ -28,7 +28,7 @@ export function exerciseReducer(
       return state.map(ex => {
         if (ex.problem.id !== action.problemId) return ex;
 
-        const updatedLearning = ex.learning?.answer(
+        const updatedLearning = ex.learning.answer(
           action.answerResult,
           action.secondsToAnswer ?? 20,
           action.now

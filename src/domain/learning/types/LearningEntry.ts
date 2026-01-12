@@ -46,7 +46,7 @@ export class LearningEntry {
     // getter
     get totalCount(): number { return this.solvedCount + this.failedCount}
     get accuracy(): number { return this.totalCount === 0 ? 0 : this.solvedCount / this.totalCount }
-    get isDue(): boolean { return this.nextReviewedAt.isDue }   
+    //get isDue(): boolean { return this.nextReviewedAt.isDue }   
 
     answer(
         result: AnswerResult,

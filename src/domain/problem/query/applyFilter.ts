@@ -28,21 +28,16 @@ export const applyFilter = (
         // 未回答のみ
         const flag = filter.unansweredOnly && record && (record.solvedCount + record.failedCount > 0)
 
-        if (filter.unansweredOnly && record !== undefined && (record.solvedCount + record.failedCount > 0)){
+        if (filter.unansweredOnly && record.totalCount > 0){
                 return false
         }
         
         // ミッション対象
-        if (filter.isMissionTarget &&
-            record?.nextReviewedAt !== undefined &&
-            //record.nextReviewedAt > now
-            record.nextReviewedAt.isDue
-        ){
+        if (filter.isMissionTarget && !record.nextReviewedAt.isDue){            
             return false
         }
         // スターつきのみ
-        if (filter.starredOnly &&
-            !problem.starred){
+        if (filter.starredOnly && !problem.starred){
             return false
         }
         

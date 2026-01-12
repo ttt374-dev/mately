@@ -4,7 +4,7 @@ import {  matchMateLength } from '../mateFilter'
 import { DefaultFilterState, type FilterState, type MateLengthFilter } from '../types'
 import { applyFilter } from '../applyFilter'
 import { Problem } from '../../Problem'
-import type { Exercise } from '@/domain/Exercise/Exercise'
+import { Exercise } from '@/domain/Exercise/Exercise'
 
 describe("mate filter test", () => {
     const p3 = Problem.create({ id: "003", kifContent: createKifContent({ mateLength: 3 }) })
@@ -14,7 +14,7 @@ describe("mate filter test", () => {
     const p11 = Problem.create({ id: "011", kifContent: createKifContent({ mateLength: 11 }) })
 
     const problems = [p3, p5, p7, p9, p11]
-    const exercises: Exercise[] = problems.map(p=>({problem: p}))
+    const exercises = problems.map(p=>( Exercise.create(p)))
 
     it("mate length", ()=>{
         const filter: MateLengthFilter = { length: 3, mode: "eq"}

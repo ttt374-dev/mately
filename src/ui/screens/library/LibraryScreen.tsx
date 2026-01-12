@@ -29,8 +29,8 @@ export default function LibraryScreen() {
     const [backupDialogOpen, setBackupDialogOpen] = useState(false)
     const { importFiles } = useImportFiles()
     const fsm = useFsmContext()
-    const { learningRecords, libraryList,
-        removeMany, clearAllLearnings, toggleStar,        
+    const { libraryList,
+        removeMany,  toggleStar, clearAllLearings,
     } = useLibraryStore()
        
     const { checkedIds, api: checkboxApi } = useLibraryCheckbox(libraryList.map((p) => p.problem.id))
@@ -46,11 +46,11 @@ export default function LibraryScreen() {
         //next()          // TODO
     }
     const dialog = useProblemDetailDialog(handleAfterDelete)
-    const handleSelectProblem = (problem: Problem, index: number) => {        
+    const handleSelectProblem = (exercise: Exercise, index: number) => {        
         if (selectionMode) {
-            checkboxApi.toggleChecked(problem.id)
+            checkboxApi.toggleChecked(exercise.problem.id)
         } else {
-            dialog.openDialog(problem)
+            dialog.openDialog(exercise)
             //openDetailDialog(currentProb)
             
             //navigate(`/view/${problem.id}`)
@@ -83,7 +83,7 @@ export default function LibraryScreen() {
             header={"Library"}
             rightActions={
             <LibraryListMenu 
-                onClearAllLearnings={clearAllLearnings}
+                onClearAllLearnings={clearAllLearings}
                 onBackupDialogOpen={()=>setBackupDialogOpen(true)}      
                 onImportFiles={handleImportFiles}          
             />}            
@@ -110,7 +110,7 @@ export default function LibraryScreen() {
                             selectionMode={selectionMode}
                             isChecked={checkboxApi.isChecked(e.problem.id)}
                             onToggleChecked={checkboxApi.toggleChecked}
-                            onSelect={() => handleSelectProblem(e.problem, i)}
+                            onSelect={() => handleSelectProblem(e, i)}
                             onEnterSelectionMode={() => setSelectionMode(true)}
                             //learningEntry={learningRecords[e.problem.id]}
                             onToggleStar={toggleStar}
@@ -122,16 +122,16 @@ export default function LibraryScreen() {
             <BackupRestoreDialog open={backupDialogOpen} 
                 onClose={()=>setBackupDialogOpen(false)}/>
 
-            {dialog.problem && 
+            {dialog.exercise && 
             <ProblemDetailDialog 
                 open={dialog.open}
-                problem={dialog.problem}
+                exercise={dialog.exercise}
                 onUpdateTitle={dialog.updateTitle}
                 onConfirm={handleNavigateToPlayer}
                 onClose={dialog.closeDialog}
                 onDelete={dialog.deleteProblem}       
                 onResetLearning={dialog.resetLearning}         
-                learningEntry={learningRecords[dialog.problem.id]}
+                //learningEntry={}
             />}
 
 

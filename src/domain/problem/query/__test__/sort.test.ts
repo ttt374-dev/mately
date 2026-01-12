@@ -4,7 +4,7 @@ import { applySort } from '../applySort';
 import type { SortState } from '../types';
 import { LearningEntry } from '@/domain/learning/types';
 import { Problem } from '../../Problem';
-import type { Exercise } from '@/domain/Exercise/Exercise';
+import { Exercise } from '@/domain/Exercise/Exercise';
 
 
 describe("sort test", () => {   
@@ -14,7 +14,7 @@ describe("sort test", () => {
         const p2 = Problem.create({ id: "002", title: "ccc" })
         const p3 = Problem.create({ id: "003", title: "aaa" })
         const problems = [p1, p2, p3]
-        const exercises: Exercise[] = problems.map(p => ({ problem: p}))
+        const exercises: Exercise[] = problems.map(p => ( Exercise.create(p)))
 
         const sortAsc: SortState = { key: "title", order: "asc"}
         let sorted = applySort(exercises, sortAsc)

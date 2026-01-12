@@ -14,7 +14,7 @@ export const useImportFiles = () => {
         importFiles: async (files: File[]) => {
             console.log("importfiles:", files)
             const result = await usecase.importFiles(files)
-            await stores.problem.reload()
+            await stores.exercise.reload()
             return result
         }
     }

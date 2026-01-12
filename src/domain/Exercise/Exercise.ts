@@ -4,11 +4,11 @@ import { Problem } from "../problem/Problem";
 export class Exercise {
   constructor(
     readonly problem: Problem,
-    readonly learning?: LearningEntry
+    readonly learning: LearningEntry
   ){}
-  static create(){
-    const p = Problem.create()
-    return new Exercise(p, LearningEntry.create(p.id))
+  static create(p?: Problem, ){    
+    const problem = p ?? Problem.create()
+    return new Exercise(problem, LearningEntry.create(problem.id))
   }
 }
 

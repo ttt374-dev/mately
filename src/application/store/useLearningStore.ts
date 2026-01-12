@@ -5,7 +5,7 @@ import type { LearningEntry, LearningRecord } from '@/domain/learning/types/Lear
 import type { AnswerResult } from '@/domain/learning/types';
 //import { judgeAnswerQuality, scheduleNext } from '@/domain/learning/scheduleNext';
 import { learningReducer } from '@/domain/learning/learningReducer';
-
+/*
 ////////////////////////////////////
 export function useLearningStore (repository: LearningRepository){
     const [records, dispatch] = useReducer(learningReducer, {});
@@ -73,4 +73,4 @@ export function useLearningStore (repository: LearningRepository){
         markFailed: (id: string, secondsToAnswer?: number) => markAnswer(id, "failed", secondsToAnswer),
         replaceAll,
     }
-}
+}*/

@@ -46,7 +46,7 @@ export default function LibraryItemText({ exercise, onToggleStar }: Props) {
                 {learningEntry && <>
                     <Typography variant="body2" color="text.primary">
                         {(learningEntry.accuracy * 100).toFixed(0)}%/
-                        ef:{ learningEntry.easeFactor.value.toFixed(2)}/
+                        ef:{ learningEntry.easeFactor.value}/
                         {inDays(learningEntry.nextReviewedAt?.value ?? 0).toFixed(0)}d
                         
                     </Typography>

@@ -6,7 +6,6 @@ import DashboardScreen from '@/ui/screens/dashboard/DashboardScreen';
 import PlayerScreen from '@/ui/screens/player/PlayerScreen';
 import SummaryScreen from '@/ui/screens/summary/SummaryScreen';
 import { AppProvsiders } from './providers/AppProviders';
-import ViewScreen from '@/ui/screens/view/ViewScreen';
 import { useEffect } from 'react';
 import { fileBackupWriter } from '@/infra/backup/backupWriter';
 import { createBackupRestoreUsecase } from '@/usecase/backupRestore/backupRestoreUsecase';
@@ -36,7 +35,6 @@ export default function App() {
                     <Route path="/library" element={<LibraryScreen />} />
                     <Route path="/summary" element={<SummaryScreen />} />
                     <Route path="/dashboard" element={<DashboardScreen />} />
-                    <Route path="/view/:id" element={<ViewScreen />} />
                     <Route path="/" element={<Navigate to="/dashboard" />} />
                     <Route path="/player" element={<PlayerScreen />} />
                 </Routes>

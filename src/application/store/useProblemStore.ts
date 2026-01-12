@@ -6,6 +6,7 @@ import { problemReducer } from "@/domain/problem/stores/problemReducer";
 // -------------------------
 // hook
 // -------------------------
+/*
 export function useProblemStore(repository: ProblemRepository) {
     const [problems, dispatch] = useReducer(problemReducer, [] as Problem[]);
     const isInitialized = useRef(false);
@@ -94,3 +95,4 @@ export function useProblemStore(repository: ProblemRepository) {
         removeAll,
     };
 }
+*/

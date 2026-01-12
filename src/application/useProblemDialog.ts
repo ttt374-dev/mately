@@ -1,41 +1,40 @@
 import { useStoreContext } from "@/app/providers/StoreProvider"
+import type { Exercise } from "@/domain/Exercise/Exercise"
 import type { Problem } from "@/domain/problem/Problem"
 import { useState } from "react"
 
 export function useProblemDetailDialog(
     onAfterDelete?: () => void,
 ) {
-    const [problem, setProblem] = useState<Problem | null>(null)
+    const [exercise, setExecise] = useState<Exercise | null>(null)
 
-    const open = problem !== null
+    const open = exercise !== null
 
-    const openDialog = (problem: Problem) => {
-        setProblem(problem)
+    const openDialog = (exercise: Exercise) => {
+        setExecise(exercise)
     }
 
     const closeDialog = () => {
-        setProblem(null)
+        setExecise(null)
     }
-
     const stores = useStoreContext()
 
     const updateTitle = (title: string) => {
-        problem && stores.problem.updateTitle(problem.id, title)
+        exercise && stores.exercise.updateTitle(exercise.problem.id, title)
     }
     const deleteProblem = async () => {
-        if(problem){
-            await stores.problem.removeMany([problem.id])
-            await stores.learning.removeMany([problem.id])
+        if(exercise){
+            await stores.exercise.remove(exercise.problem.id)
             onAfterDelete?.()
         }
     }
     const resetLearning = async () => {
-        problem && 
-            await stores.learning.removeMany([problem.id])
+        exercise && 
+            await stores.exercise.remove(exercise.problem.id)
     }
     return {
         open, openDialog, closeDialog,
-        problem,
+        exercise,
         updateTitle, deleteProblem, resetLearning,
 
     }

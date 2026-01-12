@@ -13,8 +13,8 @@ export const useBackupRestore = () => {
     }
     const restore = async (data: BackupData) => {
         await usecase.restore(data)
-        await stores.problem.reload()
-        await stores.learning.reload()
+        await stores.exercise.reload()
+        
     }
     return {
         backup, restore
