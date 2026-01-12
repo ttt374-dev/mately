@@ -5,21 +5,24 @@ import { buildLibraryList } from "@/domain/problem/builder"
 export function useLibraryStore(){
     const stores = useStoreContext()    
 
-    const { state } = useQueryContext()
-    const sortState = state.sortState
-    const libraryList = buildLibraryList(stores.problem.problems, sortState, stores.learning.records)
+    const {  state: { sortState }  } = useQueryContext()
+    //const sortState = state.sortState
+    const libraryList = buildLibraryList(
+        stores.exercise.exercises, sortState)
+        //stores.problem.problems, sortState, stores.learning.records)
     
     const removeMany = async (ids: string[]) => {
-        await stores.problem.removeMany(ids)
-        await stores.learning.removeMany(ids)   
+        await stores.exercise.removeMany(ids)
+        //await stores.problem.removeMany(ids)
+        //await stores.learning.removeMany(ids)   
     }
     
     return {
         //problems: stores.problem.problems, 
         libraryList,
-        learningRecords: stores.learning.records,
-        clearAllLearnings: stores.learning.clearAll,
-        toggleStar: stores.problem.toggleStar,
+        learningRecords: stores.learning.records,  // TODO
+        clearAllLearnings: stores.learning.clearAll, // TODO
+        toggleStar: stores.exercise.toggleStar,
         removeMany 
     }
 }

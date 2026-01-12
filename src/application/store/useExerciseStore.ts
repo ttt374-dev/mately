@@ -62,28 +62,28 @@ export function useExerciseStore(
         });
     };
 
-    const remove = (problemId: string) => dispatch({ type: 'REMOVE', problemId });
+    const remove = async (problemId: string) => dispatch({ type: 'REMOVE', problemId });
     const removeMany = async (ids: string[]) => {
         if (!ids || ids.length === 0) return;
         dispatch({ type: "REMOVE_MANY", problemIds: ids });
     };
 
 
-    const clearAll = () => dispatch({ type: 'CLEAR_ALL' });
+    const clearAll = async () => dispatch({ type: 'CLEAR_ALL' });
     const addProblem = async (newProblem: Problem) => {
         const exercise = new Exercise(newProblem)
         dispatch({ type: "ADD", payload: exercise });        
     };
-    const markAnswer = (problemId: string, answerResult: AnswerResult, secondsToAnswer?: number) =>
+    const markAnswer = async (problemId: string, answerResult: AnswerResult, secondsToAnswer?: number) =>
         dispatch({ type: 'ANSWER', problemId, answerResult, secondsToAnswer, now: Date.now() });
 
-    const toggleStar = (problemId: string) => {                
+    const toggleStar = async (problemId: string) => {                
         update(problemId, e => {            
             return new Exercise(e.problem.toggleStar(), e.learning)
         })
         //dispatch({ type: 'UPDATE', problemId });
     }
-    const updateTitle = (problemId: ProblemId, title: string) => {
+    const updateTitle = async (problemId: ProblemId, title: string) => {
         update(problemId, e => {            
             return new Exercise(e.problem.setTitle(title), e.learning)
         })
@@ -91,7 +91,7 @@ export function useExerciseStore(
     
 
     return {
-        state,        
+        exercises: state,        
         remove, removeMany,
         clearAll,
 
