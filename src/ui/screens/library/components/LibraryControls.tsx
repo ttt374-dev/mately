@@ -5,7 +5,7 @@ import LibrarySortControl from "./LibrarySortControl"
 import type { LibraryCheckboxApi, useLibraryCheckbox } from "../hooks/useLibraryCheckbox"
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import type { SortState } from "@/domain/problem/query/types"
+import type { SortState } from "@/domain/Exercise/query/types"
 
 type Props = {
     selectionMode: boolean

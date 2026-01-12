@@ -12,7 +12,7 @@ import { useLibraryStore } from './hooks/useLibraryStore';
 import { LibraryControls } from './components/LibraryControls';
 import { useLibraryCheckbox } from './hooks/useLibraryCheckbox';
 import { useFsmContext } from '@/app/providers/FsmProvider';
-import { buildQueue } from '@/domain/problem/builder';
+import { buildQueue } from '@/domain/Exercise/builder';
 import ProblemDetailDialog from '../../common/ProblemDetailDialog/ProblemDetailDialog';
 import { useProblemDetailDialog } from '@/application/useProblemDialog';
 import { useToast } from '@/app/providers/ToastProvider';

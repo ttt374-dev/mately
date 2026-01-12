@@ -1,5 +1,5 @@
-import type { SortState } from "@/domain/problem/query/types/Sort"
-import { applySort } from "@/domain/problem/query/applySort"
+import type { SortState } from "@/domain/Exercise/query/types/Sort"
+import { applySort } from "@/domain/Exercise/query/applySort"
 import type { Exercise } from "@/domain/Exercise/Exercise"
 
 

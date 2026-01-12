@@ -2,15 +2,15 @@ import { Box, List, ListItem, Button, Stack, Paper, Typography, Grid, Card, Card
 import { useNavigate } from 'react-router-dom';
 
 import { AppLayout } from "../../common/AppLayout"
-import { buildQueue } from '@/domain/problem/builder/queueBuilder';
+import { buildQueue } from '@/domain/Exercise/builder/queueBuilder';
 import DashboardFilterControl from './components/DashboardFilterControl';
 import { useQueryContext } from '@/app/providers/QueryProvider';
 import { useFsmContext } from '@/app/providers/FsmProvider';
 import { useStoreContext } from '@/app/providers/StoreProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { DeckCard } from './components/DeckCard';
-import type { SortState } from '@/domain/problem/query/types';
-import { applyQuery } from '@/domain/problem/query/applyQuery';
+import type { SortState } from '@/domain/Exercise/query/types';
+import { applyQuery } from '@/domain/Exercise/query/applyQuery';
 
 
 export default function DashboardScreen(){

@@ -1,5 +1,5 @@
 import type { LearningRecord } from "@/domain/learning/types";
-import type { Problem } from "../Problem";
+import type { Problem } from "../../problem/Problem";
 import { applyFilter } from "./applyFilter";
 import { applySort } from "./applySort";
 import type { FilterState, MateLengthFilter, SortState } from "./types";

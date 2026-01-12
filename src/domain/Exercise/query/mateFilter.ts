@@ -1,5 +1,5 @@
 import type { KifContent } from "@/domain/kif/types"
-import type { Problem } from "../Problem"
+import type { Problem } from "../../problem/Problem"
 import type { MateBucket, MateLengthFilter } from "./types"
 
 

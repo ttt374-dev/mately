@@ -21,7 +21,7 @@ import PlayerListMenu from './components/PlayerListMenu';
 import { useToast } from '@/app/providers/ToastProvider';
 import ProblemDetailDialog from '../../common/ProblemDetailDialog/ProblemDetailDialog';
 import { useProblemDetailDialog } from '@/application/useProblemDialog';
-import { useExerciseStore } from '@/application/store/useExerciseStore';
+import { useExerciseStore } from '@/application/useExerciseStore';
 import type { Exercise } from '@/domain/Exercise/Exercise';
 
 const getCurrentExercise = (fsmState: FsmState, exercises: Exercise[]): Exercise | null => {

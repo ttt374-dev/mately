@@ -4,7 +4,7 @@ import { DefaultFilterState, type FilterState, type SortState } from '../types';
 import { applySort } from '../applySort';
 import { applyFilter } from '../applyFilter';
 import { IntervalDays, LearningEntry, ReviewedAt } from '@/domain/learning/types';
-import { Problem } from '../../Problem';
+import { Problem } from '../../../problem/Problem';
 import { Exercise } from '@/domain/Exercise/Exercise';
 
 describe("filter test", () => {   

@@ -1,7 +1,7 @@
 import type { ReactNode, } from "react"
 import { createContext, useContext, } from "react"
 import { useRepositoryContext } from "./RepositoryProvider"
-import { useExerciseStore } from "@/application/store/useExerciseStore"
+import { useExerciseStore } from "@/application/useExerciseStore"
 
 //type StoreContextValue = {
     //readonly problem: ReturnType<typeof useProblemStore>

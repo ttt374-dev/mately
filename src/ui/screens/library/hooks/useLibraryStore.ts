@@ -1,6 +1,6 @@
 import { useQueryContext } from "@/app/providers/QueryProvider"
 import { useStoreContext } from "@/app/providers/StoreProvider"
-import { buildLibraryList } from "@/domain/problem/builder"
+import { buildLibraryList } from "@/domain/Exercise/builder"
 
 export function useLibraryStore(){
     const store = useStoreContext()    

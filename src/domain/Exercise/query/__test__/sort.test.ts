@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest'
 import { applySort } from '../applySort';
 import type { SortState } from '../types';
 import { LearningEntry } from '@/domain/learning/types';
-import { Problem } from '../../Problem';
+import { Problem } from '../../../problem/Problem';
 import { Exercise } from '@/domain/Exercise/Exercise';
 
 

@@ -1,7 +1,7 @@
 import { Card, FormControlLabel, FormGroup, FormLabel, Paper } from "@mui/material";
 import { FormControl, TextField, Checkbox } from "@mui/material";
 
-import type { FilterState } from "@/domain/problem/query/types/Filter";
+import type { FilterState } from "@/domain/Exercise/query/types/Filter";
 import { useQueryContext } from "@/app/providers/QueryProvider";
 import { MateLengthCheckboxes } from "./MateLengthCheckbox";
 

@@ -1,7 +1,7 @@
 // domain/problemRecord/sortProblemRecords.ts
 import type { Exercise } from "@/domain/Exercise/Exercise"
 import type { LearningEntry, LearningRecord } from "../../learning/types"
-import type { Problem } from "../Problem"
+import type { Problem } from "../../problem/Problem"
 import type { SortState, SortKey, SortOrder } from "./types/Sort"
 
 export function applySort(

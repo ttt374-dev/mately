@@ -1,4 +1,4 @@
-import type { FilterState } from "@/domain/problem/query/types/Filter";
+import type { FilterState } from "@/domain/Exercise/query/types/Filter";
 
 type BaseFilterDef<K extends keyof FilterState> = {
     key: K

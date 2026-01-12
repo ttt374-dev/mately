@@ -6,7 +6,7 @@ import {
   Checkbox,
 } from "@mui/material"
 
-import type { MateBucket } from "@/domain/problem/query/types"
+import type { MateBucket } from "@/domain/Exercise/query/types"
 
 type Props = {
   mateBuckets: MateBucket[] | undefined

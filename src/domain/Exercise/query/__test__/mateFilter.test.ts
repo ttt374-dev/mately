@@ -3,7 +3,7 @@ import { createKifContent } from '@/domain/kif/factory'
 import {  matchMateLength } from '../mateFilter'
 import { DefaultFilterState, type FilterState, type MateLengthFilter } from '../types'
 import { applyFilter } from '../applyFilter'
-import { Problem } from '../../Problem'
+import { Problem } from '../../../problem/Problem'
 import { Exercise } from '@/domain/Exercise/Exercise'
 
 describe("mate filter test", () => {

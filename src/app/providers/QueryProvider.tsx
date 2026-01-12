@@ -1,4 +1,4 @@
-import { useProblemQuery } from "@/application/query/useProblemQuery"
+import { useProblemQuery } from "@/application/useProblemQuery"
 import type { ReactNode } from "react"
 import { createContext, useContext, useState } from "react"
 import { useStoreContext } from "./StoreProvider"

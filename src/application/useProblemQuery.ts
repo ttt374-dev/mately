@@ -1,4 +1,4 @@
-import { DefaultFilterState, DefaultSortState, type FilterState, type SortState } from "@/domain/problem/query/types";
+import { DefaultFilterState, DefaultSortState, type FilterState, type SortState } from "@/domain/Exercise/query/types";
 import { useReducer } from "react";
 
 type State = {
