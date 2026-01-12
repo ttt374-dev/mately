@@ -3,14 +3,14 @@ import type { Problem } from "../Problem";
 import { applyFilter } from "./applyFilter";
 import { applySort } from "./applySort";
 import type { FilterState, MateLengthFilter, SortState } from "./types";
+import type { Exercise } from "@/domain/Exercise/Exercise";
 
 
-export function applyQuery(problems: Problem[], 
-    sort?: SortState, filter?: FilterState, mateLengthFilter?: MateLengthFilter,
-    learningRecords?: LearningRecord){
+export function applyQuery(exercises: Exercise[], 
+    sort?: SortState, filter?: FilterState){
 
-    const filtered = filter ? applyFilter(problems, filter, learningRecords) : problems
-    const sorted = sort ? applySort(filtered, sort, learningRecords) : filtered
+    const filtered = filter ? applyFilter(exercises, filter) : exercises
+    const sorted = sort ? applySort(filtered, sort) : filtered
 
     return sorted
 }

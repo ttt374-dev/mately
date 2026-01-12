@@ -7,7 +7,7 @@ import { useQueryContext } from '@/app/providers/QueryProvider';
 import { useState } from 'react';
 import BackupRestoreDialog from '@/ui/common/BackupRestoreDialog';
 import { LibraryListMenu } from './components/LibraryListMenu';
-import LibraryListItem from './components/LibraryItem';
+import LibraryListItem from './components/LibraryListItem';
 import { useLibraryStore } from './hooks/useLibraryStore';
 import { LibraryControls } from './components/LibraryControls';
 import { useLibraryCheckbox } from './hooks/useLibraryCheckbox';
@@ -17,11 +17,13 @@ import ProblemDetailDialog from '../../common/ProblemDetailDialog/ProblemDetailD
 import { useProblemDetailDialog } from '@/application/useProblemDialog';
 import { useToast } from '@/app/providers/ToastProvider';
 import { useImportFiles } from '@/application/useImportFiles';
+import type { Exercise } from '@/domain/Exercise/Exercise';
 
 ///////////////////////////////////////////////
 export default function LibraryScreen() {    
     //const [index, setIndex] = useState(0)
     const toast = useToast()
+    
 
     const [selectionMode, setSelectionMode] = useState(false)
     const [backupDialogOpen, setBackupDialogOpen] = useState(false)
@@ -31,7 +33,7 @@ export default function LibraryScreen() {
         removeMany, clearAllLearnings, toggleStar,        
     } = useLibraryStore()
        
-    const { checkedIds, api: checkboxApi } = useLibraryCheckbox(libraryList.map((p) => p.id))
+    const { checkedIds, api: checkboxApi } = useLibraryCheckbox(libraryList.map((p) => p.problem.id))
 
     //const { sortState, api: sortApi } = useQueryContext().sort
     const { state: { sortState }, setSort } = useQueryContext()
@@ -58,7 +60,7 @@ export default function LibraryScreen() {
     }    
     const handleNavigateToPlayer = (problemId: string) => {
 
-        const index = libraryList.findIndex(p => p.id === problemId)
+        const index = libraryList.findIndex(p => p.problem.id === problemId)
         fsm.start(buildQueue(libraryList), index)
         navigate("/player")
         //navigate(`/view/${problemId}`)
@@ -100,16 +102,17 @@ export default function LibraryScreen() {
 
             <Box sx={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
                 <List>
-                    {libraryList.map((p, i) => (                        
+                    {libraryList.map((e, i) => (                        
                         <LibraryListItem
-                            key={p.id}
-                            problem={p}
+                            key={e.problem.id}
+                            //problem={e.problem}
+                            exercise={e}
                             selectionMode={selectionMode}
-                            isChecked={checkboxApi.isChecked(p.id)}
+                            isChecked={checkboxApi.isChecked(e.problem.id)}
                             onToggleChecked={checkboxApi.toggleChecked}
-                            onSelect={() => handleSelectProblem(p, i)}
+                            onSelect={() => handleSelectProblem(e.problem, i)}
                             onEnterSelectionMode={() => setSelectionMode(true)}
-                            learningEntry={learningRecords[p.id]}
+                            //learningEntry={learningRecords[e.problem.id]}
                             onToggleStar={toggleStar}
                         />
                     ))}

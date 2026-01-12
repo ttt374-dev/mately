@@ -5,6 +5,7 @@ import { Box, List, ListItem, Button, Stack, Paper, Typography, Grid, Card, Card
 import { calcDeckStats } from '../utils/calcDeckStats';
 import type React from 'react';
 import { useMemo } from 'react';
+import type { Exercise } from '@/domain/Exercise/Exercise';
 
 
 type StatItem = {
@@ -13,13 +14,12 @@ type StatItem = {
 };
 
 type Props = {
-    problems: Problem[]
-    title: string;
-    learningRecords: LearningRecord
+    exercises: Exercise[]
+    title: string;    
 };
 
-export function DeckCard({ problems, title, learningRecords }: Props) {
-    const stats = calcDeckStats(problems, learningRecords)
+export function DeckCard({ exercises, title}: Props) {
+    const stats = calcDeckStats(exercises)
 
     const statsItems: StatItem[] = useMemo(() => [
         { label: "問題数", value: stats.problemCount},

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createImportProblemsUsecase } from "@/usecase/importProblems/importProblemsUsecase";
 import { Problem } from "@/domain/problem/Problem";
 
@@ -18,12 +18,13 @@ function createTestFile(
 describe("importProblemsUsecase - single", () => {
     it("単一ファイルをインポートできる", async () => {
         // arrange
-        const problem: Problem = {
+        const problem = Problem.create({
             id: "p1",
             title: "test",
-        } as any;
+        });
 
-        (Problem.createFromText as any).mockReturnValue(problem);
+        //(Problem.createFromText as any).mockReturnValue(problem);
+        vi.spyOn(Problem, 'createFromText').mockReturnValue(problem);
 
         const repo = new InMemoryProblemRepository();
         const usecase = createImportProblemsUsecase(repo);
@@ -45,31 +46,46 @@ describe("importProblemsUsecase - single", () => {
     });
 });
 
-describe("importProblemsUsecase - multiple success", () => {
-    it("複数ファイルをまとめてインポートできる", async () => {
-        // arrange
-        (Problem.createFromText as any)
-            .mockReturnValueOnce({ id: "p1" } as any)
-            .mockReturnValueOnce({ id: "p2" } as any);
 
-        const repo = new InMemoryProblemRepository();
-        const usecase = createImportProblemsUsecase(repo);
+describe('importProblemsUsecase - multiple success', () => {
+  let spy: ReturnType<typeof vi.spyOn>;
 
-        const files = [
-            createTestFile("a.kif", "a"),
-            createTestFile("b.kif", "b"),
-        ];
+  beforeEach(() => {
+    // beforeEachで毎回スパイをリセット
+    vi.restoreAllMocks();
+  });
 
-        // act
-        const result = await usecase.importFiles(files);
+  it('複数ファイルをまとめてインポートできる', async () => {
+    // arrange
+    const p1 = Problem.create({ id: '001', title: 'test' });
+    const p2 = Problem.create({ id: '002', title: 'asdf' });
 
-        // assert
-        expect(result.ok).toBe(true);
-        if (result.ok) {
-            expect(result.count).toBe(2);
-        }
+    // createFromText の呼び出し順に返す
+    spy = vi.spyOn(Problem, 'createFromText')
+      .mockReturnValueOnce(p1)
+      .mockReturnValueOnce(p2);
 
-        const problems = await repo.load();
-        expect(problems).toHaveLength(2);
-    });
+    const repo = new InMemoryProblemRepository();
+    const usecase = createImportProblemsUsecase(repo);
+
+    const files = [
+      createTestFile('a.kif', 'a'),
+      createTestFile('b.kif', 'b'),
+    ];
+
+    // act
+    const result = await usecase.importFiles(files);
+
+    // assert
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.count).toBe(2);
+    }
+
+    const problems = await repo.load();
+    expect(problems).toHaveLength(2);
+
+    // 個別のIDも確認
+    expect(problems.map(p => p.id)).toEqual(['001', '002']);
+  });
 });

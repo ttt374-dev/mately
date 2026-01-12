@@ -3,6 +3,7 @@ import type { LearningEntry, LearningRecord } from "../../learning/types";
 import type { Problem } from "../Problem"
 import type { FilterState } from "./types/Filter";
 import { matchMateBuckets, matchMateLength } from "./mateFilter";
+import type { Exercise } from "@/domain/Exercise/Exercise";
 
 function matchesText(problem: Problem, text?: string): boolean {
     if (!text) return true;
@@ -13,14 +14,16 @@ function matchesText(problem: Problem, text?: string): boolean {
 }
 //////////////////////////////////
 export const applyFilter = (
-    problems: Problem[],
+    //problems: Problem[],
+    exercises: Exercise[],
     filter: FilterState,
-    learningRecords?: LearningRecord,
-): Problem[] => {
+    //learningRecords?: LearningRecord,
+): Exercise[] => {
     const now = Date.now();
     //console.log("filter problems", filter, learningRecords)
-    return problems.filter(problem => {
-        const record = learningRecords?.[problem.id] 
+    return exercises.filter(exercise => {
+        const problem = exercise.problem
+        const record = exercise.learning
 
         // 未回答のみ
         const flag = filter.unansweredOnly && record && (record.solvedCount + record.failedCount > 0)

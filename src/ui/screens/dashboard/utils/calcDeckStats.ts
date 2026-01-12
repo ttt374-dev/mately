@@ -1,3 +1,4 @@
+import type { Exercise } from "@/domain/Exercise/Exercise"
 import type { LearningRecord } from "@/domain/learning/types"
 import type { Problem } from "@/domain/problem/Problem"
 
@@ -12,16 +13,13 @@ export interface DeckStats {
   accuracy: number // 0.0 ~ 1.0
 }
 
-export function calcDeckStats(
-  problems: Problem[],
-  learningRecords: LearningRecord
-): DeckStats {
+export function calcDeckStats(exercises: Exercise[]): DeckStats {
   let solvedCount = 0
   let failedCount = 0
   let unansweredCount = 0
 
-  for (const problem of problems) {
-    const record = learningRecords[problem.id]
+  for (const exercise of exercises) {
+    const record = exercise.learning
 
     if (record) {
       solvedCount += record.solvedCount
@@ -34,7 +32,7 @@ export function calcDeckStats(
   const answeredCount = solvedCount + failedCount
 
   return {
-    problemCount: problems.length,
+    problemCount: exercises.length,
     unansweredCount,
     solvedCount,
     failedCount,

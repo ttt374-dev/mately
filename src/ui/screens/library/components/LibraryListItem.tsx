@@ -3,10 +3,12 @@ import LibraryItemText from "./LibraryItemText";
 import type { Problem } from "@/domain/problem/Problem";
 import type { LearningEntry } from "@/domain/learning/types";
 import { useLongPress } from "../hooks/useLongPress";
+import type { Exercise } from "@/domain/Exercise/Exercise";
 
 type Props = {
-    problem: Problem,
-    learningEntry?: LearningEntry,
+    //problem: Problem,
+    exercise: Exercise,
+    //learningEntry?: LearningEntry,
 
     selectionMode: boolean
     isChecked: boolean
@@ -16,19 +18,20 @@ type Props = {
     onToggleStar: (id: string) => void
 }
 export default function LibraryListItem({
-    problem,
+    //problem,
+    exercise,
     selectionMode,
     isChecked,
     onToggleChecked,
     onSelect,
     onEnterSelectionMode,
-    learningEntry,
+    //learningEntry,
     onToggleStar,
 }: Props) {
 
     const { bind, isLongPressedRef } = useLongPress({
         onLongPress: () => {
-            onToggleChecked(problem.id)
+            onToggleChecked(exercise.problem.id)
             onEnterSelectionMode()
         },
         
@@ -54,7 +57,7 @@ export default function LibraryListItem({
                             checked={isChecked}
                             onChange={(e) => {
                                 e.stopPropagation()
-                                onToggleChecked(problem.id)
+                                onToggleChecked(exercise.problem.id)
                             }}
                         />
                     )}
@@ -62,8 +65,9 @@ export default function LibraryListItem({
 
                 <ListItemText>
                     <LibraryItemText
-                        problem={problem}
-                        learningEntry={learningEntry}
+                        exercise={exercise}
+                        //problem={exproblem}
+                        //learningEntry={learningEntry}
                         onToggleStar={onToggleStar}
                     />
                 </ListItemText>

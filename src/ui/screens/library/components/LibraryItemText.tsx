@@ -5,18 +5,22 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import type { Problem } from '@/domain/problem/Problem';
 import type { LearningEntry } from '@/domain/learning/types';
 import { formatDate } from '@/utils';
+import type { Exercise } from '@/domain/Exercise/Exercise';
 
 export function inDays(date: number): number {
     return (date - Date.now()) / (60*60*24*1000)
 }
 
 type Props = {
-    problem: Problem 
-    learningEntry?: LearningEntry
+    exercise: Exercise,
+    //problem: Problem 
+    //learningEntry?: LearningEntry
     onToggleStar: (id: string) => void
 }
 
-export default function LibraryItemText({ problem, learningEntry, onToggleStar }: Props) {
+export default function LibraryItemText({ exercise, onToggleStar }: Props) {
+    const problem = exercise.problem
+    const learningEntry = exercise.learning
     
     return (
         <Box>

@@ -1,4 +1,3 @@
-import { useRepositoryContext } from "@/app/providers/RepositoryProvider";
 import type { ProblemRepository } from "@/domain/problem/problemRepository";
 import { Problem } from "@/domain/problem/Problem";
 
@@ -17,8 +16,8 @@ export function createImportProblemsUsecase(problemRepo: ProblemRepository) {
             const text = new TextDecoder("shift_jis").decode(buf);
 
             // TODO filename
-            const repos = useRepositoryContext()
-            const problems = await repos.problem.load()
+            //const repos = useRepositoryContext()
+            const problems = await problemRepo.load()
             const resolvedTitle = resolveUniqTitle(file.name, problems)
             const newProblem = Problem.createFromText(text, resolvedTitle)
             newProblem && await problemRepo.add(newProblem)

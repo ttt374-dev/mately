@@ -20,20 +20,22 @@ export default function DashboardScreen(){
     const stores = useStoreContext()
     const navigate = useNavigate()
 
-    const problems = stores.problem.problems
-    const learningRecords = stores.learning.records
-    const queriedProblems = useMemo(()=> {
+    const exercises = stores.exercise.exercises
+
+    //const problems = stores.problem.problems
+    //const learningRecords = stores.learning.records
+    const queriedExecises = useMemo(()=> {
         //console.log("reload query problems", problems, filter)
         const sort: SortState = {
             key: "nextReviewedAt",
             order: "asc",
         }
         
-        return applyQuery(problems, sort, state.filterState, undefined, learningRecords)
-    }, [problems, state.filterState, learningRecords])
+        return applyQuery(exercises, sort, state.filterState)
+    }, [exercises, state.filterState])
 
     const startMission = () => {        
-        fsm.start(buildQueue(queriedProblems))
+        fsm.start(buildQueue(queriedExecises))
         navigate("/player")        
     }
     ///
@@ -53,10 +55,10 @@ export default function DashboardScreen(){
                 
                 <Grid container spacing={2}>
                     <Grid size={6}>
-                        <DeckCard title="Mission" problems={queriedProblems} learningRecords={learningRecords}/>
+                        <DeckCard title="Mission" exercises={queriedExecises}/>
                     </Grid>
                     <Grid size={6}>
-                        <DeckCard title="All" problems={problems} learningRecords={learningRecords}/>
+                        <DeckCard title="All" exercises={exercises} />
                     </Grid>           
                     <Grid size={12}>
                     <DashboardFilterControl/>

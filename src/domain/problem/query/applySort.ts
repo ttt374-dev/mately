@@ -64,7 +64,7 @@ export function applySort(
 
     //console.log("sorted:", sorted)
 
-    return exercises
+    return sorted
 }
 
 
