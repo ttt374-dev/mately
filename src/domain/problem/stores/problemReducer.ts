@@ -7,7 +7,7 @@ import { Problem } from "../Problem";
 type State = Problem[];
 
 type Action =
-    | { type: "SET"; payload: Problem[] }
+    | { type: "SET_ALL"; payload: Problem[] }
     | { type: "ADD"; payload: Problem }
     | { type: "UPDATE"; payload: { id: string; updater: (p: Problem) => Problem } }
     | { type: "REMOVE_MANY"; payload: string[] }
@@ -18,7 +18,7 @@ type Action =
 // -------------------------
 export function problemReducer(state: State, action: Action): State {
     switch (action.type) {
-        case "SET":
+        case "SET_ALL":
             return action.payload;
 
         case "ADD":

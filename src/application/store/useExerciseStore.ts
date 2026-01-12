@@ -2,15 +2,15 @@ import type { LearningRepository } from "@/domain/learning/LearningRepository";
 import { LearningEntry, type AnswerResult, type LearningRecord } from "@/domain/learning/types";
 import type { Problem } from "@/domain/problem/Problem";
 import type { ProblemRepository } from "@/domain/problem/problemRepository";
-import type { LearningProblem } from "@/domain/ProblemLearning/LearningProblem";
-import { learningProblemReducer } from "@/domain/ProblemLearning/learningProblemReducer";
+import type { Exercise, LearningProblem } from "@/domain/Exercise/Exercise";
+import { learningProblemReducer } from "@/domain/Exercise/exerciseReducer";
 import { useEffect, useReducer, useRef } from "react";
 
 export function useLearningProblemStore(
   problemRepo: ProblemRepository,
   learningRepo: LearningRepository
 ) {
-  const [state, dispatch] = useReducer(learningProblemReducer, {} as Record<string, LearningProblem>);
+  const [state, dispatch] = useReducer(learningProblemReducer, [] as Exercise[]);
 
   const isInitialized = useRef(false);
 

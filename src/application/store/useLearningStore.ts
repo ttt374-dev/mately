@@ -9,9 +9,11 @@ import { learningReducer } from '@/domain/learning/learningReducer';
 ////////////////////////////////////
 export function useLearningStore (repository: LearningRepository){
     const [records, dispatch] = useReducer(learningReducer, {});
-
-
     const isInitialized = useRef(false);
+
+    useEffect(() => {
+        reload().catch(() => reset())
+    }, [])
 
     useEffect(() => {
         if (!isInitialized.current) {
@@ -21,6 +23,12 @@ export function useLearningStore (repository: LearningRepository){
         repository.save(records)
     }, [records])
 
+
+
+     //const update = async (problemId: string, updater: (r: LearningEntry) => LearningEntry) => {
+     //   dispatch({ type: 'UPDATE', problemId, updater });
+     //   await repository.save(records); // 注意: 非同期更新の競合には要検討
+    //};
     const reload = async () => {
         try {
             const data = await repository.load()
@@ -32,15 +40,6 @@ export function useLearningStore (repository: LearningRepository){
     const reset = () => {
         dispatch({ type: 'SET_ALL', payload: {} });
     }
-    useEffect(() => {
-        reload().catch(() => reset())
-    }, [])
-
-     //const update = async (problemId: string, updater: (r: LearningEntry) => LearningEntry) => {
-     //   dispatch({ type: 'UPDATE', problemId, updater });
-     //   await repository.save(records); // 注意: 非同期更新の競合には要検討
-    //};
-
     const markAnswer = (problemId: string, answerResult: AnswerResult, secondsToAnswer?: number) => {
         dispatch({ type: 'ANSWER', 
             problemId, answerResult, secondsToAnswer, now: Date.now()

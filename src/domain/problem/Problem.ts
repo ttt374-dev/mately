@@ -38,6 +38,10 @@ export class Problem {
         return this.create({kifContent: kifContentResult.value, title: title})
         //return new Problem(v4(), title, now,  kifContentResult.value, false)        
     }
+    setTitle(title: string){
+        return Problem.create({...this, title: title})
+    }
+
     toggleStar() {
         return Problem.create({...this, starred: !this.starred})
     }
