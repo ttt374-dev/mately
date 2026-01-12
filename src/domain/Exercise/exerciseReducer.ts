@@ -10,9 +10,9 @@ type Action =
   | { type: "REMOVE_MANY"; problemIds: ProblemId[] }
   | { type: 'CLEAR_ALL' }
   | { type: 'ANSWER'; problemId: ProblemId; answerResult: AnswerResult; secondsToAnswer?: number; now: number }
-  | { type: 'TOGGLE_STAR'; problemId: ProblemId }
+  //| { type: 'TOGGLE_STAR'; problemId: ProblemId }
 
-export function learningProblemReducer(
+export function exerciseReducer(
   state: Exercise[],
   action: Action
 ): Exercise[] {

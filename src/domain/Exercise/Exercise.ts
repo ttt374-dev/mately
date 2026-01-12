@@ -4,7 +4,7 @@ import { Problem } from "../problem/Problem";
 export class Exercise {
   constructor(
     readonly problem: Problem,
-    readonly learning: LearningEntry
+    readonly learning?: LearningEntry
   ){}
   static create(){
     const p = Problem.create()

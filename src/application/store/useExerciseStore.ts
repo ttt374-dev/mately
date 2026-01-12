@@ -1,68 +1,103 @@
-import type { LearningRepository } from "@/domain/learning/LearningRepository";
-import { LearningEntry, type AnswerResult, type LearningRecord } from "@/domain/learning/types";
-import type { Problem } from "@/domain/problem/Problem";
-import type { ProblemRepository } from "@/domain/problem/problemRepository";
-import type { Exercise, LearningProblem } from "@/domain/Exercise/Exercise";
-import { learningProblemReducer } from "@/domain/Exercise/exerciseReducer";
 import { useEffect, useReducer, useRef } from "react";
 
-export function useLearningProblemStore(
-  problemRepo: ProblemRepository,
-  learningRepo: LearningRepository
+import type { LearningRepository } from "@/domain/learning/LearningRepository";
+import type { Problem, ProblemId } from "@/domain/problem/Problem";
+import type { ProblemRepository } from "@/domain/problem/problemRepository";
+import { exerciseReducer } from "@/domain/Exercise/exerciseReducer";
+import { LearningEntry, type AnswerResult, type LearningRecord } from "@/domain/learning/types";
+import  { Exercise } from "@/domain/Exercise/Exercise";
+
+
+export function useExerciseStore(
+    problemRepo: ProblemRepository,
+    learningRepo: LearningRepository
 ) {
-  const [state, dispatch] = useReducer(learningProblemReducer, [] as Exercise[]);
+    const [state, dispatch] = useReducer(exerciseReducer, [] as Exercise[]);
 
-  const isInitialized = useRef(false);
+    const isInitialized = useRef(false);
 
-  // 初期ロード
-  useEffect(() => {
-    (async () => {
-      try {
+    // 初期ロード
+    useEffect(() => {
+        reload().catch(() => reset())
+    }, []);
+
+    // 永続化
+    useEffect(() => {
+        if (!isInitialized.current) {
+            isInitialized.current = true;
+            return;
+        }
+        const problems: Problem[] = Object.values(state).map(pwl => pwl.problem);
+        const learnings: LearningRecord = Object.fromEntries(
+            Object.values(state).map(pwl => [pwl.problem.id, pwl.learning])
+        );
+
+        problemRepo.save(problems);
+        learningRepo.save(learnings);
+    }, [state]);
+
+    // Action helpers
+    const reload = async () => {
         const problems = await problemRepo.load();
         const learnings = await learningRepo.load();
 
-        const combined: LearningProblem[] = problems.map(p => ({
-          problem: p,
-          learning: learnings[p.id] ?? LearningEntry.create(p.id),
+        const exercise: Exercise[] = problems.map(p => ({
+            problem: p,
+            learning: learnings[p.id] ?? LearningEntry.create(p.id),
         }));
-
-        dispatch({ type: 'SET_ALL', payload: combined });
-      } catch {
-        dispatch({ type: 'CLEAR_ALL' });
-      }
-    })();
-  }, []);
-
-  // 永続化
-  useEffect(() => {
-    if (!isInitialized.current) {
-      isInitialized.current = true;
-      return;
+        dispatch({ type: 'SET_ALL', payload: exercise });
     }
-    const problems: Problem[] = Object.values(state).map(pwl => pwl.problem);
-    const learnings: LearningRecord = Object.fromEntries(
-      Object.values(state).map(pwl => [pwl.problem.id, pwl.learning])
-    );
+    const reset = async () => {
+        dispatch({ type: 'CLEAR_ALL' });
+    }
+    const update = async (problemId: string, updater: (p: Exercise) => Exercise) => {
+        // updater は Problem インスタンスのメソッドを呼ぶ形にする
+        dispatch({ type: "UPDATE", payload: { id: problemId, updater } });
 
-    problemRepo.save(problems);
-    learningRepo.save(learnings);
-  }, [state]);
+        const next = state.map(e => {
+            if (e.problem.id === problemId) {
+                updater(e); // Problem クラスのメソッドで更新
+            }
+            return e;
+        });
+    };
 
-  // Action helpers
-  const markAnswer = (problemId: string, answerResult: AnswerResult, secondsToAnswer?: number) =>
-    dispatch({ type: 'ANSWER', problemId, answerResult, secondsToAnswer, now: Date.now() });
+    const remove = (problemId: string) => dispatch({ type: 'REMOVE', problemId });
+    const removeMany = async (ids: string[]) => {
+        if (!ids || ids.length === 0) return;
+        dispatch({ type: "REMOVE_MANY", problemIds: ids });
+    };
 
-  const toggleStar = (problemId: string) => dispatch({ type: 'TOGGLE_STAR', problemId });
 
-  const remove = (problemId: string) => dispatch({ type: 'REMOVE', problemId });
+    const clearAll = () => dispatch({ type: 'CLEAR_ALL' });
+    const addProblem = async (newProblem: Problem) => {
+        const exercise = new Exercise(newProblem)
+        dispatch({ type: "ADD", payload: exercise });        
+    };
+    const markAnswer = (problemId: string, answerResult: AnswerResult, secondsToAnswer?: number) =>
+        dispatch({ type: 'ANSWER', problemId, answerResult, secondsToAnswer, now: Date.now() });
 
-  const clearAll = () => dispatch({ type: 'CLEAR_ALL' });
+    const toggleStar = (problemId: string) => {                
+        update(problemId, e => {            
+            return new Exercise(e.problem.toggleStar(), e.learning)
+        })
+        //dispatch({ type: 'UPDATE', problemId });
+    }
+    const updateTitle = (problemId: ProblemId, title: string) => {
+        update(problemId, e => {            
+            return new Exercise(e.problem.setTitle(title), e.learning)
+        })
+    }
+    
 
-  return {
-    state,
-    markAnswer,
-    toggleStar,
-    remove,
-    clearAll,
-  };
+    return {
+        state,        
+        remove, removeMany,
+        clearAll,
+
+        addProblem,
+        updateTitle, toggleStar,
+        
+        markAnswer,
+    };
 }
