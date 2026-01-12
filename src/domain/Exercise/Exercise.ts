@@ -1,9 +1,15 @@
-import type { LearningEntry } from "../learning/types";
-import type { Problem } from "../problem/Problem";
+import { LearningEntry } from "../learning/types";
+import { Problem } from "../problem/Problem";
 
-export type Exercise = {
-  problem: Problem ;
-  learning: LearningEntry;
+export class Exercise {
+  constructor(
+    readonly problem: Problem,
+    readonly learning: LearningEntry
+  ){}
+  static create(){
+    const p = Problem.create()
+    return new Exercise(p, LearningEntry.create(p.id))
+  }
 }
 
 // Problem と LearningEntry を紐づけた形
